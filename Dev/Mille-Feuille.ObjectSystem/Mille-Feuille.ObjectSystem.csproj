@@ -7,7 +7,7 @@
     <ProjectGuid>{89031DED-10DE-487D-9818-4BEC00447DC5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MilleFeuille.ObjectSystem</RootNamespace>
+    <RootNamespace>wraikny.MilleFeuille.ObjectSystem</RootNamespace>
     <AssemblyName>MilleFeuille.ObjectSystem</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

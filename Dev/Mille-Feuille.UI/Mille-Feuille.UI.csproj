@@ -7,7 +7,7 @@
     <ProjectGuid>{199918F3-CA5B-4D6D-A2E5-3793033C12A5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mille_Feuille.UI</RootNamespace>
+    <RootNamespace>wraikny.MilleFeuille.UI</RootNamespace>
     <AssemblyName>MilleFeuille.UI</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
