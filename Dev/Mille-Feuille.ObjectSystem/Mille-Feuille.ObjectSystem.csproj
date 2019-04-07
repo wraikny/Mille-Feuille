@@ -7,8 +7,8 @@
     <ProjectGuid>{89031DED-10DE-487D-9818-4BEC00447DC5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mille_Feuille.ObjectSystem</RootNamespace>
-    <AssemblyName>Mille_Feuille.ObjectSystem</AssemblyName>
+    <RootNamespace>MilleFeuille.ObjectSystem</RootNamespace>
+    <AssemblyName>MilleFeuille.ObjectSystem</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

@@ -8,7 +8,7 @@
     <ProjectGuid>cb542c31-5dc2-41fb-a19d-c5a16d749dd6</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Mille-Feuille.Input</RootNamespace>
-    <AssemblyName>Mille-Feuille.Input</AssemblyName>
+    <AssemblyName>MilleFeuille.Input</AssemblyName>
     <UseStandardResourceNames>true</UseStandardResourceNames>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
