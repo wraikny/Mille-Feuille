@@ -12,7 +12,7 @@ open System.Runtime.InteropServices
 [<assembly: AssemblyConfiguration("")>]
 [<assembly: AssemblyCompany("")>]
 [<assembly: AssemblyProduct("Mille-Feuille.Fs")>]
-[<assembly: AssemblyCopyright("Copyright ©  2019")>]
+[<assembly: AssemblyCopyright("Copyright © wraikny 2019")>]
 [<assembly: AssemblyTrademark("")>]
 [<assembly: AssemblyCulture("")>]
 
