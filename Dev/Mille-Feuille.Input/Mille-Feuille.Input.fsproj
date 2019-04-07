@@ -8,13 +8,13 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>cb542c31-5dc2-41fb-a19d-c5a16d749dd6</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Input</RootNamespace>
-    <AssemblyName>Input</AssemblyName>
+    <RootNamespace>Mille-Feuille.Input</RootNamespace>
+    <AssemblyName>Mille-Feuille.Input</AssemblyName>
     <UseStandardResourceNames>true</UseStandardResourceNames>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <WarningsAsErrors>3239;$(WarningsAsErrors)</WarningsAsErrors>
-    <Name>Input</Name>
+    <Name>Mille-Feuille.Input</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
