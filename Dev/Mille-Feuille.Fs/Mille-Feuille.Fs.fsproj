@@ -44,8 +44,17 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Content Include="packages.config" />
+    <None Include="..\Lib\Altseed.dll">
+      <Link>Altseed.dll</Link>
+    </None>
+    <None Include="..\Lib\Altseed_core.dll">
+      <Link>Altseed_core.dll</Link>
+    </None>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Altseed">
+      <HintPath>..\Lib\Altseed.dll</HintPath>
+    </Reference>
     <Reference Include="FSharp.Core">
       <HintPath>..\packages\FSharp.Core.4.6.2\lib\net45\FSharp.Core.dll</HintPath>
     </Reference>
