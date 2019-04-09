@@ -50,6 +50,7 @@
     <None Include="..\Lib\Altseed_core.dll">
       <Link>Altseed_core.dll</Link>
     </None>
+    <Compile Include="Tool.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Altseed">
