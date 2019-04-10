@@ -1,4 +1,4 @@
-﻿module wraikny.MilleFeuille.Fs.Tool
+﻿module wraikny.MillFeuille.Fs.Tool
 
 
 type Event<'Msg> =
@@ -10,7 +10,7 @@ type Event<'Msg> =
 
 
 
-module TreeRec =
+module TreeDef =
     type Item<'Msg> =
         internal
         | Empty
@@ -26,7 +26,10 @@ module TreeRec =
         | Combo of label : string * current : int * items : string list * (int -> 'Msg)
 
 
-    type Column<'Msg> = internal | Column of (int * Item<'Msg> list) list
+    type Column<'Msg> =
+        internal
+        | NoColumn of Item<'Msg> list
+        | Column of (float32 option * Item<'Msg> list) list
 
 
     type Menu<'Msg> =
@@ -35,7 +38,29 @@ module TreeRec =
         | MenuItem of label : string * shortcut : asd.Keys list option * selected : bool * Event<'Msg>
 
 
-open TreeRec
+open TreeDef
+
+
+[<Struct>]
+type Window =
+    private
+    | Fullscreen of offset : int
+    | Windowed
+
+
+type Window<'Msg> =
+    private {
+        name : string
+        menuBar : Menu<'Msg> list option
+        contents : Column<'Msg> list
+    }
+
+
+type ViewModel<'Msg> =
+    private {
+        mainWindow : (Window<'Msg> * int) option
+        windows : Window<'Msg> list
+    }
 
 
 module Tree =
@@ -72,27 +97,54 @@ module Tree =
     let combo label currentIndex items msg = Combo(label, currentIndex, items, msg)
 
     // Column
-    let column = Column
+    let column = function
+        | [] ->
+            NoColumn []
+        | (w, l)::[] ->
+            NoColumn l
+        | xs ->
+            Column xs
+
+    let noColumn = NoColumn
 
     // Menu
     let menu label menus = Menu.Menu(label, menus)
 
     let menuItem label shortcut selected event = MenuItem(label, shortcut, selected, event)
 
+    let mainWindow name offset menuBar contents =
+        {
+            name = name
+            menuBar = menuBar
+            contents = contents
+        }, Fullscreen offset
+    
+    
+    let window name menuBar contents =
+        {
+            name = name
+            menuBar = menuBar
+            contents = contents
+        }
+    
+    
+    let viewModel mainWindow windows =
+        {
+            mainWindow = mainWindow
+            windows = windows
+        }
 
     let private exampleColumn : Column<unit> list = [
-        column [
-            1, [
-                text "hoge"
-                button "Button" <| Msg()
-            ]
+        noColumn[
+            text "hoge"
+            button "Button" <| Msg()
         ]
         column [
-            1, [
+            Some 100.f, [
                 text "hoge"
                 button "Button" <| Msg()
             ]
-            1, [
+            Some 100.f, [
                 text "hoge"
                 button "Button" <| Msg()
             ]
@@ -117,51 +169,6 @@ module Tree =
             ]
         ]
     ]
-
-
-[<Struct>]
-type Window =
-    private
-    | Fullscreen of offset : int
-    | Windowed
-
-
-type Window<'Msg> =
-    private {
-        name : string
-        menuBar : Menu<'Msg> list option
-        contents : Column<'Msg> list
-    }
-
-
-type ViewModel<'Msg> =
-    private {
-        mainWindow : (Window<'Msg> * int) option
-        windows : Window<'Msg> list
-    }
-
-
-let mainWindow name offset menuBar contents =
-    {
-        name = name
-        menuBar = menuBar
-        contents = contents
-    }, Fullscreen offset
-
-
-let window name menuBar contents =
-    {
-        name = name
-        menuBar = menuBar
-        contents = contents
-    }, Windowed
-
-
-let viewModel mainWindow windows =
-    {
-        mainWindow = mainWindow
-        windows = windows
-    }
 
 
 let open' f =
@@ -210,7 +217,7 @@ module private Helper =
 
 open wraikny.Tart.Core
 
-module Render =
+module internal Render =
     let eventRender x (sender : IMessageSender<'Msg>) =
         x |> function
         | Nothing -> ()
@@ -224,103 +231,107 @@ module Render =
             |> msg
             |> sender.PushMsg
 
-    module Tree =
-        let selectable (label, selected, msg) (sender : IMessageSender<'Msg>) =
-            if asd.Engine.Tool.Selectable(label, selected) then
-                sender.PushMsg(msg)
 
-        let itemRender x (sender : IMessageSender<'Msg>) =
-            x |> function
-            | Empty -> ()
-            | Separator -> asd.Engine.Tool.Separator()
-            | SameLine -> asd.Engine.Tool.SameLine()
-            | Text text -> asd.Engine.Tool.Text(text)
+    let selectable (label, selected, msg) (sender : IMessageSender<'Msg>) =
+        if asd.Engine.Tool.Selectable(label, selected) then
+            sender.PushMsg(msg)
 
-            | Selectable (label, selected, msg) ->
-                selectable (label, selected, msg) sender
+    let itemRender x (sender : IMessageSender<'Msg>) =
+        x |> function
+        | Empty -> ()
+        | Separator -> asd.Engine.Tool.Separator()
+        | SameLine -> asd.Engine.Tool.SameLine()
+        | Text text -> asd.Engine.Tool.Text(text)
 
-            | Button(label, event) ->
-                if asd.Engine.Tool.Button(label) then
-                    eventRender event sender
+        | Selectable (label, selected, msg) ->
+            selectable (label, selected, msg) sender
 
-            | Image(path, size) ->
-                asd.Engine.Tool.Image(
-                    asd.Engine.Graphics.CreateTexture2D(path)
-                    , size
-                )
+        | Button(label, event) ->
+            if asd.Engine.Tool.Button(label) then
+                eventRender event sender
 
-            | InputInt(label, current, msg) ->
-                let i = [|current|]
-                if asd.Engine.Tool.InputInt(label, i) then
-                    msg i.[0]
-                    |> sender.PushMsg
+        | Image(path, size) ->
+            asd.Engine.Tool.Image(
+                asd.Engine.Graphics.CreateTexture2D(path)
+                , size
+            )
 
-            | InputText(label, current, bufferSize, msg) ->
-                let n = current |> String.length
-                let bufferSize = bufferSize |> Option.defaultValue(n + 256)
-                let s : sbyte [] =
-                    Array.append
-                        (current |> Seq.map sbyte |> Seq.toArray)
-                        [|for _ in 1..bufferSize-n -> 0y|]
+        | InputInt(label, current, msg) ->
+            let i = [|current|]
+            if asd.Engine.Tool.InputInt(label, i) then
+                msg i.[0]
+                |> sender.PushMsg
 
-                if asd.Engine.Tool.InputText(label, s, bufferSize) then
-                    let s =
-                        s
-                        |> Array.takeWhile(fun x -> x <> 0y)
-                        |> Array.map byte
+        | InputText(label, current, bufferSize, msg) ->
+            let n = current |> String.length
+            let bufferSize = bufferSize |> Option.defaultValue(n + 256)
+            let s : sbyte [] =
+                Array.append
+                    (current |> Seq.map sbyte |> Seq.toArray)
+                    [|for _ in 1..bufferSize-n -> 0y|]
 
-                    let s = System.Text.Encoding.UTF8.GetString (s, 0, s |> Array.length)
+            if asd.Engine.Tool.InputText(label, s, bufferSize) then
+                let s =
+                    s
+                    |> Array.takeWhile(fun x -> x <> 0y)
+                    |> Array.map byte
+
+                let s = System.Text.Encoding.UTF8.GetString (s, 0, s |> Array.length)
                     
-                    msg(s) |> sender.PushMsg
+                msg(s) |> sender.PushMsg
 
-            | ListBox(label, current, items, msg) ->
-                let itemsStr =
-                    items
-                    |> List.map(fun s -> s.Replace(";", ":"))
-                    |> String.concat ";"
+        | ListBox(label, current, items, msg) ->
+            let itemsStr =
+                items
+                |> List.map(fun s -> s.Replace(";", ":"))
+                |> String.concat ";"
 
-                let current = [|current|]
-                if asd.Engine.Tool.ListBox(label, current, itemsStr) then
-                    msg current.[0]
-                    |> sender.PushMsg
+            let current = [|current|]
+            if asd.Engine.Tool.ListBox(label, current, itemsStr) then
+                msg current.[0]
+                |> sender.PushMsg
 
-            | Combo(label, current, items, msg) ->
-                let preview =
-                    items
-                    |> List.tryItem current
-                    |> Option.defaultValue ""
+        | Combo(label, current, items, msg) ->
+            let preview =
+                items
+                |> List.tryItem current
+                |> Option.defaultValue ""
 
-                Helper.combo label preview <| fun _ ->
-                    for (index, item) in items |> List.indexed do
-                        selectable(item, index = current, msg index) sender
+            Helper.combo label preview <| fun _ ->
+                for (index, item) in items |> List.indexed do
+                    selectable(item, index = current, msg index) sender
             
 
-    let columnRender (Column(list)) (sender : IMessageSender<'Msg>) =
-        let currentIndex = asd.Engine.Tool.ColumnIndex
-        let currentWidth = asd.Engine.Tool.GetColumnWidth(currentIndex)
+    let columnRender (column) (sender : IMessageSender<'Msg>) =
+        column |> function
+        | NoColumn list ->
+            for i in list do
+                 itemRender i sender
+        | Column list ->
+            let currentIndex = asd.Engine.Tool.ColumnIndex
 
-        let columnSize = list |> List.length
-        let widthSum = list |> List.sumBy fst |> float32
+            let columnSize = list |> List.length
 
-        let render (index, (w, il)) =
-            let rate = (float32 w / widthSum)
-            let width = currentWidth * rate
+            let render (w, il) =
+                w |> function
+                | None -> ()
+                | Some w ->
+                    asd.Engine.Tool.SetColumnWidth(currentIndex, w)
 
-            asd.Engine.Tool.SetColumnWidth(index + 1, width)
-
-            for i in il do
-                Tree.itemRender i sender
+                for i in il do
+                    itemRender i sender
         
 
-        list |> function
-        | [] -> ()
-        | x::xs ->
-            asd.Engine.Tool.Columns(columnSize)
-            render (-1, x)
-            asd.Engine.Tool.NextColumn()
-            for x in xs |> List.indexed do
-                asd.Engine.Tool.NextColumn()
-                render x
+            list |> function
+            | [] -> ()
+            | x::xs ->
+                asd.Engine.Tool.Columns(columnSize)
+
+                // render x
+
+                for x in list do
+                    render x
+                    asd.Engine.Tool.NextColumn()
 
 
     let rec menuRender x (sender : IMessageSender<'Msg>) =
