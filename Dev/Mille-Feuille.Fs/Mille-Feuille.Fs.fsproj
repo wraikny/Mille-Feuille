@@ -50,6 +50,14 @@
     <None Include="..\Lib\Altseed_core.dll">
       <Link>Altseed_core.dll</Link>
     </None>
+    <None Include="..\Lib\Tart.Core.dll">
+      <Link>Tart.Core.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Lib\Tart.Helper.dll">
+      <Link>Tart.Helper.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Compile Include="Tool.fs" />
   </ItemGroup>
   <ItemGroup>
@@ -66,6 +74,12 @@
     <Reference Include="System.ValueTuple">
       <HintPath>..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Tart.Core">
+      <HintPath>..\Lib\Tart.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Tart.Helper">
+      <HintPath>..\Lib\Tart.Helper.dll</HintPath>
     </Reference>
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
