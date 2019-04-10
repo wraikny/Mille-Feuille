@@ -1,10 +1,10 @@
-﻿namespace wraikny.MillFeuille.Example.Fs.Tool
+﻿namespace wraikny.MilleFeuille.Example.Fs.Tool
 
 open wraikny.Tart.Core
 open wraikny.Tart.Core.Libraries
 
-open wraikny.MillFeuille.Fs.Tool
-open wraikny.MillFeuille.Fs.Tool.Tree
+open wraikny.MilleFeuille.Fs.Tool
+open wraikny.MilleFeuille.Fs.Tool.Tree
 
 module Counter =
     type Model =

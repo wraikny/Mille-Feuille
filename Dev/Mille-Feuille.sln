@@ -11,7 +11,7 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Mille-Feuille.Input", "Mill
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Mille-Feuille.Fs", "Mille-Feuille.Fs\Mille-Feuille.Fs.fsproj", "{F0694096-423D-4328-AB20-CEF9052B2F31}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Mill-Feuille.Example", "Mill-Feuille.Example\Mill-Feuille.Example.fsproj", "{8FAB469C-B647-469E-9BC3-C74E7FA2D454}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Mille-Feuille.Example", "Mille-Feuille.Example\Mille-Feuille.Example.fsproj", "{8FAB469C-B647-469E-9BC3-C74E7FA2D454}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

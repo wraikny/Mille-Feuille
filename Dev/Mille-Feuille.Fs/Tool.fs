@@ -1,4 +1,4 @@
-﻿module wraikny.MillFeuille.Fs.Tool
+﻿module wraikny.MilleFeuille.Fs.Tool
 
 
 type Event<'Msg> =

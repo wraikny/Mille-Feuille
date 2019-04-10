@@ -1,4 +1,4 @@
-﻿namespace wraikny.MillFeuille.Example
+﻿namespace wraikny.MilleFeuille.Example
 
 module Program =
     [<EntryPoint>]

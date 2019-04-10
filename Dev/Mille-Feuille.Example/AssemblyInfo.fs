@@ -7,12 +7,12 @@ open System.Runtime.InteropServices
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[<assembly: AssemblyTitle("Mill-Feuille.Example")>]
+[<assembly: AssemblyTitle("Mille-Feuille.Example")>]
 [<assembly: AssemblyDescription("")>]
 [<assembly: AssemblyConfiguration("")>]
 [<assembly: AssemblyCompany("")>]
-[<assembly: AssemblyProduct("Mill-Feuille.Example")>]
-[<assembly: AssemblyCopyright("Copyright ©  2019")>]
+[<assembly: AssemblyProduct("Mille-Feuille.Example")>]
+[<assembly: AssemblyCopyright("Copyright © wraikny 2019")>]
 [<assembly: AssemblyTrademark("")>]
 [<assembly: AssemblyCulture("")>]
 

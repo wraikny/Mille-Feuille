@@ -8,12 +8,12 @@
     <ProjectGuid>8fab469c-b647-469e-9bc3-c74e7fa2d454</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Mill_Feuille.Example</RootNamespace>
-    <AssemblyName>MillFeuille.Example</AssemblyName>
+    <AssemblyName>MilleFeuille.Example</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <UseStandardResourceNames>true</UseStandardResourceNames>
     <WarningsAsErrors>3239;$(WarningsAsErrors)</WarningsAsErrors>
-    <Name>Mill-Feuille.Example</Name>
+    <Name>Mille-Feuille.Example</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
