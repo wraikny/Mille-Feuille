@@ -20,6 +20,7 @@ module TreeDef =
         | Selectable of string * selected : bool * 'Msg
         | Button of string * Event<'Msg>
         | Image of string * asd.Vector2DF
+        | ColorEdit4 of label : string * current : asd.Color * (asd.Color -> 'Msg)
         | InputInt of label : string * int * (int -> 'Msg)
         | InputText of label : string * text : string * bufferSize : int option * (string -> 'Msg)
         | ListBox of label : string * current : int * items : string list * (int -> 'Msg)
@@ -63,16 +64,17 @@ type ViewModel<'Msg> =
     }
 
 
-module Tree =
-    // Event
+module Event =
     let nothing = Nothing
 
-    let msg = Msg
+    let message = Msg
 
     let openDialog filter path msg = OpenDialog(filter, path, msg)
 
     let saveDialog filter path msg = SaveDialog(filter, path, msg)
 
+
+module Tree =
     // Item
     let empty = Empty
 
@@ -87,6 +89,8 @@ module Tree =
     let button label event = Button(label, event)
 
     let image path size = Image(path, size)
+
+    let colorEdit4 label current msg = ColorEdit4(label, current, msg)
 
     let inputInt label current msg = InputInt(label, current, msg)
 
@@ -255,6 +259,20 @@ module internal Render =
                 asd.Engine.Graphics.CreateTexture2D(path)
                 , size
             )
+
+        | ColorEdit4(label, current, msg) ->
+            let color : float32 [] =
+                [|current.R; current.G; current.B; current.A|]
+                |> Array.map float32
+                |> Array.map (fun x -> x / 255.0f)
+
+            if asd.Engine.Tool.ColorEdit4(label, color) then
+                let color =
+                    color
+                    |> Array.map (fun x -> x * 255.0f)
+                    |> Array.map byte
+                msg(new asd.Color(color.[0], color.[1], color.[2], color.[3]))
+                |> sender.PushMsg
 
         | InputInt(label, current, msg) ->
             let i = [|current|]
