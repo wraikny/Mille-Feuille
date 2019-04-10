@@ -11,6 +11,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Mille-Feuille.Input", "Mill
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Mille-Feuille.Fs", "Mille-Feuille.Fs\Mille-Feuille.Fs.fsproj", "{F0694096-423D-4328-AB20-CEF9052B2F31}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Mill-Feuille.Example", "Mill-Feuille.Example\Mill-Feuille.Example.fsproj", "{8FAB469C-B647-469E-9BC3-C74E7FA2D454}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,14 @@ Global
 		{F0694096-423D-4328-AB20-CEF9052B2F31}.Release|Any CPU.ActiveCfg = Release|x86
 		{F0694096-423D-4328-AB20-CEF9052B2F31}.Release|x86.ActiveCfg = Release|x86
 		{F0694096-423D-4328-AB20-CEF9052B2F31}.Release|x86.Build.0 = Release|x86
+		{8FAB469C-B647-469E-9BC3-C74E7FA2D454}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FAB469C-B647-469E-9BC3-C74E7FA2D454}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FAB469C-B647-469E-9BC3-C74E7FA2D454}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8FAB469C-B647-469E-9BC3-C74E7FA2D454}.Debug|x86.Build.0 = Debug|Any CPU
+		{8FAB469C-B647-469E-9BC3-C74E7FA2D454}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FAB469C-B647-469E-9BC3-C74E7FA2D454}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FAB469C-B647-469E-9BC3-C74E7FA2D454}.Release|x86.ActiveCfg = Release|Any CPU
+		{8FAB469C-B647-469E-9BC3-C74E7FA2D454}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
