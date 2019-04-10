@@ -66,20 +66,20 @@ module Counter =
                     text <| sprintf "Count: %d" model.count
                     text <| sprintf "Tmp: %d" model.tmp
                     text <| sprintf "Random Range: %A" model.range
-                    button "Clear" <| msg Clear
+                    button "Clear" <| Event.message Clear
 
                     separator
 
                     inputInt "value" model.tmp SetTmp
-                    button "Add" <| msg Add
+                    button "Add" <| Event.message Add
                     sameLine
-                    button "Sub" <| msg Sub
+                    button "Sub" <| Event.message Sub
 
                     separator
 
                     inputInt "Min" rMin <| fun i -> SetRange(i, rMax)
                     inputInt "Max" rMax <| fun i -> SetRange(rMin, i)
-                    button "Random" <| msg Random
+                    button "Random" <| Event.message Random
                 ]
             ]
         ]
