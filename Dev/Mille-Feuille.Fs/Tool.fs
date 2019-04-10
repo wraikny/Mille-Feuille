@@ -1,4 +1,4 @@
-module wraikny.MillFeuille.Fs.Tool
+﻿module wraikny.MillFeuille.Fs.Tool
 
 
 type Event<'Msg> =
@@ -64,16 +64,17 @@ type ViewModel<'Msg> =
     }
 
 
-module Tree =
-    // Event
+module Event =
     let nothing = Nothing
 
-    let msg = Msg
+    let message = Msg
 
     let openDialog filter path msg = OpenDialog(filter, path, msg)
 
     let saveDialog filter path msg = SaveDialog(filter, path, msg)
 
+
+module Tree =
     // Item
     let empty = Empty
 
