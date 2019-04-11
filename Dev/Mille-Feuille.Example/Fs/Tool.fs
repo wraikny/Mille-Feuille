@@ -31,7 +31,7 @@ module Counter =
         | SetRange of int * int
 
 
-    let update msg model : Model * Msg Cmd =
+    let update msg model : Model * Cmd<Msg, _> =
         let {count=count; tmp=tmp} = model
         msg |> function
         | Add ->
@@ -86,13 +86,13 @@ module Counter =
 
 
     let messengerBuilder() : IMessenger<Msg, ViewModel<Msg>> =
-        let core : CoreFunctions<Msg, Model, ViewModel<Msg>> = {
-            init = init
-            update = update
-            view = view
-        }
-
-        IMessenger.createMessenger core
+        IMessenger.createMessenger
+            {
+                init = init
+                update = update
+                view = view
+            }
+            None
 
 
     let main () =
