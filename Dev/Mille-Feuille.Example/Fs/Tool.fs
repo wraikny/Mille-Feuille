@@ -85,21 +85,21 @@ module Counter =
         ]
 
 
-    let messengerBuilder() : IMessenger<Msg, ViewModel<Msg>> =
+    let messengerBuilder updater : IMessenger<Msg, ViewModel<Msg>> =
         IMessenger.createMessenger
             {
                 init = init
                 update = update
                 view = view
             }
-            None
+            updater
 
 
     let main () =
         asd.Engine.Initialize("Counter", 800, 600, new asd.EngineOption())
         |> ignore
 
-        let messenger = messengerBuilder()
+        let messenger = messengerBuilder None
 
         open' <| fun _ ->
             asd.Engine.TargetFPS <- 20
@@ -111,10 +111,8 @@ module Counter =
                     asd.Engine.Update()
 
                     messenger.TryViewModel |> function
-                    | Some view -> loop view
-                    | None ->
-
-                        loop view
+                    | Some newView -> loop newView
+                    | None -> loop view
 
 
             messenger.StartAsync() |> ignore
@@ -126,6 +124,5 @@ module Counter =
             messenger.Stop()
 
         asd.Engine.Terminate()
-
 
         0
