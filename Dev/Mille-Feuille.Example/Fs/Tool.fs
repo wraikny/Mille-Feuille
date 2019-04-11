@@ -22,8 +22,7 @@ module Counter =
         }
 
     type Msg =
-        | Add
-        | Sub
+        | SetValue of count : int * tmp : int
         | Clear
         | Random
         | SetCount of int
@@ -34,15 +33,10 @@ module Counter =
     let update msg model : Model * Cmd<Msg, _> =
         let {count=count; tmp=tmp} = model
         msg |> function
-        | Add ->
+        | SetValue(c, t) ->
             { model with
-                count = count + tmp
-                tmp = 0
-            }, Cmd.none
-        | Sub ->
-            { model with
-                count = count - tmp
-                tmp = 0
+                count = c
+                tmp = t
             }, Cmd.none
         | Clear ->
             init, Cmd.none
@@ -58,7 +52,13 @@ module Counter =
 
 
     let view model : ViewModel<Msg> =
-        let rMin, rMax = model.range
+        let
+            {
+                count = count
+                tmp = tmp
+                range = rMin, rMax
+            }
+            = model
 
         viewModel None [
             window "Counter" None [
@@ -71,9 +71,9 @@ module Counter =
                     separator
 
                     inputInt "value" model.tmp SetTmp
-                    button "Add" <| Event.message Add
+                    button "Add" <| Event.message (SetValue(count + tmp, 0))
                     sameLine
-                    button "Sub" <| Event.message Sub
+                    button "Sub" <| Event.message (SetValue(count - tmp, 0))
 
                     separator
 
