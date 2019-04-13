@@ -14,6 +14,12 @@ namespace wraikny.MilleFeuille.Input.Mouse
         private asd.CameraObject2D camera = null;
         private asd.RectF area;
 
+        private void InitializeRadius(float radius)
+        {
+            this.radius = radius;
+            collider = new asd.CircleCollider() { Radius = radius };
+        }
+
         public CollidableMouse(float radius, asd.CameraObject2D camera)
         {
             this.camera = camera;
@@ -33,12 +39,6 @@ namespace wraikny.MilleFeuille.Input.Mouse
                           new asd.Vector2DF(0.0f, 0.0f),
                           asd.Engine.WindowSize.To2DF()))
         { }
-
-        private void InitializeRadius(float radius)
-        {
-            this.radius = radius;
-            collider = new asd.CircleCollider() { Radius = radius };
-        }
 
         protected override void OnAdded()
         {
