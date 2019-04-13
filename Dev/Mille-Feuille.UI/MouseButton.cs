@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,12 +34,44 @@ namespace wraikny.MilleFeuille.UI
             Owner.AddComponent(component, key_);
         }
 
-        public asd.Object2D Owner { get; }
-
-        public MouseButton(asd.Object2D owner, asd.Collider2D collider)
+        public void Update(asd.MouseButtons key, asd.CollisionType collision, asd.ButtonState state)
         {
-            Owner = owner;
-            Owner.AddCollider(collider);
+            var component = GetButtonComponent(key);
+            if (component == null) return;
+
+            if (
+                component.State != ButtonState.Default &&
+                collision == asd.CollisionType.Exit
+                )
+            {
+                component.Update(ButtonOperation.Exit);
+                return;
+            }
+
+            switch (component.State)
+            {
+                case ButtonState.Default:
+                    if(
+                        collision != asd.CollisionType.Exit &&
+                        state == asd.ButtonState.Free
+                        )
+                    {
+                        component.Update(ButtonOperation.Enter);
+                    }
+                    break;
+                case ButtonState.Hover:
+                    if(state == asd.ButtonState.Push)
+                    {
+                        component.Update(ButtonOperation.Push);
+                    }
+                    break;
+                case ButtonState.Hold:
+                    if (state == asd.ButtonState.Release)
+                    {
+                        component.Update(ButtonOperation.Release);
+                    }
+                    break;
+            }
         }
     }
 }
