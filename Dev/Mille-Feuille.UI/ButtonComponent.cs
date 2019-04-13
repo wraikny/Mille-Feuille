@@ -29,6 +29,24 @@ namespace wraikny.MilleFeuille.UI
         public abstract void CallHold();
         public abstract void CallOnSelected();
         public abstract void CallOnExit();
+
+        protected override void OnUpdate()
+        {
+            base.OnUpdate();
+
+            switch(State)
+            {
+                case ButtonState.Default:
+                    CallDefault();
+                    break;
+                case ButtonState.Hover:
+                    CallHover();
+                    break;
+                case ButtonState.Hold:
+                    CallHold();
+                    break;
+            }
+        }
     }
 
     public class ButtonComponent<T> : ButtonComponentBase
