@@ -20,6 +20,8 @@ namespace wraikny.MilleFeuille.Input.Mouse
             collider = new asd.CircleCollider() { Radius = radius };
         }
 
+        public bool ColliderVisible { get; set; }
+
         public CollidableMouse(float radius, asd.CameraObject2D camera)
         {
             this.camera = camera;
@@ -50,6 +52,14 @@ namespace wraikny.MilleFeuille.Input.Mouse
         {
             base.OnUpdate();
             SetPosition();
+            if(ColliderVisible)
+            {
+                var inside = InsideArea();
+                if(inside != collider.IsVisible)
+                {
+                    collider.IsVisible = inside;
+                }
+            }
         }
 
         private void SetPosition()
@@ -71,15 +81,38 @@ namespace wraikny.MilleFeuille.Input.Mouse
             }
         }
 
+        private bool InsideArea()
+        {
+            var area = (camera != null)
+                ? camera.Dst.ToF()
+                : this.area
+                ;
+
+            var areaRD = area.Position + area.Size;
+
+            var pos = asd.Engine.Mouse.Position;
+
+            return (
+                (area.Position.X <= pos.X && pos.X <= areaRD.X) &&
+                (area.Position.Y <= pos.Y && pos.Y <= areaRD.Y)
+            );
+        }
+
         public IEnumerable<T> GetCollidedObjects<T>()
             where T : asd.Object2D
         {
+
             return
-                Collisions2DInfo
-                .Where(x => x.SelfCollider.OwnerObject.Equals(this))
-                .Select(x => x.TheirsCollider.OwnerObject)
-                .Where(x => x.AbsoluteBeingDrawn)
-                .OfType<T>();
+                (InsideArea())
+                ?
+                    Collisions2DInfo
+                    .Where(x => x.SelfCollider.OwnerObject.Equals(this))
+                    .Select(x => x.TheirsCollider.OwnerObject)
+                    .Where(x => x.AbsoluteBeingDrawn)
+                    .OfType<T>()
+                :
+                    new List<T>()
+            ;
         }
     }
 }
