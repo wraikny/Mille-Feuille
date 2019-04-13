@@ -11,12 +11,14 @@ namespace wraikny.MilleFeuille.ObjectSystem
         private bool isSceneChanging = false;
 
         public bool IsPaused { get; private set; }
-        public List<asd.Layer> PauseLayers { get; private set; }
-        public List<asd.Layer> NonPauseLayers { get; private set; }
+        public List<asd.Layer> PauseLayers { get; }
+        public List<asd.Layer> NonPauseLayers { get; }
 
         public Scene()
         {
             IsPaused = false;
+            PauseLayers = new List<asd.Layer>();
+            NonPauseLayers = new List<asd.Layer>();
         }
 
         public void Pause(bool paused)
@@ -29,7 +31,8 @@ namespace wraikny.MilleFeuille.ObjectSystem
                 layer.IsDrawn = IsPaused;
             });
 
-            NonPauseLayers.ForEach(layer => {
+            NonPauseLayers.ForEach(layer =>
+            {
                 layer.IsUpdated = !IsPaused;
             });
         }
