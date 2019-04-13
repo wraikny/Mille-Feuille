@@ -8,36 +8,25 @@ namespace wraikny.MilleFeuille.UI
 {
     public class MouseButton
     {
-        protected const string leftkey = "LeftButton";
-        protected const string rightkey = "RightButton";
+        private static string GetKeyStringFromMouseButton(asd.MouseButtons key)
+        {
+            return "__MouseButton_" + key.ToString();
+        }
+
+        public ButtonComponentBase GetButtonComponent(asd.MouseButtons key)
+        {
+            var key_ = GetKeyStringFromMouseButton(key);
+            return (ButtonComponentBase)Owner.GetComponent(key.ToString());
+        }
+
+        public void SetButtonComponent(asd.MouseButtons key, ButtonComponentBase component)
+        {
+            var key_ = GetKeyStringFromMouseButton(key);
+            Owner.RemoveComponent(key_);
+            Owner.AddComponent(component, key_);
+        }
 
         public asd.Object2D Owner { get; }
-
-        public ButtonComponentBase Left
-        {
-            get => (ButtonComponentBase)Owner.GetComponent(leftkey);
-            set
-            {
-                if (Left != null)
-                {
-                    Owner.RemoveComponent(leftkey);
-                }
-                Owner.AddComponent(value, leftkey);
-            }
-        }
-
-        public ButtonComponentBase Right
-        {
-            get => (ButtonComponentBase)Owner.GetComponent(rightkey);
-            set
-            {
-                if (Right != null)
-                {
-                    Owner.RemoveComponent(rightkey);
-                }
-                Owner.AddComponent(value, rightkey);
-            }
-        }
 
         public MouseButton(asd.Object2D owner, asd.Collider2D collider)
         {
