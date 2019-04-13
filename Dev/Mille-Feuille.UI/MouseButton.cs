@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +8,14 @@ namespace wraikny.MilleFeuille.UI
 {
     public class MouseButton
     {
+        public asd.Object2D Owner { get; }
+
+        public MouseButton(asd.Object2D owner, asd.Collider2D collider)
+        {
+            Owner = owner;
+            Owner.AddCollider(collider);
+        }
+
         private static string GetKeyStringFromMouseButton(asd.MouseButtons key)
         {
             return "__MouseButton_" + key.ToString();
