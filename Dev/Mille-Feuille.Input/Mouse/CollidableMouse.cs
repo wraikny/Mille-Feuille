@@ -93,17 +93,14 @@ namespace wraikny.MilleFeuille.Input.Mouse
             );
         }
 
-        public IEnumerable<T> GetCollidedObjects<T>()
-            where T : asd.Object2D
+        public IEnumerable<asd.Collision2DInfo> GetCollisionInfo()
         {
             return
                 InsideArea()
                 ?
                     Collisions2DInfo
+                    .Where(x => x.TheirsCollider.OwnerObject.AbsoluteBeingDrawn)
                     .Where(x => x.SelfCollider.OwnerObject.Equals(this))
-                    .Select(x => x.TheirsCollider.OwnerObject)
-                    .Where(x => x.AbsoluteBeingDrawn)
-                    .OfType<T>()
                 :
                     null
             ;
