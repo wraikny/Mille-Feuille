@@ -46,6 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ButtonComponent.cs" />
+    <Compile Include="ButtonForMouse.cs" />
+    <Compile Include="MouseButtonSelecter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -57,6 +59,12 @@
       <Link>Altseed_core.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mille-Feuille.Input\Mille-Feuille.Input.csproj">
+      <Project>{dba45fb2-c9ed-4fa4-80fa-5611943efb0e}</Project>
+      <Name>Mille-Feuille.Input</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
