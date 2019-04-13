@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace wraikny.MilleFeuille.Input.Controller
 {
-    abstract class ControllerBase<TControl>
+    public abstract class ControllerBase<TControl>
     {
         public abstract IEnumerable<TControl> Keys { get; }
 
