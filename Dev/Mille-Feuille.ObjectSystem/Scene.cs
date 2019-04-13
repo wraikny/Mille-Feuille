@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace wraikny.MilleFeuille.ObjectSystem
 {
-    class Scene : asd.Scene
+    public class Scene : asd.Scene
     {
         private bool isSceneChanging = false;
 
