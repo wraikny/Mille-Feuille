@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace wraikny.MilleFeuille.Input.Mouse
 {
-    class CollidableMouse : asd.GeometryObject2D
+    public class CollidableMouse : asd.GeometryObject2D
     {
         private readonly asd.CircleCollider collider;
 

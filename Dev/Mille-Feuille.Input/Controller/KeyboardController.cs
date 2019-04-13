@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace wraikny.MilleFeuille.Input.Controller
 {
-    class KeyboardController<TControl> : ControllerBase<TControl>
+    public class KeyboardController<TControl> : ControllerBase<TControl>
     {
         private readonly Dictionary<TControl, asd.Keys> binding;
 
