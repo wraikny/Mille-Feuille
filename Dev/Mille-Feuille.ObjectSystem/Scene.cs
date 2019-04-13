@@ -10,7 +10,31 @@ namespace wraikny.MilleFeuille.ObjectSystem
     {
         private bool isSceneChanging = false;
 
-        protected bool ChangeScene(asd.Scene scene)
+        public bool IsPaused { get; private set; }
+        public List<asd.Layer> PauseLayers { get; private set; }
+        public List<asd.Layer> NonPauseLayers { get; private set; }
+
+        public Scene()
+        {
+            IsPaused = false;
+        }
+
+        public void Pause(bool paused)
+        {
+            IsPaused = paused;
+
+            PauseLayers.ForEach(layer =>
+            {
+                layer.IsUpdated = IsPaused;
+                layer.IsDrawn = IsPaused;
+            });
+
+            NonPauseLayers.ForEach(layer => {
+                layer.IsUpdated = !IsPaused;
+            });
+        }
+
+        public bool ChangeScene(asd.Scene scene)
         {
             var changeScene = !isSceneChanging;
 
@@ -23,7 +47,7 @@ namespace wraikny.MilleFeuille.ObjectSystem
             return changeScene;
         }
 
-        protected bool ChangeSceneWithTransition(asd.Scene scene, asd.Transition transition, bool doAutoDispose = true)
+        public bool ChangeSceneWithTransition(asd.Scene scene, asd.Transition transition, bool doAutoDispose = true)
         {
             var changeScene = !isSceneChanging;
 
