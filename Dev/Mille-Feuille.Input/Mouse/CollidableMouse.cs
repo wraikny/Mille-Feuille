@@ -8,30 +8,23 @@ namespace wraikny.MilleFeuille.Input.Mouse
 {
     class CollidableMouse : asd.GeometryObject2D
     {
-        private float radius;
-        private asd.CircleCollider collider;
+        private readonly asd.CircleCollider collider;
 
-        private asd.CameraObject2D camera = null;
-        private asd.RectF area;
-
-        private void InitializeRadius(float radius)
-        {
-            this.radius = radius;
-            collider = new asd.CircleCollider() { Radius = radius };
-        }
+        private readonly asd.CameraObject2D camera = null;
+        private readonly asd.RectF area;
 
         public bool ColliderVisible { get; set; }
 
         public CollidableMouse(float radius, asd.CameraObject2D camera)
         {
             this.camera = camera;
-            InitializeRadius(radius);
+            collider = new asd.CircleCollider() { Radius = radius };
         }
 
         public CollidableMouse(float radius, asd.RectF area)
         {
             this.area = area;
-            InitializeRadius(radius);
+            collider = new asd.CircleCollider() { Radius = radius };
         }
 
         public CollidableMouse(float radius)
@@ -40,7 +33,9 @@ namespace wraikny.MilleFeuille.Input.Mouse
                       new asd.RectF(
                           new asd.Vector2DF(0.0f, 0.0f),
                           asd.Engine.WindowSize.To2DF()))
-        { }
+        {
+            collider = new asd.CircleCollider() { Radius = radius };
+        }
 
         protected override void OnAdded()
         {
@@ -52,7 +47,7 @@ namespace wraikny.MilleFeuille.Input.Mouse
         {
             base.OnUpdate();
             SetPosition();
-            if(ColliderVisible)
+            if (ColliderVisible)
             {
                 var inside = InsideArea();
                 if(inside != collider.IsVisible)
@@ -75,7 +70,7 @@ namespace wraikny.MilleFeuille.Input.Mouse
                 var src = camera.Src.ToF();
                 var dst = camera.Dst.ToF();
                 Position =
-                        (pos - dst.Position) * src.Size / dst.Size
+                        ((pos - dst.Position) * src.Size / dst.Size)
                         + src.Position
                 ;
             }
@@ -101,9 +96,8 @@ namespace wraikny.MilleFeuille.Input.Mouse
         public IEnumerable<T> GetCollidedObjects<T>()
             where T : asd.Object2D
         {
-
             return
-                (InsideArea())
+                InsideArea()
                 ?
                     Collisions2DInfo
                     .Where(x => x.SelfCollider.OwnerObject.Equals(this))
@@ -111,7 +105,7 @@ namespace wraikny.MilleFeuille.Input.Mouse
                     .Where(x => x.AbsoluteBeingDrawn)
                     .OfType<T>()
                 :
-                    new List<T>()
+                    null
             ;
         }
     }
