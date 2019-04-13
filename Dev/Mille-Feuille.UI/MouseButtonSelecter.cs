@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,8 +12,9 @@ namespace wraikny.MilleFeuille.UI
         private readonly CollidableMouse mouse;
         private readonly List<MouseButton> buttons;
 
-        public MouseButtonSelecter()
+        public MouseButtonSelecter(CollidableMouse mouse)
         {
+            this.mouse = mouse;
             buttons = new List<MouseButton>();
         }
 
