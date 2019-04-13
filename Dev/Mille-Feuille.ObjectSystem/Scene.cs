@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MilleFeuille.ObjectSystem
+namespace wraikny.MilleFeuille.ObjectSystem
 {
     class Scene : asd.Scene
     {
