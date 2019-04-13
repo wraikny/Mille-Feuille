@@ -6,8 +6,22 @@ using System.Threading.Tasks;
 
 namespace wraikny.MilleFeuille.UI
 {
+    public enum ButtonState
+    {
+        Default,
+        Hover,
+        Hold,
+    }
+
     public abstract class ButtonComponentBase : asd.Object2DComponent
     {
+        public ButtonState State { get; }
+
+        public ButtonComponentBase()
+        {
+
+        }
+
         public abstract void CallDefault();
         public abstract void CallOnEntered();
         public abstract void CallHover();
@@ -20,6 +34,13 @@ namespace wraikny.MilleFeuille.UI
     public class ButtonComponent<T> : ButtonComponentBase
         where T : asd.Object2D
     {
+
+        public ButtonComponent()
+            : base()
+        {
+
+        }
+
         public event Action<T> Default = delegate { };
         public override void CallDefault() => Default((T)Owner);
 
