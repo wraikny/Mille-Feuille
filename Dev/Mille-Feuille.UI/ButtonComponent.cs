@@ -15,7 +15,7 @@ namespace wraikny.MilleFeuille.UI
 
     public abstract class ButtonComponentBase : asd.Object2DComponent
     {
-        public ButtonState State { get; }
+        public ButtonState State { get; set;  }
 
         public ButtonComponentBase()
         {
@@ -23,7 +23,7 @@ namespace wraikny.MilleFeuille.UI
         }
 
         public abstract void CallDefault();
-        public abstract void CallOnEntered();
+        public abstract void CallOnEnter();
         public abstract void CallHover();
         public abstract void CallOnPushed();
         public abstract void CallHold();
@@ -44,8 +44,8 @@ namespace wraikny.MilleFeuille.UI
         public event Action<T> Default = delegate { };
         public override void CallDefault() => Default((T)Owner);
 
-        public event Action<T> OnEntered = delegate { };
-        public override void CallOnEntered() => OnEntered((T)Owner);
+        public event Action<T> OnEnter = delegate { };
+        public override void CallOnEnter() => OnEnter((T)Owner);
 
         public event Action<T> Hover = delegate { };
         public override void CallHover() => Hover((T)Owner);
