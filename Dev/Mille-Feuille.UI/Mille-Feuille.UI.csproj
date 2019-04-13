@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ButtonComponent.cs" />
-    <Compile Include="ButtonForMouse.cs" />
+    <Compile Include="MouseButton.cs" />
     <Compile Include="MouseButtonSelecter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

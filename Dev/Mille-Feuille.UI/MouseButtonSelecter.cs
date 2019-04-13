@@ -10,11 +10,11 @@ namespace wraikny.MilleFeuille.UI
     public class MouseButtonSelecter
     {
         private readonly CollidableMouse mouse;
-        private readonly List<ButtonForMouse> buttons;
+        private readonly List<MouseButton> buttons;
 
         public MouseButtonSelecter()
         {
-            buttons = new List<ButtonForMouse>();
+            buttons = new List<MouseButton>();
         }
 
 

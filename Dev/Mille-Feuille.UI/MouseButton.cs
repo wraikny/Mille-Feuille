@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace wraikny.MilleFeuille.UI
 {
-    public class ButtonForMouse
+    public class MouseButton
     {
         protected const string leftkey = "LeftButton";
         protected const string rightkey = "RightButton";
@@ -39,9 +39,10 @@ namespace wraikny.MilleFeuille.UI
             }
         }
 
-        public ButtonForMouse(asd.Object2D owner)
+        public MouseButton(asd.Object2D owner, asd.Collider2D collider)
         {
             Owner = owner;
+            Owner.AddCollider(collider);
         }
     }
 }
