@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace wraikny.MilleFeuille.UI
 {
-    class ButtonForMouse
+    public class ButtonForMouse
     {
         protected const string leftkey = "LeftButton";
         protected const string rightkey = "RightButton";

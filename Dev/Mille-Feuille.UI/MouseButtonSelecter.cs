@@ -7,7 +7,7 @@ using wraikny.MilleFeuille.Input.Mouse;
 
 namespace wraikny.MilleFeuille.UI
 {
-    class MouseButtonSelecter
+    public class MouseButtonSelecter
     {
         private readonly CollidableMouse mouse;
         private readonly List<ButtonForMouse> buttons;

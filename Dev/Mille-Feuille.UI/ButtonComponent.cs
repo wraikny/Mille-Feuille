@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace wraikny.MilleFeuille.UI
 {
-    abstract class ButtonComponentBase : asd.Object2DComponent
+    public abstract class ButtonComponentBase : asd.Object2DComponent
     {
         public abstract void CallDefault();
         public abstract void CallOnEntered();
@@ -17,7 +17,7 @@ namespace wraikny.MilleFeuille.UI
         public abstract void CallOnExit();
     }
 
-    class ButtonComponent<T> : ButtonComponentBase
+    public class ButtonComponent<T> : ButtonComponentBase
         where T : asd.Object2D
     {
         public event Action<T> Default = delegate { };
