@@ -10,45 +10,24 @@ namespace wraikny.MilleFeuille.UI
         where T : asd.Object2D
     {
         public event Action<T> Default = delegate { };
-        public void CallDefault()
-        {
-            Default((T)this.Owner);
-        }
+        public void CallDefault() => Default((T)Owner);
 
         public event Action<T> OnEntered = delegate { };
-        public void CallOnEntered()
-        {
-            OnEntered((T)this.Owner);
-        }
+        public void CallOnEntered() => OnEntered((T)Owner);
 
         public event Action<T> Hover = delegate { };
-        public void CallHover()
-        {
-            Hover((T)this.Owner);
-        }
+        public void CallHover() => Hover((T)Owner);
 
         public event Action<T> OnPushed = delegate { };
-        public void CallOnPushed()
-        {
-            OnPushed((T)this.Owner);
-        }
+        public void CallOnPushed() => OnPushed((T)Owner);
 
         public event Action<T> Hold = delegate { };
-        public void CallHold()
-        {
-            Hold((T)this.Owner);
-        }
+        public void CallHold() => Hold((T)Owner);
 
         public event Action<T> OnSelected = delegate { };
-        public void CallOnSelected()
-        {
-            OnSelected((T)this.Owner);
-        }
+        public void CallOnSelected() => OnSelected((T)Owner);
 
         public event Action<T> OnExit = delegate { };
-        public void CallOnExit()
-        {
-            OnExit((T)this.Owner);
-        }
+        public void CallOnExit() => OnExit((T)Owner);
     }
 }
