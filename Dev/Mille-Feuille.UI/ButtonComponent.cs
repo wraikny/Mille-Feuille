@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace wraikny.MilleFeuille.UI
 {
-    public enum ButtonState
+    internal enum ButtonState
     {
         Default,
         Hover,
         Hold,
     }
 
-    public enum ButtonOperation
+    internal enum ButtonOperation
     {
         Enter,
         Push,
@@ -23,21 +23,21 @@ namespace wraikny.MilleFeuille.UI
 
     public abstract class ButtonComponentBase : asd.Object2DComponent
     {
-        public ButtonState State { get; set;  }
+        internal ButtonState State { get; set;  }
 
         public ButtonComponentBase()
         {
-
+            State = ButtonState.Default;
         }
 
         protected abstract void CallDefault();
         protected abstract void CallHover();
         protected abstract void CallHold();
 
-        public abstract void CallOnEnter();
-        public abstract void CallOnPushed();
-        public abstract void CallOnSelected();
-        public abstract void CallOnExit();
+        protected abstract void CallOnEnter();
+        protected abstract void CallOnPushed();
+        protected abstract void CallOnSelected();
+        protected abstract void CallOnExit();
 
         protected override void OnUpdate()
         {
@@ -57,7 +57,7 @@ namespace wraikny.MilleFeuille.UI
             }
         }
 
-        public void Update(ButtonOperation op)
+        internal void Update(ButtonOperation op)
         {
             switch(op)
             {
@@ -95,21 +95,21 @@ namespace wraikny.MilleFeuille.UI
         protected override void CallDefault() => Default((T)Owner);
 
         public event Action<T> OnEnter = delegate { };
-        public override void CallOnEnter() => OnEnter((T)Owner);
+        protected override void CallOnEnter() => OnEnter((T)Owner);
 
         public event Action<T> Hover = delegate { };
         protected override void CallHover() => Hover((T)Owner);
 
         public event Action<T> OnPushed = delegate { };
-        public override void CallOnPushed() => OnPushed((T)Owner);
+        protected override void CallOnPushed() => OnPushed((T)Owner);
 
         public event Action<T> Hold = delegate { };
         protected override void CallHold() => Hold((T)Owner);
 
         public event Action<T> OnSelected = delegate { };
-        public override void CallOnSelected() => OnSelected((T)Owner);
+        protected override void CallOnSelected() => OnSelected((T)Owner);
 
         public event Action<T> OnExit = delegate { };
-        public override void CallOnExit() => OnExit((T)Owner);
+        protected override void CallOnExit() => OnExit((T)Owner);
     }
 }

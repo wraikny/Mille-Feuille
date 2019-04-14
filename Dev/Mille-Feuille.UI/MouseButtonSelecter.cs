@@ -31,24 +31,14 @@ namespace wraikny.MilleFeuille.UI
         {
             var result = new List<(MouseButton, asd.Collision2DInfo)>();
 
-            var collisions = mouse.GetCollisionInfo();
-
-            foreach(var info in collisions)
+            foreach(var info in mouse.GetCollisionInfo())
             {
                 var collidedObject = info.TheirsCollider.OwnerObject;
 
-                MouseButton collidedButton = null;
-                foreach(var button in buttons)
-                {
-                    var buttonOwner = button.Owner;
-                    if(collidedObject.Equals(buttonOwner))
-                    {
-                        collidedButton = button;
-                        break;
-                    }
-                }
+                var collidedButton = buttons
+                    .FirstOrDefault(button => collidedObject.Equals(button.Owner));
 
-                if(collidedButton != null)
+                if (collidedButton != null)
                 {
                     result.Add(
                         (collidedButton, info)
@@ -64,7 +54,7 @@ namespace wraikny.MilleFeuille.UI
             foreach(var key in allMouseButtons)
             {
                 var state = asd.Engine.Mouse.GetButtonInputState(key);
-                foreach(var (button, info) in GetCollidedButtons(key))
+                foreach (var (button, info) in GetCollidedButtons(key))
                 {
                     button.Update(key, info.CollisionType, state);
                 }
