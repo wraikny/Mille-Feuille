@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace wraikny.MilleFeuille.UI
 {
-    internal enum ButtonState
+    public enum ButtonState
     {
         Default,
         Hover,
         Hold,
     }
 
-    internal enum ButtonOperation
+    public enum ButtonOperation
     {
         Enter,
         Push,
@@ -23,7 +23,7 @@ namespace wraikny.MilleFeuille.UI
 
     public abstract class ButtonComponentBase : asd.Object2DComponent
     {
-        internal ButtonState State { get; set;  }
+        public ButtonState State { get; set;  }
 
         public ButtonComponentBase()
         {
@@ -57,7 +57,7 @@ namespace wraikny.MilleFeuille.UI
             }
         }
 
-        internal void Update(ButtonOperation op)
+        public void UpdateState(ButtonOperation op)
         {
             switch(op)
             {

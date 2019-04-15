@@ -18,13 +18,13 @@ namespace wraikny.MilleFeuille.UI
 
         private static string GetKeyStringFromMouseButton(asd.MouseButtons key)
         {
-            return "__MouseButton_" + key.ToString();
+            return "__MilleFeuille_MouseButton_" + key.ToString();
         }
 
         public ButtonComponentBase GetButtonComponent(asd.MouseButtons key)
         {
             var key_ = GetKeyStringFromMouseButton(key);
-            return (ButtonComponentBase)Owner.GetComponent(key.ToString());
+            return (ButtonComponentBase)Owner.GetComponent(key_);
         }
 
         public void SetButtonComponent(asd.MouseButtons key, ButtonComponentBase component)
@@ -34,7 +34,12 @@ namespace wraikny.MilleFeuille.UI
             Owner.AddComponent(component, key_);
         }
 
-        public void Update(asd.MouseButtons key, asd.CollisionType collision, asd.ButtonState state)
+        public bool HasButtonComponent(asd.MouseButtons key)
+        {
+            return GetButtonComponent(key) != null;
+        }
+
+        public void UpdateButtonState(asd.MouseButtons key, asd.CollisionType collision, asd.ButtonState state)
         {
             var component = GetButtonComponent(key);
             if (component == null) return;
@@ -44,7 +49,7 @@ namespace wraikny.MilleFeuille.UI
                 collision == asd.CollisionType.Exit
                 )
             {
-                component.Update(ButtonOperation.Exit);
+                component.UpdateState(ButtonOperation.Exit);
                 return;
             }
 
@@ -56,19 +61,19 @@ namespace wraikny.MilleFeuille.UI
                         state == asd.ButtonState.Free
                         )
                     {
-                        component.Update(ButtonOperation.Enter);
+                        component.UpdateState(ButtonOperation.Enter);
                     }
                     break;
                 case ButtonState.Hover:
                     if(state == asd.ButtonState.Push)
                     {
-                        component.Update(ButtonOperation.Push);
+                        component.UpdateState(ButtonOperation.Push);
                     }
                     break;
                 case ButtonState.Hold:
                     if (state == asd.ButtonState.Release)
                     {
-                        component.Update(ButtonOperation.Release);
+                        component.UpdateState(ButtonOperation.Release);
                     }
                     break;
             }
