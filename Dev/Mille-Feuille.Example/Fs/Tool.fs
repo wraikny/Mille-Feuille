@@ -113,8 +113,14 @@ module Counter =
         let updater = CounterUpdater()
 
         let messenger =
-            Some(updater :> IMessageSender<_>)
-            |> IMessenger.createMessenger Core.program
+            let env =
+                Environment
+                    .Initialize()
+                    .SetUpdater(updater)
+
+            IMessenger.createMessenger
+                env
+                Core.program
                 
 
         Tool.open' <| fun _ ->
