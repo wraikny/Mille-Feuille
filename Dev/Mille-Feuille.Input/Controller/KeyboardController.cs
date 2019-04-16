@@ -19,7 +19,7 @@ namespace wraikny.MilleFeuille.Input.Controller
 
         public override asd.ButtonState? GetState(TControl key)
         {
-            if (binding.TryGetValue(key, out asd.Keys result))
+            if (binding.TryGetValue(key, out var result))
             {
                 return asd.Engine.Keyboard.GetKeyState(result);
             }
