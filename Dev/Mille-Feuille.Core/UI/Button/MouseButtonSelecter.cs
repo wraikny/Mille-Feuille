@@ -25,7 +25,11 @@ namespace wraikny.MilleFeuille.Core.UI.Button
             UpdateButtonsState();
         }
 
-        public void AddButton(MouseButton button) => Buttons.Add(button);
+        public MouseButtonSelecter AddButton(MouseButton button)
+        {
+            Buttons.Add(button);
+            return this;
+        }
 
         private void UpdateButtonsState()
         {
