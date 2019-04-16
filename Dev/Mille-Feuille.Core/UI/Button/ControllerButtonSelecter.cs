@@ -58,23 +58,6 @@ namespace wraikny.MilleFeuille.Core.UI.Button
             }
         }
 
-        private bool UpdateDirection(ButtonDirection dir)
-        {
-            var control = DirectionToControl(dir);
-            if (Controller.GetState(control) == asd.ButtonState.Push)
-            {
-                var current = CursorButton;
-                var next = current.GetButton(dir);
-                if (next == null) return false;
-
-                current.UpdateButtonState(ButtonOperation.Exit);
-                next.UpdateButtonState(ButtonOperation.Enter);
-
-                CursorButton = next;
-            }
-            return false;
-        }
-
         private void UpdateButtonsState()
         {
             ButtonDirection[] dirs = {
@@ -86,7 +69,19 @@ namespace wraikny.MilleFeuille.Core.UI.Button
 
             foreach (var dir in dirs )
             {
-                UpdateDirection(dir);
+                var control = DirectionToControl(dir);
+                if (Controller.GetState(control) == asd.ButtonState.Push)
+                {
+                    var next = CursorButton.GetButton(dir);
+                    if (next == null) continue;
+
+                    CursorButton.UpdateButtonState(ButtonOperation.Exit);
+                    next.UpdateButtonState(ButtonOperation.Enter);
+
+                    CursorButton = next;
+
+                    break;
+                }
             }
 
             if(Controller.GetState(ControllerControl.Select) == asd.ButtonState.Push)
