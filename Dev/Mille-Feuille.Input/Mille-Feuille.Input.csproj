@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\ControllerBase.cs" />
+    <Compile Include="Controller\JoystickController.cs" />
     <Compile Include="Controller\KeyboardController.cs" />
     <Compile Include="Mouse\CollidableMouse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
