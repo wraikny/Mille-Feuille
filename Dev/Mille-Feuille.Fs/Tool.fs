@@ -222,7 +222,7 @@ module private Helper =
 open wraikny.Tart.Core
 
 module internal Render =
-    let eventRender x (sender : IMessageSender<'Msg>) =
+    let eventRender x (sender : IMsgSender<'Msg>) =
         x |> function
         | Nothing -> ()
         | Msg msg -> sender.PushMsg(msg)
@@ -236,11 +236,11 @@ module internal Render =
             |> sender.PushMsg
 
 
-    let selectable (label, selected, msg) (sender : IMessageSender<'Msg>) =
+    let selectable (label, selected, msg) (sender : IMsgSender<'Msg>) =
         if asd.Engine.Tool.Selectable(label, selected) then
             sender.PushMsg(msg)
 
-    let itemRender x (sender : IMessageSender<'Msg>) =
+    let itemRender x (sender : IMsgSender<'Msg>) =
         x |> function
         | Empty -> ()
         | Separator -> asd.Engine.Tool.Separator()
@@ -320,7 +320,7 @@ module internal Render =
                     selectable(item, index = current, msg index) sender
             
 
-    let columnRender (column) (sender : IMessageSender<'Msg>) =
+    let columnRender (column) (sender : IMsgSender<'Msg>) =
         column |> function
         | NoColumn list ->
             for i in list do
@@ -352,7 +352,7 @@ module internal Render =
                     asd.Engine.Tool.NextColumn()
 
 
-    let rec menuRender x (sender : IMessageSender<'Msg>) =
+    let rec menuRender x (sender : IMsgSender<'Msg>) =
         x |> function
         | Menu(label, list) ->
             Helper.menu label <| fun _ ->
@@ -384,7 +384,7 @@ module internal Render =
                 eventRender event sender
 
 
-    let windowRender (x : Window<'Msg>) (window : Window) (sender : IMessageSender<'Msg>) =
+    let windowRender (x : Window<'Msg>) (window : Window) (sender : IMsgSender<'Msg>) =
         let renderMenu() =
             x.menuBar |> function
             | None -> ()
@@ -410,7 +410,7 @@ module internal Render =
                 renderContent()
     
 
-let render (x : ViewModel<'Msg>) (sender : IMessageSender<'Msg>) =
+let render (x : ViewModel<'Msg>) (sender : IMsgSender<'Msg>) =
     x.mainWindow |> function
     | None -> ()
     | Some(mainWindow, offset) ->
