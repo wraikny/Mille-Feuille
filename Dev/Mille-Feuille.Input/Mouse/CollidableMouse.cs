@@ -46,7 +46,9 @@ namespace wraikny.MilleFeuille.Input.Mouse
         protected override void OnUpdate()
         {
             base.OnUpdate();
-            SetPosition();
+
+            CalcPositionFromMouse();
+
             if (ColliderVisible)
             {
                 var inside = InsideArea();
@@ -57,7 +59,20 @@ namespace wraikny.MilleFeuille.Input.Mouse
             }
         }
 
-        private void SetPosition()
+        public IEnumerable<asd.Collision2DInfo> GetCollisionInfo()
+        {
+            return
+                InsideArea()
+                ?
+                    Collisions2DInfo
+                    .Where(x => x.TheirsCollider.OwnerObject.AbsoluteBeingDrawn)
+                    .Where(x => x.SelfCollider.OwnerObject.Equals(this))
+                :
+                    null
+            ;
+        }
+
+        private void CalcPositionFromMouse()
         {
             var pos = asd.Engine.Mouse.Position;
 
@@ -91,19 +106,6 @@ namespace wraikny.MilleFeuille.Input.Mouse
                 (area.Position.X <= pos.X && pos.X <= areaRD.X) &&
                 (area.Position.Y <= pos.Y && pos.Y <= areaRD.Y)
             );
-        }
-
-        public IEnumerable<asd.Collision2DInfo> GetCollisionInfo()
-        {
-            return
-                InsideArea()
-                ?
-                    Collisions2DInfo
-                    .Where(x => x.TheirsCollider.OwnerObject.AbsoluteBeingDrawn)
-                    .Where(x => x.SelfCollider.OwnerObject.Equals(this))
-                :
-                    null
-            ;
         }
     }
 }
