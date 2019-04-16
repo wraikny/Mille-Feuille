@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MilleFeuille.Core.UI.Button
+namespace wraikny.MilleFeuille.Core.UI.Button
 {
     public enum ButtonDirection
     {
@@ -24,8 +24,9 @@ namespace MilleFeuille.Core.UI.Button
         public IReadOnlyDictionary<ButtonDirection, ControllerButton>
             ConnectedButtons => connectedButtons;
 
-        public ControllerButton()
+        public ControllerButton(asd.Object2D owner)
         {
+            Owner = owner;
             connectedButtons = new Dictionary<ButtonDirection, ControllerButton>();
         }
 
@@ -41,9 +42,16 @@ namespace MilleFeuille.Core.UI.Button
             return this;
         }
 
-        public ControllerButton(asd.Object2D owner)
+        public static void ConnectVertical(ControllerButton up, ControllerButton down)
         {
-            Owner = owner;
+            up.SetButton(ButtonDirection.Down, down);
+            down.SetButton(ButtonDirection.Up, up);
+        }
+
+        public static void ConnectHorizontal(ControllerButton left, ControllerButton right)
+        {
+            left.SetButton(ButtonDirection.Right, right);
+            right.SetButton(ButtonDirection.Left, left);
         }
 
         private static string GetKeyString()

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MilleFeuille.Core.Input.Controller
+namespace wraikny.MilleFeuille.Core.Input.Controller
 {
     public class KeyboardController<TControl> : ControllerBase<TControl>
     {
