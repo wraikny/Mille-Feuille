@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MilleFeuille.Core.UI.Button
+namespace wraikny.MilleFeuille.Core.UI.Button
 {
     public enum ButtonDirection
     {

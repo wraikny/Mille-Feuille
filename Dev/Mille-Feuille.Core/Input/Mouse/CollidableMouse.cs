@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MilleFeuille.Core.Input.Mouse
+namespace wraikny.MilleFeuille.Core.Input.Mouse
 {
     public class CollidableMouse : asd.GeometryObject2D
     {

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MilleFeuille.Core.Input.Mouse;
+using wraikny.MilleFeuille.Core.Input.Mouse;
 
-namespace MilleFeuille.Core.UI.Button
+namespace wraikny.MilleFeuille.Core.UI.Button
 {
     public class MouseButtonSelecter : asd.Layer2DComponent
     {
