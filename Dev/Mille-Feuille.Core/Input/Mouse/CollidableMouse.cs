@@ -68,7 +68,7 @@ namespace wraikny.MilleFeuille.Core.Input.Mouse
                     .Where(x => x.TheirsCollider.OwnerObject.AbsoluteBeingDrawn)
                     .Where(x => x.SelfCollider.OwnerObject.Equals(this))
                 :
-                    null
+                    new List<asd.Collision2DInfo>()
             ;
         }
 

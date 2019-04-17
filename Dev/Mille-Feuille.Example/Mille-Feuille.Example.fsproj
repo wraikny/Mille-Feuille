@@ -63,10 +63,11 @@
       <Link>Altseed_core.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Compile Include="Fs\Tool.fs" />
-    <Compile Include="Program.fs" />
     <None Include="App.config" />
     <Content Include="packages.config" />
+    <Compile Include="Core\UI\MouseButton.fs" />
+    <Compile Include="Fs\Tool.fs" />
+    <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Altseed">
@@ -91,6 +92,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mille-Feuille.Core\Mille-Feuille.Core.csproj">
+      <Name>Mille-Feuille.Core</Name>
+      <Project>{73984409-a0fe-476e-99f2-61be570a752f}</Project>
+      <Private>True</Private>
+    </ProjectReference>
     <ProjectReference Include="..\Mille-Feuille.Fs\Mille-Feuille.Fs.fsproj">
       <Name>Mille-Feuille.Fs</Name>
       <Project>{f0694096-423d-4328-ab20-cef9052b2f31}</Project>
