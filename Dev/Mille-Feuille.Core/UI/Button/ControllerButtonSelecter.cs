@@ -8,7 +8,7 @@ using wraikny.MilleFeuille.Core.Input.Controller;
 
 namespace wraikny.MilleFeuille.Core.UI.Button
 {
-    public enum ControllerControl
+    public enum ControllerSelect
     {
         Up,
         Down,
@@ -19,12 +19,12 @@ namespace wraikny.MilleFeuille.Core.UI.Button
 
     class ControllerButtonSelecter : asd.Layer2DComponent
     {
-        public ControllerBase<ControllerControl> Controller { get; }
+        public ControllerBase<ControllerSelect> Controller { get; }
 
         public ControllerButton CursorButton { get; private set; }
 
         public ControllerButtonSelecter(
-            ControllerBase<ControllerControl> controller
+            ControllerBase<ControllerSelect> controller
             , ControllerButton selectedButton
         )
         {
@@ -41,18 +41,18 @@ namespace wraikny.MilleFeuille.Core.UI.Button
             UpdateButtonsState();
         }
 
-        private ControllerControl DirectionToControl(ButtonDirection dir)
+        private ControllerSelect DirectionToControl(ButtonDirection dir)
         {
             switch(dir)
             {
                 case ButtonDirection.Up:
-                    return ControllerControl.Up;
+                    return ControllerSelect.Up;
                 case ButtonDirection.Down:
-                    return ControllerControl.Down;
+                    return ControllerSelect.Down;
                 case ButtonDirection.Right:
-                    return ControllerControl.Right;
+                    return ControllerSelect.Right;
                 case ButtonDirection.Left:
-                    return ControllerControl.Left;
+                    return ControllerSelect.Left;
                 default:
                     throw new Exception();
             }
@@ -84,12 +84,12 @@ namespace wraikny.MilleFeuille.Core.UI.Button
                 }
             }
 
-            if(Controller.GetState(ControllerControl.Select) == asd.ButtonState.Push)
+            if(Controller.GetState(ControllerSelect.Select) == asd.ButtonState.Push)
             {
                 CursorButton.UpdateButtonState(ButtonOperation.Push);
             }
 
-            if (Controller.GetState(ControllerControl.Select) == asd.ButtonState.Release)
+            if (Controller.GetState(ControllerSelect.Select) == asd.ButtonState.Release)
             {
                 CursorButton.UpdateButtonState(ButtonOperation.Push);
             }
