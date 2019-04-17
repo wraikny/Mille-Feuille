@@ -3,4 +3,5 @@
 module Program =
     [<EntryPoint>]
     let main _ = 
-        Fs.Tool.Counter.main()
+        // Fs.Tool.Counter.main()
+        Core.UI.MouseButton.main()

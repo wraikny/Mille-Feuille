@@ -14,16 +14,14 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
 
     public class JoystickController<TControl> : ControllerBase<TControl>
     {
-        private abstract class JoystickInput
+        private interface IJoystickInput
         {
-            public abstract asd.ButtonState GetState(asd.Joystick joystick);
+            asd.ButtonState GetState(asd.Joystick joystick);
 
-            public virtual void Update(asd.Joystick joystick)
-            {
-            }
+            void Update(asd.Joystick joystick);
         }
 
-        private class ButtonInput : JoystickInput
+        private class ButtonInput : IJoystickInput
         {
             private readonly int index;
 
@@ -32,13 +30,15 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
                 this.index = index;
             }
 
-            public override asd.ButtonState GetState(asd.Joystick joystick)
+            public asd.ButtonState GetState(asd.Joystick joystick)
             {
                 return joystick.GetButtonState(index);
             }
+
+            public void Update(asd.Joystick joystick) { }
         }
 
-        private class AxisInput : JoystickInput
+        private class AxisInput : IJoystickInput
         {
             private readonly int axisIndex;
             private readonly int direction;
@@ -53,7 +53,7 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
                 currentState = false;
             }
 
-            public override asd.ButtonState GetState(asd.Joystick joystick)
+            public asd.ButtonState GetState(asd.Joystick joystick)
             {
                 if (currentState)
                 {
@@ -69,7 +69,7 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
                 }
             }
 
-            public override void Update(asd.Joystick joystick)
+            public void Update(asd.Joystick joystick)
             {
                 previousState = currentState;
                 currentState = joystick.GetAxisState(axisIndex) == direction;
@@ -77,7 +77,7 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
         }
 
         private readonly asd.Joystick joystick;
-        private readonly Dictionary<TControl, JoystickInput> binding;
+        private readonly Dictionary<TControl, IJoystickInput> binding;
 
         public bool IsValid { get; private set; }
 
@@ -94,7 +94,7 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
 
             joystick = asd.Engine.JoystickContainer.GetJoystickAt(index);
 
-            binding = new Dictionary<TControl, JoystickInput>();
+            binding = new Dictionary<TControl, IJoystickInput>();
         }
 
         public void BindButton(int buttonIndex, TControl abstractKey)

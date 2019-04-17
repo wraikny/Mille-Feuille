@@ -14,6 +14,21 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         Left,
     }
 
+    public static class ButtonDirectionExt
+    {
+        public static ButtonDirection Reverse(this ButtonDirection self)
+        {
+            switch(self)
+            {
+                case ButtonDirection.Up: return ButtonDirection.Down;
+                case ButtonDirection.Down: return ButtonDirection.Up;
+                case ButtonDirection.Right: return ButtonDirection.Left;
+                case ButtonDirection.Left: return ButtonDirection.Right;
+                default: throw new Exception();
+            }
+        }
+    }
+
     public class ControllerButton
     {
         public asd.Object2D Owner { get; }
@@ -42,16 +57,25 @@ namespace wraikny.MilleFeuille.Core.UI.Button
             return this;
         }
 
-        public static void ConnectVertical(ControllerButton up, ControllerButton down)
+        public ControllerButton Chain(ControllerButton next, ButtonDirection dir)
         {
-            up.SetButton(ButtonDirection.Down, down);
-            down.SetButton(ButtonDirection.Up, up);
+            this.SetButton(dir, next);
+            next.SetButton(dir.Reverse(), this);
+
+            return next;
         }
 
-        public static void ConnectHorizontal(ControllerButton left, ControllerButton right)
+        public static void ConnetButtons(IReadOnlyCollection<ControllerButton> buttons, ButtonDirection dir)
         {
-            left.SetButton(ButtonDirection.Right, right);
-            right.SetButton(ButtonDirection.Left, left);
+            var count = buttons.Count();
+
+            for(int i = 0; i < count - 2; i++)
+            {
+                var b1 = buttons.ElementAt(i);
+                var b2 = buttons.ElementAt(i + 1);
+
+                b1.Chain(b2, dir);
+            }
         }
 
         private static string GetKeyString()
