@@ -33,13 +33,22 @@ namespace wraikny.MilleFeuille.Core.UI.Button
 
         private void UpdateButtonsState()
         {
-            foreach (var (button, info) in GetCollidedButtons())
+            var collisionsDict =
+                    GetCollidedButtons()
+                    .ToList()
+                    .ToDictionary(t => t.Item1, t => t.Item2);
+            foreach (var button in Buttons)
             {
                 var key = button.TriggerButton;
                 var state = asd.Engine.Mouse.GetButtonInputState(key);
-                if(key == button.TriggerButton)
+
+                if(collisionsDict.TryGetValue(button, out var info))
                 {
                     button.Update(info.CollisionType, state);
+                }
+                else
+                {
+                    button.Update(asd.CollisionType.Exit, state);
                 }
             }
         }
