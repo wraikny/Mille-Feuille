@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using wraikny.MilleFeuille.Core;
 
 namespace wraikny.MilleFeuille.Core.UI.Button
 {
@@ -21,7 +22,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         Exit,
     }
 
-    public abstract class ButtonComponentBase : asd.Object2DComponent
+    public abstract class ButtonComponentBase : Object.Object2DComponent
     {
         public ButtonState State { get; set; }
 
@@ -34,10 +35,10 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         protected abstract void CallHover();
         protected abstract void CallHold();
 
-        protected abstract void CallOnEnter();
+        protected abstract void CallOnEntered();
         protected abstract void CallOnPushed();
         protected abstract void CallOnSelected();
-        protected abstract void CallOnExit();
+        protected abstract void CallOnExited();
 
         protected override void OnUpdate()
         {
@@ -62,7 +63,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
             switch (op)
             {
                 case ButtonOperation.Enter:
-                    CallOnEnter();
+                    CallOnEntered();
                     State = ButtonState.Hover;
                     break;
                 case ButtonOperation.Push:
@@ -74,8 +75,8 @@ namespace wraikny.MilleFeuille.Core.UI.Button
                     State = ButtonState.Hover;
                     break;
                 case ButtonOperation.Exit:
-                    CallOnEnter();
-                    State = ButtonState.Hover;
+                    CallOnExited();
+                    State = ButtonState.Default;
                     break;
             }
         }
@@ -94,8 +95,8 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         public event Action<T> Default = delegate { };
         protected override void CallDefault() => Default((T)Owner);
 
-        public event Action<T> OnEnter = delegate { };
-        protected override void CallOnEnter() => OnEnter((T)Owner);
+        public event Action<T> OnEntered = delegate { };
+        protected override void CallOnEntered() => OnEntered((T)Owner);
 
         public event Action<T> Hover = delegate { };
         protected override void CallHover() => Hover((T)Owner);
@@ -109,7 +110,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         public event Action<T> OnSelected = delegate { };
         protected override void CallOnSelected() => OnSelected((T)Owner);
 
-        public event Action<T> OnExit = delegate { };
-        protected override void CallOnExit() => OnExit((T)Owner);
+        public event Action<T> OnExited = delegate { };
+        protected override void CallOnExited() => OnExited((T)Owner);
     }
 }

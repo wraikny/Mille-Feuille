@@ -10,12 +10,12 @@ namespace wraikny.MilleFeuille.Core.UI.Button
     public class MouseButtonSelecter : asd.Layer2DComponent
     {
         public CollidableMouse Mouse { get; }
-        public List<MouseButton> Buttons { get; }
+        public List<IMouseButton> Buttons { get; }
 
         public MouseButtonSelecter(CollidableMouse mouse)
         {
             this.Mouse = mouse;
-            Buttons = new List<MouseButton>();
+            Buttons = new List<IMouseButton>();
         }
 
         protected override void OnLayerUpdated()
@@ -25,7 +25,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
             UpdateButtonsState();
         }
 
-        public MouseButtonSelecter AddButton(MouseButton button)
+        public MouseButtonSelecter AddButton(IMouseButton button)
         {
             Buttons.Add(button);
             return this;
@@ -33,19 +33,20 @@ namespace wraikny.MilleFeuille.Core.UI.Button
 
         private void UpdateButtonsState()
         {
-            foreach (var key in allMouseButtons)
+            foreach (var (button, info) in GetCollidedButtons())
             {
+                var key = button.TriggerButton;
                 var state = asd.Engine.Mouse.GetButtonInputState(key);
-                foreach (var (button, info) in GetCollidedButtons())
+                if(key == button.TriggerButton)
                 {
-                    button.UpdateButtonState(key, info.CollisionType, state);
+                    button.Update(info.CollisionType, state);
                 }
             }
         }
 
-        private IEnumerable<(MouseButton, asd.Collision2DInfo)> GetCollidedButtons()
+        private IEnumerable<(IMouseButton, asd.Collision2DInfo)> GetCollidedButtons()
         {
-            var result = new List<(MouseButton, asd.Collision2DInfo)>();
+            var result = new List<(IMouseButton, asd.Collision2DInfo)>();
 
             foreach (var info in Mouse.GetCollisionInfo())
             {
@@ -53,7 +54,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
 
                 var collidedButton = Buttons
                     .FirstOrDefault(button =>
-                        collidedObject.Equals(button.Owner)
+                        collidedObject.Equals(button.ButtonOwner)
                     );
 
                 if (collidedButton != null)
