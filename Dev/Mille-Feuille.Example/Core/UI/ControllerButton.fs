@@ -4,6 +4,7 @@ open System.Linq
 open wraikny.MilleFeuille.Core
 open wraikny.MilleFeuille.Core.UI
 open wraikny.MilleFeuille.Fs.Input.Controller
+open wraikny.MilleFeuille.Fs.UI.Button
 
 type Scene() =
     inherit Object.Scene()
@@ -41,46 +42,31 @@ type Scene() =
             )
 
         let createButton index =
-            let c =
-                new UI.Button.ControllerButtonComponent<asd.GeometryObject2D>()
-
             let defaultColor = new asd.Color(255uy, 255uy, 255uy)
             let hoverColor = new asd.Color(150uy, 150uy, 150uy)
             let holdColor = new asd.Color(50uy, 50uy, 50uy)
-            
-            c.add_Default(fun owner ->
-                () //printfn "Default"
-            )
 
-            c.add_Hover(fun owner ->
-                () //printfn "Hover"
-            )
-
-            c.add_Hold(fun owner ->
-                () //printfn "Hold"
-            )
-
-            c.add_OnEntered(fun owner ->
+            (ButtonBuilder.init() : ButtonBuilder<asd.GeometryObject2D>)
+            //|> ButtonBuilder.addDefault(fun owner -> ())
+            //|> ButtonBuilder.addHover(fun owner -> ())
+            //|> ButtonBuilder.addHold(fun owner -> ())
+            |> ButtonBuilder.addOnEntered(fun owner ->
                 printfn "Button%d: OnEntered" index
                 owner.Color <- hoverColor
             )
-
-            c.add_OnPushed(fun owner ->
+            |> ButtonBuilder.addOnPushed(fun owner ->
                 printfn "Button%d: OnPushed" index
                 owner.Color <- holdColor
             )
-
-            c.add_OnSelected(fun owner ->
+            |> ButtonBuilder.addOnSelected(fun owner ->
                 printfn "Button%d: OnSelected" index
                 owner.Color <- hoverColor
             )
-
-            c.add_OnExited(fun owner ->
+            |> ButtonBuilder.addOnEntered(fun owner ->
                 printfn "Button%d: Onexited" index
                 owner.Color <- defaultColor
             )
-
-            c
+            |> ButtonBuilder.buildController
 
         let btnCmp1 = createButton 1
         let btnCmp2 = createButton 2

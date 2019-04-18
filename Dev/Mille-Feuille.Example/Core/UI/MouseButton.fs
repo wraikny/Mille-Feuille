@@ -1,6 +1,7 @@
 ﻿module wraikny.MilleFeuille.Example.Core.UI.MouseButton
 
 open wraikny.MilleFeuille.Core
+open wraikny.MilleFeuille.Fs.UI.Button
 
 type Scene() =
     inherit Object.Scene()
@@ -44,61 +45,41 @@ type Scene() =
             )
 
 
-        let buttonComponent =
-            let c = new UI.Button.MouseButtonComponent<asd.GeometryObject2D>(asd.MouseButtons.ButtonLeft)
+        let buttonComponent index =
             let defaultColor = new asd.Color(255uy, 255uy, 255uy)
             let hoverColor = new asd.Color(150uy, 150uy, 150uy)
             let holdColor = new asd.Color(50uy, 50uy, 50uy)
 
-            c.add_Default(fun owner ->
-                () //printfn "Default"
-            )
-
-            c.add_Hover(fun owner ->
-                () //printfn "Hover"
-            )
-
-            c.add_Hold(fun owner ->
-                () //printfn "Hold"
-            )
-
-            c.add_OnEntered(fun owner ->
-                printfn "OnEntered"
+            (ButtonBuilder.init() : ButtonBuilder<asd.GeometryObject2D>)
+            //|> ButtonBuilder.addDefault(fun owner -> ())
+            //|> ButtonBuilder.addHover(fun owner -> ())
+            //|> ButtonBuilder.addHold(fun owner -> ())
+            |> ButtonBuilder.addOnEntered(fun owner ->
+                printfn "Button%d: OnEntered" index
                 owner.Color <- hoverColor
             )
-
-            c.add_OnPushed(fun owner ->
-                printfn "OnPushed"
+            |> ButtonBuilder.addOnPushed(fun owner ->
+                printfn "Button%d: OnPushed" index
                 owner.Color <- holdColor
             )
-
-            c.add_OnSelected(fun owner ->
-                printfn "OnSelected"
+            |> ButtonBuilder.addOnSelected(fun owner ->
+                printfn "Button%d: OnSelected" index
                 owner.Color <- hoverColor
             )
-
-            c.add_OnExited(fun owner ->
-                printfn "Onexited"
+            |> ButtonBuilder.addOnEntered(fun owner ->
+                printfn "Button%d: Onexited" index
                 owner.Color <- defaultColor
             )
+            |> ButtonBuilder.buildMouse asd.MouseButtons.ButtonLeft
 
-            c.add_OnOwnerAdded(fun owner ->
-                let buttonCollider =
-                    new asd.RectangleCollider(
-                        Area = buttonArea
-                        , IsVisible = true
-                    )
-                owner.AddCollider(buttonCollider)
-            )
+        let btn0 = buttonComponent 0
 
-            c
-
-        buttonObj.AddComponent(buttonComponent, "Button")
+        buttonObj.AddComponent(btn0, "Button")
 
         uiLayer.AddObject(buttonObj)
 
         let selecter = new UI.Button.MouseButtonSelecter(mouse)
-        selecter.AddButton(buttonComponent) |> ignore
+        selecter.AddButton(btn0) |> ignore
 
         uiLayer.AddComponent(selecter, "MouseButtonSelecter")
 
