@@ -103,25 +103,3 @@ type Scene() =
         uiLayer.AddComponent(selecter, "MouseButtonSelecter")
 
         ()
-
-
-let main () =
-    asd.Engine.Initialize("Mouse Button", 800, 600, new asd.EngineOption())
-    |> ignore
-
-    let scene = new Scene()
-
-
-    asd.Engine.ChangeScene(scene)
-    
-
-    let rec loop () =
-        if asd.Engine.DoEvents() then
-            asd.Engine.Update()
-            loop ()
-
-    loop()
-
-    asd.Engine.Terminate()
-
-    0
