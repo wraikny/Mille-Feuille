@@ -60,8 +60,8 @@
     </None>
     <Compile Include="Tool.fs" />
     <Compile Include="Input\Controller\KeyboardBuilder.fs" />
-    <Compile Include="Input\Controller\JoystickController.fs" />
-    <Compile Include="UI\Button\ButtonComponent.fs" />
+    <Compile Include="Input\Controller\JoystickBuilder.fs" />
+    <Compile Include="UI\Button\ButtonBuilder.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Altseed">
