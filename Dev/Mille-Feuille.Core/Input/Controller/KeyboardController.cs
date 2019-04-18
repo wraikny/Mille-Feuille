@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace wraikny.MilleFeuille.Core.Input.Controller
 {
-    public class KeyboardController<TControl> : ControllerBase<TControl>
+    public class KeyboardController<TControl> : IController<TControl>
     {
         private readonly Dictionary<TControl, asd.Keys> binding;
 
-        public override IEnumerable<TControl> Keys => binding.Keys;
+        public IEnumerable<TControl> Keys => binding.Keys;
 
         public KeyboardController()
         {
             binding = new Dictionary<TControl, asd.Keys>();
         }
 
-        public override asd.ButtonState? GetState(TControl key)
+        public asd.ButtonState? GetState(TControl key)
         {
             if (binding.TryGetValue(key, out var result))
             {
@@ -29,17 +29,19 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
             }
         }
 
-        public void BindKey(asd.Keys key, TControl abstractKey)
+        public void BindKey(TControl abstractKey, asd.Keys key)
         {
             binding[abstractKey] = key;
         }
 
-        public void BindKeys(IReadOnlyCollection<(asd.Keys, TControl)> collection)
+        public void BindKeys(IReadOnlyCollection<(TControl, asd.Keys)> collection)
         {
-            foreach (var (key, abstractKey) in collection)
+            foreach (var (abstractKey, key) in collection)
             {
-                BindKey(key, abstractKey);
+                BindKey(abstractKey, key);
             }
         }
+
+        public void Update() { }
     }
 }

@@ -17,28 +17,44 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         Select,
     }
 
-    class ControllerButtonSelecter : asd.Layer2DComponent
+    public class ControllerButtonSelecter : asd.Layer2DComponent
     {
-        public ControllerBase<ControllerSelect> Controller { get; }
+        private readonly List<IController<ControllerSelect>> controllers;
+        public IEnumerable<IController<ControllerSelect>> Controllers => controllers;
 
-        public ControllerButton CursorButton { get; private set; }
+        public IControllerButton CursorButton { get; private set; }
 
         public ControllerButtonSelecter(
-            ControllerBase<ControllerSelect> controller
-            , ControllerButton selectedButton
+            IControllerButton selectedButton
         )
         {
-            Controller = controller;
+            controllers = new List<IController<ControllerSelect>>();
             CursorButton = selectedButton;
+            selectedButton.Update(ButtonOperation.Enter);
         }
 
         protected override void OnLayerUpdated()
         {
             base.OnLayerUpdated();
 
-            Controller.Update();
+            foreach(var controller in Controllers)
+            {
+                controller.Update();
+            }
 
             UpdateButtonsState();
+        }
+
+        public ControllerButtonSelecter AddController(IController<ControllerSelect> controller)
+        {
+            controllers.Add(controller);
+            return this;
+        }
+
+        public ControllerButtonSelecter AddControllers(IReadOnlyCollection<IController<ControllerSelect>> controllers)
+        {
+            this.controllers.AddRange(controllers);
+            return this;
         }
 
         private ControllerSelect DirectionToControl(ButtonDirection dir)
@@ -67,31 +83,34 @@ namespace wraikny.MilleFeuille.Core.UI.Button
                 ButtonDirection.Left,
             };
 
-            foreach (var dir in dirs )
+            foreach(var controller in Controllers)
             {
-                var control = DirectionToControl(dir);
-                if (Controller.GetState(control) == asd.ButtonState.Push)
+                foreach (var dir in dirs )
                 {
-                    var next = CursorButton.GetButton(dir);
-                    if (next == null) continue;
+                    var control = DirectionToControl(dir);
+                    if (controller.GetState(control) == asd.ButtonState.Push)
+                    {
+                        var next = CursorButton.GetButton(dir);
+                        if (next == null) continue;
 
-                    CursorButton.UpdateButtonState(ButtonOperation.Exit);
-                    next.UpdateButtonState(ButtonOperation.Enter);
+                        CursorButton.Update(ButtonOperation.Exit);
+                        next.Update(ButtonOperation.Enter);
 
-                    CursorButton = next;
+                        CursorButton = next;
 
-                    break;
+                        break;
+                    }
                 }
-            }
 
-            if(Controller.GetState(ControllerSelect.Select) == asd.ButtonState.Push)
-            {
-                CursorButton.UpdateButtonState(ButtonOperation.Push);
-            }
+                if(controller.GetState(ControllerSelect.Select) == asd.ButtonState.Push)
+                {
+                    CursorButton.Update(ButtonOperation.Push);
+                }
 
-            if (Controller.GetState(ControllerSelect.Select) == asd.ButtonState.Release)
-            {
-                CursorButton.UpdateButtonState(ButtonOperation.Push);
+                if (controller.GetState(ControllerSelect.Select) == asd.ButtonState.Release)
+                {
+                    CursorButton.Update(ButtonOperation.Release);
+                }
             }
         }
     }

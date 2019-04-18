@@ -1,6 +1,7 @@
 ﻿module wraikny.MilleFeuille.Example.Core.UI.MouseButton
 
 open wraikny.MilleFeuille.Core
+open wraikny.MilleFeuille.Fs.UI.Button
 
 type Scene() =
     inherit Object.Scene()
@@ -10,12 +11,28 @@ type Scene() =
     override this.OnRegistered() =
         this.AddLayer(uiLayer)
 
-        let mouse = new Input.Mouse.CollidableMouse(5.0f)
+        uiLayer.AddObject <|
+            new asd.GeometryObject2D(
+                Shape =
+                    new asd.RectangleShape(
+                        DrawingArea = new asd.RectF(
+                            new asd.Vector2DF(0.0f, 0.0f)
+                            , asd.Engine.WindowSize.To2DF()
+                        )
+                    )
+                , Color =
+                    new asd.Color(0uy, 100uy, 150uy)
+            )
+
+        let mouse = new Input.Mouse.CollidableMouse(10.0f)
+        mouse.ColliderVisible <- true
         uiLayer.AddObject(mouse)
+
 
         let buttonArea =
             let size = new asd.Vector2DF(300.0f, 150.0f)
             new asd.RectF(-size / 2.0f, size)
+
 
         let buttonObj =
             new asd.GeometryObject2D(
@@ -23,72 +40,47 @@ type Scene() =
                     new asd.RectangleShape(
                         DrawingArea = buttonArea
                     )
-                , Color = new asd.Color(255uy, 255uy, 255uy, 255uy)
+                , Color = new asd.Color(255uy, 255uy, 255uy)
                 , Position = asd.Engine.WindowSize.To2DF() / 2.0f
             )
+
+
+        let buttonComponent index =
+            let defaultColor = new asd.Color(255uy, 255uy, 255uy)
+            let hoverColor = new asd.Color(150uy, 150uy, 150uy)
+            let holdColor = new asd.Color(50uy, 50uy, 50uy)
+
+            (ButtonBuilder.init() : ButtonBuilder<asd.GeometryObject2D>)
+            //|> ButtonBuilder.addDefault(fun owner -> ())
+            //|> ButtonBuilder.addHover(fun owner -> ())
+            //|> ButtonBuilder.addHold(fun owner -> ())
+            |> ButtonBuilder.addOnEntered(fun owner ->
+                printfn "Button%d: OnEntered" index
+                owner.Color <- hoverColor
+            )
+            |> ButtonBuilder.addOnPushed(fun owner ->
+                printfn "Button%d: OnPushed" index
+                owner.Color <- holdColor
+            )
+            |> ButtonBuilder.addOnReleased(fun owner ->
+                printfn "Button%d: OnReleased" index
+                owner.Color <- hoverColor
+            )
+            |> ButtonBuilder.addOnExited(fun owner ->
+                printfn "Button%d: Onexited" index
+                owner.Color <- defaultColor
+            )
+            |> ButtonBuilder.buildMouse asd.MouseButtons.ButtonLeft
+
+        let btn0 = buttonComponent 0
+
+        buttonObj.AddComponent(btn0, "Button")
+
         uiLayer.AddObject(buttonObj)
 
-        let buttonComponent =
-            let c = new UI.Button.ButtonComponent<asd.GeometryObject2D>()
-            c.add_Default(fun owner ->
-                () //printfn "Default"
-            )
-
-            c.add_Hover(fun owner ->
-                () //printfn "Hover"
-            )
-
-            c.add_Hold(fun owner ->
-                () //printfn "Hold"
-            )
-
-            c.add_OnEnter(fun owner ->
-                printfn "OnEnter"
-            )
-
-            c.add_OnPushed(fun owner ->
-                printfn "OnPushed"
-            )
-
-            c.add_OnSelected(fun owner ->
-                printfn "OnSelected"
-            )
-
-            c.add_OnExit(fun owner ->
-                printfn "Onexit"
-            )
-
-            c
-
-        let buttonCollider = new asd.RectangleCollider(Area = buttonArea)
-        let mouseButton = new UI.Button.MouseButton(buttonObj, buttonCollider);
-        mouseButton.SetButtonComponent(asd.MouseButtons.ButtonLeft, buttonComponent)
-
         let selecter = new UI.Button.MouseButtonSelecter(mouse)
-        selecter.AddButton(mouseButton) |> ignore
+        selecter.AddButton(btn0) |> ignore
 
         uiLayer.AddComponent(selecter, "MouseButtonSelecter")
 
         ()
-
-
-let main () =
-    asd.Engine.Initialize("Mouse Button", 800, 600, new asd.EngineOption())
-    |> ignore
-
-    let scene = new Scene()
-
-
-    asd.Engine.ChangeScene(scene)
-    
-
-    let rec loop () =
-        if asd.Engine.DoEvents() then
-            asd.Engine.Update()
-            loop ()
-
-    loop()
-
-    asd.Engine.Terminate()
-
-    0

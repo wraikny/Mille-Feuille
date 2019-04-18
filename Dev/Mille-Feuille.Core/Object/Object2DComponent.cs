@@ -6,34 +6,35 @@ using System.Threading.Tasks;
 
 namespace wraikny.MilleFeuille.Core.Object
 {
-    public class Object2DComponent : asd.Object2DComponent
+    public class Object2DComponent<T> : asd.Object2DComponent
+        where T : asd.Object2D
     {
-        public event Action<asd.Object2D> OnOwnerAdded = delegate { };
-        public event Action<asd.Object2D> OnOwnerRemoved = delegate { };
-        public event Action<asd.Object2D> OnOwnerDisposed = delegate { };
-        public event Action<asd.Object2D> OnComponentUpdate = delegate { };
+        public event Action<T> OnOwnerAdded = delegate { };
+        public event Action<T> OnOwnerRemoved = delegate { };
+        public event Action<T> OnOwnerDisposed = delegate { };
+        public event Action<T> OnComponentUpdate = delegate { };
 
         protected override void OnObjectAdded()
         {
             base.OnObjectAdded();
-            OnOwnerAdded(Owner);
+            OnOwnerAdded((T)Owner);
         }
 
         protected override void OnObjectRemoved()
         {
             base.OnObjectRemoved();
-            OnOwnerRemoved(Owner);
+            OnOwnerRemoved((T)Owner);
         }
 
         protected override void OnObjectDisposed()
         {
             base.OnObjectDisposed();
-            OnOwnerDisposed(Owner);
+            OnOwnerDisposed((T)Owner);
         }
         protected override void OnUpdate()
         {
             base.OnUpdate();
-            OnComponentUpdate(Owner);
+            OnComponentUpdate((T)Owner);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
         Positive,
     }
 
-    public class JoystickController<TControl> : ControllerBase<TControl>
+    public class JoystickController<TControl> : IController<TControl>
     {
         private interface IJoystickInput
         {
@@ -81,7 +81,7 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
 
         public bool IsValid { get; private set; }
 
-        public override IEnumerable<TControl> Keys => binding.Keys;
+        public IEnumerable<TControl> Keys => binding.Keys;
 
         public JoystickController(int index)
         {
@@ -97,25 +97,25 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
             binding = new Dictionary<TControl, IJoystickInput>();
         }
 
-        public void BindButton(int buttonIndex, TControl abstractKey)
+        public void BindButton(TControl abstractKey, int buttonIndex)
         {
             binding[abstractKey] = new ButtonInput(buttonIndex);
         }
 
-        public void BindAxis(int axisIndex, AxisDirection direction, TControl abstractKey)
+        public void BindAxis(TControl abstractKey, int axisIndex, AxisDirection direction)
         {
             binding[abstractKey] = new AxisInput(axisIndex, direction);
         }
 
         public void BindDirection(TControl left, TControl right, TControl up, TControl down)
         {
-            BindAxis(0, AxisDirection.Negative, left);
-            BindAxis(0, AxisDirection.Positive, right);
-            BindAxis(1, AxisDirection.Negative, up);
-            BindAxis(1, AxisDirection.Positive, down);
+            BindAxis(left, 0, AxisDirection.Negative);
+            BindAxis(right, 0, AxisDirection.Positive);
+            BindAxis(up, 1, AxisDirection.Negative);
+            BindAxis(down, 1, AxisDirection.Positive);
         }
 
-        public override asd.ButtonState? GetState(TControl key)
+        public asd.ButtonState? GetState(TControl key)
         {
             if (IsValid && binding.TryGetValue(key, out var input))
             {
@@ -125,7 +125,7 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
             return null;
         }
 
-        public override void Update()
+        public void Update()
         {
             if (!IsValid)
             {
