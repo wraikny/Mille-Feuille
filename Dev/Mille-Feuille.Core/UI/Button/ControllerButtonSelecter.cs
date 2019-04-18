@@ -21,11 +21,11 @@ namespace wraikny.MilleFeuille.Core.UI.Button
     {
         public ControllerBase<ControllerSelect> Controller { get; }
 
-        public ControllerButton CursorButton { get; private set; }
+        public IControllerButton CursorButton { get; private set; }
 
         public ControllerButtonSelecter(
             ControllerBase<ControllerSelect> controller
-            , ControllerButton selectedButton
+            , IControllerButton selectedButton
         )
         {
             Controller = controller;
@@ -75,8 +75,8 @@ namespace wraikny.MilleFeuille.Core.UI.Button
                     var next = CursorButton.GetButton(dir);
                     if (next == null) continue;
 
-                    CursorButton.UpdateButtonState(ButtonOperation.Exit);
-                    next.UpdateButtonState(ButtonOperation.Enter);
+                    CursorButton.Update(ButtonOperation.Exit);
+                    next.Update(ButtonOperation.Enter);
 
                     CursorButton = next;
 
@@ -86,12 +86,12 @@ namespace wraikny.MilleFeuille.Core.UI.Button
 
             if(Controller.GetState(ControllerSelect.Select) == asd.ButtonState.Push)
             {
-                CursorButton.UpdateButtonState(ButtonOperation.Push);
+                CursorButton.Update(ButtonOperation.Push);
             }
 
             if (Controller.GetState(ControllerSelect.Select) == asd.ButtonState.Release)
             {
-                CursorButton.UpdateButtonState(ButtonOperation.Push);
+                CursorButton.Update(ButtonOperation.Push);
             }
         }
     }
