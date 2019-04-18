@@ -17,6 +17,7 @@ type JoystickBuilder<'T when 'T : comparison> =
         binding : Map<'T, JoystickInput<'T>>
     }
 
+
 module JoystickBuilder =
     let init(index) =
         {
