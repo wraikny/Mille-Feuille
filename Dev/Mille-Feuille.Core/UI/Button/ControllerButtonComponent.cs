@@ -35,6 +35,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         IControllerButton SetButton(ButtonDirection dir, IControllerButton button);
         IControllerButton Chain(IControllerButton next, ButtonDirection dir);
 
+        void Update(ButtonOperation operation);
     }
 
     public class ControllerButtonComponent<T> : ButtonComponent<T>, IControllerButton
@@ -45,6 +46,11 @@ namespace wraikny.MilleFeuille.Core.UI.Button
 
         public IReadOnlyDictionary<ButtonDirection, IControllerButton>
             ConnectedButtons => connectedButtons;
+
+        public void Update(ButtonOperation operation)
+        {
+            UpdateState(operation);
+        }
 
         public IControllerButton GetButton(ButtonDirection dir)
         {
