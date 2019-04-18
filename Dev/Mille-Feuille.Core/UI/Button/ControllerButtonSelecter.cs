@@ -17,7 +17,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         Select,
     }
 
-    class ControllerButtonSelecter : asd.Layer2DComponent
+    public class ControllerButtonSelecter : asd.Layer2DComponent
     {
         public ControllerBase<ControllerSelect> Controller { get; }
 
@@ -30,6 +30,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         {
             Controller = controller;
             CursorButton = selectedButton;
+            selectedButton.Update(ButtonOperation.Enter);
         }
 
         protected override void OnLayerUpdated()
@@ -91,7 +92,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
 
             if (Controller.GetState(ControllerSelect.Select) == asd.ButtonState.Release)
             {
-                CursorButton.Update(ButtonOperation.Push);
+                CursorButton.Update(ButtonOperation.Release);
             }
         }
     }
