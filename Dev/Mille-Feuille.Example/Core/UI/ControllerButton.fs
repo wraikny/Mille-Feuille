@@ -2,6 +2,8 @@
 
 open System.Linq
 open wraikny.MilleFeuille.Core
+open wraikny.MilleFeuille.Core.UI
+open wraikny.MilleFeuille.Fs.Input.Controller
 
 type Scene() =
     inherit Object.Scene()
@@ -91,10 +93,10 @@ type Scene() =
         (createButtonObj  100.0f -100.0f).AddComponent(btnCmp4, "Button")
 
         btnCmp1
-            .Chain(btnCmp2, UI.Button.ButtonDirection.Down)
-            .Chain(btnCmp3, UI.Button.ButtonDirection.Right)
-            .Chain(btnCmp4, UI.Button.ButtonDirection.Up)
-            .Chain(btnCmp1, UI.Button.ButtonDirection.Left)
+            .Chain(btnCmp2, Button.ButtonDirection.Down)
+            .Chain(btnCmp3, Button.ButtonDirection.Right)
+            .Chain(btnCmp4, Button.ButtonDirection.Up)
+            .Chain(btnCmp1, Button.ButtonDirection.Left)
             |> ignore
 
         uiLayer.AddObject(btnCmp1.Owner)
@@ -102,25 +104,19 @@ type Scene() =
         uiLayer.AddObject(btnCmp3.Owner)
         uiLayer.AddObject(btnCmp4.Owner)
 
-        let selecter = new UI.Button.ControllerButtonSelecter(btnCmp1)
+        let selecter = new Button.ControllerButtonSelecter(btnCmp1)
 
         let keyboard =
-            let keyboard =
-                new Input.Controller.KeyboardController<UI.Button.ControllerSelect>()
- 
-            //keyboard.BindKeys <|
-            //    (
-            //        [
-            //            struct (asd.Keys.Up, UI.Button.ControllerSelect.Up)
-            //            struct (asd.Keys.Down, UI.Button.ControllerSelect.Down)
-            //            struct (asd.Keys.Right, UI.Button.ControllerSelect.Right)
-            //            struct (asd.Keys.Left, UI.Button.ControllerSelect.Left)
-            //            struct (asd.Keys.Space, UI.Button.ControllerSelect.Select)
-            //        ]
-            //        |> List.toSeq
-            //    ).ToList()
-
-            keyboard
+            KeyboardBuilder.init()
+            |> KeyboardBuilder.bindKeys
+                [
+                    (Button.ControllerSelect.Up    , asd.Keys.Up)
+                    (Button.ControllerSelect.Down  , asd.Keys.Down)
+                    (Button.ControllerSelect.Right , asd.Keys.Right)
+                    (Button.ControllerSelect.Left  , asd.Keys.Left)
+                    (Button.ControllerSelect.Select, asd.Keys.Space)
+                ]
+            |> KeyboardBuilder.build
 
         selecter.AddController(keyboard) |> ignore
 
