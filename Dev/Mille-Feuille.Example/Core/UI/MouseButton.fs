@@ -62,8 +62,8 @@ type Scene() =
                 printfn "Button%d: OnPushed" index
                 owner.Color <- holdColor
             )
-            |> ButtonBuilder.addOnSelected(fun owner ->
-                printfn "Button%d: OnSelected" index
+            |> ButtonBuilder.addOnReleased(fun owner ->
+                printfn "Button%d: OnReleased" index
                 owner.Color <- hoverColor
             )
             |> ButtonBuilder.addOnExited(fun owner ->
