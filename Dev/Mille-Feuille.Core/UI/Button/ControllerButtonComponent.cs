@@ -76,7 +76,10 @@ namespace wraikny.MilleFeuille.Core.UI.Button
             UpdateState(operation);
         }
 
-        public static void ConnetButtons(IReadOnlyCollection<IControllerButton> buttons, ButtonDirection dir)
+        public static void ConnetButtons(
+            IReadOnlyCollection<IControllerButton> buttons
+            , ButtonDirection dir
+        )
         {
             var count = buttons.Count();
 
@@ -88,6 +91,5 @@ namespace wraikny.MilleFeuille.Core.UI.Button
                 b1.Chain(b2, dir);
             }
         }
-
     }
 }
