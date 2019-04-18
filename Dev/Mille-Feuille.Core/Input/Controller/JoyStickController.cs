@@ -12,7 +12,7 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
         Positive,
     }
 
-    public class JoystickController<TControl> : ControllerBase<TControl>
+    public class JoystickController<TControl> : IController<TControl>
     {
         private interface IJoystickInput
         {
@@ -81,7 +81,7 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
 
         public bool IsValid { get; private set; }
 
-        public override IEnumerable<TControl> Keys => binding.Keys;
+        public IEnumerable<TControl> Keys => binding.Keys;
 
         public JoystickController(int index)
         {
@@ -115,7 +115,7 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
             BindAxis(1, AxisDirection.Positive, down);
         }
 
-        public override asd.ButtonState? GetState(TControl key)
+        public asd.ButtonState? GetState(TControl key)
         {
             if (IsValid && binding.TryGetValue(key, out var input))
             {
@@ -125,7 +125,7 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
             return null;
         }
 
-        public override void Update()
+        public void Update()
         {
             if (!IsValid)
             {

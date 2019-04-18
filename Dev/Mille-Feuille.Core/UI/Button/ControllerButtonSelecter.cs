@@ -19,8 +19,8 @@ namespace wraikny.MilleFeuille.Core.UI.Button
 
     public class ControllerButtonSelecter : asd.Layer2DComponent
     {
-        private readonly List<ControllerBase<ControllerSelect>> controllers;
-        public IEnumerable<ControllerBase<ControllerSelect>> Controllers => controllers;
+        private readonly List<IController<ControllerSelect>> controllers;
+        public IEnumerable<IController<ControllerSelect>> Controllers => controllers;
 
         public IControllerButton CursorButton { get; private set; }
 
@@ -28,7 +28,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
             IControllerButton selectedButton
         )
         {
-            controllers = new List<ControllerBase<ControllerSelect>>();
+            controllers = new List<IController<ControllerSelect>>();
             CursorButton = selectedButton;
             selectedButton.Update(ButtonOperation.Enter);
         }
@@ -45,13 +45,13 @@ namespace wraikny.MilleFeuille.Core.UI.Button
             UpdateButtonsState();
         }
 
-        public ControllerButtonSelecter AddController(ControllerBase<ControllerSelect> controller)
+        public ControllerButtonSelecter AddController(IController<ControllerSelect> controller)
         {
             controllers.Add(controller);
             return this;
         }
 
-        public ControllerButtonSelecter AddControllers(IReadOnlyCollection<ControllerBase<ControllerSelect>> controllers)
+        public ControllerButtonSelecter AddControllers(IReadOnlyCollection<IController<ControllerSelect>> controllers)
         {
             this.controllers.AddRange(controllers);
             return this;

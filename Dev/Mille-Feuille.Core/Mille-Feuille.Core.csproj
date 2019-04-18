@@ -48,7 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Input\Controller\ControllerBase.cs" />
+    <Compile Include="Input\Controller\IController.cs" />
     <Compile Include="Input\Controller\JoyStickController.cs" />
     <Compile Include="Input\Controller\KeyboardController.cs" />
     <Compile Include="Input\Mouse\CollidableMouse.cs" />
