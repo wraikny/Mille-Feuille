@@ -66,6 +66,7 @@
     <None Include="App.config" />
     <Content Include="packages.config" />
     <Compile Include="Core\UI\MouseButton.fs" />
+    <Compile Include="Core\UI\ControllerButton.fs" />
     <Compile Include="Fs\Tool.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
