@@ -6,28 +6,7 @@ using System.Threading.Tasks;
 
 namespace wraikny.MilleFeuille.Core.UI.Button
 {
-    public enum ButtonDirection
-    {
-        Up,
-        Down,
-        Right,
-        Left,
-    }
-
-    public static class ButtonDirectionExt
-    {
-        public static ButtonDirection Reverse(this ButtonDirection self)
-        {
-            switch(self)
-            {
-                case ButtonDirection.Up: return ButtonDirection.Down;
-                case ButtonDirection.Down: return ButtonDirection.Up;
-                case ButtonDirection.Right: return ButtonDirection.Left;
-                case ButtonDirection.Left: return ButtonDirection.Right;
-                default: throw new Exception();
-            }
-        }
-    }
+    
 
     public class ControllerButton
     {
