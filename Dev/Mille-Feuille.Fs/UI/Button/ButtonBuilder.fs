@@ -1,10 +1,103 @@
 ﻿namespace wraikny.MilleFeuille.Fs.UI.Button
 
-type ButtonComponent< 'T when 'T :> asd.Object2D > =
+type ButtonBuilder< 'T when 'T :> asd.Object2D > =
     {
-        defaultEvent : ('T -> unit)
-        onEnteredEvent : ('T -> unit)
-        hoverEvent : ('T -> unit)
-        onPushedEvent : ('T -> unit)
+        defaultEvents : ('T -> unit) list
+        onEnteredEvents : ('T -> unit) list
+        hoverEvents : ('T -> unit) list
+        onPushedEvents : ('T -> unit) list
+        holdEvents : ('T -> unit) list
+        onSelectedEvents : ('T -> unit) list
+        onExitedEvents : ('T -> unit) list
     }
 
+
+open wraikny.MilleFeuille.Core.UI.Button
+
+
+module ButtonBuilder =
+    let init() =
+        {
+            defaultEvents = []
+            onEnteredEvents = []
+            hoverEvents = []
+            onPushedEvents = []
+            holdEvents = []
+            onSelectedEvents = []
+            onExitedEvents = []
+        }
+
+    let addDefault f builder =
+        { builder with
+            defaultEvents = f::builder.defaultEvents
+        }
+
+    let addOnEntered f builder =
+        { builder with
+            onEnteredEvents = f::builder.onEnteredEvents
+        }
+
+    let addHover f builder =
+        { builder with
+            hoverEvents = f::builder.hoverEvents
+        }
+
+    let addOnPushed f builder =
+        { builder with
+            onPushedEvents = f::builder.onPushedEvents
+        }
+
+    let addHold f builder =
+        { builder with
+            holdEvents = f::builder.holdEvents
+        }
+
+    let addOnSelected f builder =
+        { builder with
+            onSelectedEvents = f::builder.onSelectedEvents
+        }
+
+    let addOnExited f builder =
+        { builder with
+            onExitedEvents = f::builder.onExitedEvents
+        }
+
+    let private addEvents
+        (builder : ButtonBuilder<'T>)
+        (button : 'U when 'U :> ButtonComponent<'T>) =
+        for f in builder.defaultEvents do
+            button.add_Default(fun owner -> f owner)
+
+        for f in builder.onEnteredEvents do
+            button.add_OnEntered(fun owner -> f owner)
+
+        for f in builder.hoverEvents do
+            button.add_Hover(fun owner -> f owner)
+
+        for f in builder.onPushedEvents do
+            button.add_OnPushed(fun owner -> f owner)
+
+        for f in builder.holdEvents do
+            button.add_Hold(fun owner -> f owner)
+
+        for f in builder.onSelectedEvents do
+            button.add_OnSelected(fun owner -> f owner)
+
+        for f in builder.onExitedEvents do
+            button.add_OnExited(fun owner -> f owner)
+
+
+    let buildController (builder : ButtonBuilder<'T>) =
+        let button = new ControllerButtonComponent<'T>()
+
+        button |> addEvents builder
+
+        button
+
+
+    let buildMouse (mouseButton) (builder : ButtonBuilder<'T>) =
+        let button = new MouseButtonComponent<'T>(mouseButton)
+
+        button |> addEvents builder
+
+        button
