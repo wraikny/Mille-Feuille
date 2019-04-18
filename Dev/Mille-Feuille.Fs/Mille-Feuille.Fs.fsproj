@@ -58,6 +58,7 @@
       <Link>Tart.Helper.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Compile Include="Sound.fs" />
     <Compile Include="Tool.fs" />
     <Compile Include="Input\Controller\KeyboardBuilder.fs" />
     <Compile Include="Input\Controller\JoystickBuilder.fs" />
