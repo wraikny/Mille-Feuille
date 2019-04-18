@@ -34,22 +34,21 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         IControllerButton GetButton(ButtonDirection dir);
         IControllerButton SetButton(ButtonDirection dir, IControllerButton button);
         IControllerButton Chain(IControllerButton next, ButtonDirection dir);
-
         void Update(ButtonOperation operation);
     }
 
     public class ControllerButtonComponent<T> : ButtonComponent<T>, IControllerButton
         where T : asd.Object2D
     {
-        private readonly Dictionary<ButtonDirection, IControllerButton>
-            connectedButtons;
+        private readonly Dictionary<ButtonDirection, IControllerButton> connectedButtons;
 
         public IReadOnlyDictionary<ButtonDirection, IControllerButton>
             ConnectedButtons => connectedButtons;
 
-        public void Update(ButtonOperation operation)
+        
+        public ControllerButtonComponent()
         {
-            UpdateState(operation);
+            connectedButtons = new Dictionary<ButtonDirection, IControllerButton>();
         }
 
         public IControllerButton GetButton(ButtonDirection dir)
@@ -72,7 +71,15 @@ namespace wraikny.MilleFeuille.Core.UI.Button
             return next;
         }
 
-        public static void ConnetButtons(IReadOnlyCollection<IControllerButton> buttons, ButtonDirection dir)
+        public void Update(ButtonOperation operation)
+        {
+            UpdateState(operation);
+        }
+
+        public static void ConnetButtons(
+            IReadOnlyCollection<IControllerButton> buttons
+            , ButtonDirection dir
+        )
         {
             var count = buttons.Count();
 
@@ -84,6 +91,5 @@ namespace wraikny.MilleFeuille.Core.UI.Button
                 b1.Chain(b2, dir);
             }
         }
-
     }
 }

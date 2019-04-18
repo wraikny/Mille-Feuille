@@ -46,7 +46,6 @@ type Scene() =
 
         let buttonComponent =
             let c = new UI.Button.MouseButtonComponent<asd.GeometryObject2D>(asd.MouseButtons.ButtonLeft)
-
             let defaultColor = new asd.Color(255uy, 255uy, 255uy)
             let hoverColor = new asd.Color(150uy, 150uy, 150uy)
             let holdColor = new asd.Color(50uy, 50uy, 50uy)
