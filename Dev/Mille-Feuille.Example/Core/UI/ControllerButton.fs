@@ -24,24 +24,6 @@ type Scene() =
                 new asd.Color(0uy, 100uy, 150uy)
         )
 
-        let keyboard =
-            let keyboard =
-                new Input.Controller.KeyboardController<UI.Button.ControllerSelect>()
- 
-            keyboard.BindKeys <|
-                (
-                    [
-                        struct (asd.Keys.Up, UI.Button.ControllerSelect.Up)
-                        struct (asd.Keys.Down, UI.Button.ControllerSelect.Down)
-                        struct (asd.Keys.Right, UI.Button.ControllerSelect.Right)
-                        struct (asd.Keys.Left, UI.Button.ControllerSelect.Left)
-                        struct (asd.Keys.Space, UI.Button.ControllerSelect.Select)
-                    ]
-                    |> List.toSeq
-                ).ToList()
-
-            keyboard
-
         let createButtonObj x y =
             let buttonArea =
                 let size = new asd.Vector2DF(150.0f, 150.0f)
@@ -120,7 +102,27 @@ type Scene() =
         uiLayer.AddObject(btnCmp3.Owner)
         uiLayer.AddObject(btnCmp4.Owner)
 
-        let selecter = new UI.Button.ControllerButtonSelecter(keyboard, btnCmp1)
+        let selecter = new UI.Button.ControllerButtonSelecter(btnCmp1)
+
+        let keyboard =
+            let keyboard =
+                new Input.Controller.KeyboardController<UI.Button.ControllerSelect>()
+ 
+            keyboard.BindKeys <|
+                (
+                    [
+                        struct (asd.Keys.Up, UI.Button.ControllerSelect.Up)
+                        struct (asd.Keys.Down, UI.Button.ControllerSelect.Down)
+                        struct (asd.Keys.Right, UI.Button.ControllerSelect.Right)
+                        struct (asd.Keys.Left, UI.Button.ControllerSelect.Left)
+                        struct (asd.Keys.Space, UI.Button.ControllerSelect.Select)
+                    ]
+                    |> List.toSeq
+                ).ToList()
+
+            keyboard
+
+        selecter.AddController(keyboard) |> ignore
 
         uiLayer.AddComponent(selecter, "Selecter")
 
