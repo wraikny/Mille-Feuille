@@ -10,12 +10,12 @@ namespace wraikny.MilleFeuille.Core.UI.Button
     public class MouseButtonSelecter : asd.Layer2DComponent
     {
         public CollidableMouse Mouse { get; }
-        public List<IMouseButton> Buttons { get; }
+        private readonly List<IMouseButton> buttons;
 
         public MouseButtonSelecter(CollidableMouse mouse)
         {
             this.Mouse = mouse;
-            Buttons = new List<IMouseButton>();
+            buttons = new List<IMouseButton>();
         }
 
         protected override void OnLayerUpdated()
@@ -27,20 +27,19 @@ namespace wraikny.MilleFeuille.Core.UI.Button
 
         public MouseButtonSelecter AddButton(IMouseButton button)
         {
-            Buttons.Add(button);
+            buttons.Add(button);
             return this;
         }
 
         private void UpdateButtonsState()
         {
-            var collisionsDict =
-                    GetCollidedButtons()
-                    .ToList()
-                    .ToDictionary(t => t.Item1, t => t.Item2);
-            foreach (var button in Buttons)
+            var collisionsDict = GetCollisionsInfo();
+
+            foreach (var button in buttons)
             {
                 var key = button.TriggerButton;
                 var state = asd.Engine.Mouse.GetButtonInputState(key);
+
 
                 if(collisionsDict.TryGetValue(button, out var info))
                 {
@@ -53,7 +52,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
             }
         }
 
-        private IEnumerable<(IMouseButton, asd.Collision2DInfo)> GetCollidedButtons()
+        private IReadOnlyDictionary<IMouseButton, asd.Collision2DInfo> GetCollisionsInfo()
         {
             var result = new List<(IMouseButton, asd.Collision2DInfo)>();
 
@@ -61,7 +60,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
             {
                 var collidedObject = info.TheirsCollider.OwnerObject;
 
-                var collidedButton = Buttons
+                var collidedButton = buttons
                     .FirstOrDefault(button =>
                         collidedObject.Equals(button.ButtonOwner)
                     );
@@ -74,7 +73,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
                 }
             }
 
-            return result;
+            return result.ToDictionary(t => t.Item1, t => t.Item2);
         }
 
         private static readonly asd.MouseButtons[] allMouseButtons = {
