@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Input\Config\Joystick.cs" />
     <Compile Include="Input\Controller\IController.cs" />
     <Compile Include="Input\Controller\JoyStickController.cs" />
     <Compile Include="Input\Controller\KeyboardController.cs" />
