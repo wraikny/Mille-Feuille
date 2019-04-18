@@ -108,17 +108,17 @@ type Scene() =
             let keyboard =
                 new Input.Controller.KeyboardController<UI.Button.ControllerSelect>()
  
-            keyboard.BindKeys <|
-                (
-                    [
-                        struct (asd.Keys.Up, UI.Button.ControllerSelect.Up)
-                        struct (asd.Keys.Down, UI.Button.ControllerSelect.Down)
-                        struct (asd.Keys.Right, UI.Button.ControllerSelect.Right)
-                        struct (asd.Keys.Left, UI.Button.ControllerSelect.Left)
-                        struct (asd.Keys.Space, UI.Button.ControllerSelect.Select)
-                    ]
-                    |> List.toSeq
-                ).ToList()
+            //keyboard.BindKeys <|
+            //    (
+            //        [
+            //            struct (asd.Keys.Up, UI.Button.ControllerSelect.Up)
+            //            struct (asd.Keys.Down, UI.Button.ControllerSelect.Down)
+            //            struct (asd.Keys.Right, UI.Button.ControllerSelect.Right)
+            //            struct (asd.Keys.Left, UI.Button.ControllerSelect.Left)
+            //            struct (asd.Keys.Space, UI.Button.ControllerSelect.Select)
+            //        ]
+            //        |> List.toSeq
+            //    ).ToList()
 
             keyboard
 

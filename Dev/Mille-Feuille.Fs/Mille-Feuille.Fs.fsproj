@@ -59,7 +59,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Compile Include="Tool.fs" />
-    <Compile Include="Input\Controller\KeyboardController.fs" />
+    <Compile Include="Input\Controller\KeyboardBuilder.fs" />
+    <Compile Include="Input\Controller\JoystickController.fs" />
     <Compile Include="UI\Button\ButtonComponent.fs" />
   </ItemGroup>
   <ItemGroup>
@@ -83,6 +84,13 @@
     <Reference Include="Tart.Helper">
       <HintPath>..\Lib\Tart.Helper.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mille-Feuille.Core\Mille-Feuille.Core.csproj">
+      <Name>Mille-Feuille.Core</Name>
+      <Project>{73984409-a0fe-476e-99f2-61be570a752f}</Project>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
