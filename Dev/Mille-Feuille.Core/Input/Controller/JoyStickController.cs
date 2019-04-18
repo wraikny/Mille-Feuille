@@ -85,12 +85,7 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
 
         public JoystickController(int index)
         {
-            IsValid = true;
-
-            if (!asd.Engine.JoystickContainer.GetIsPresentAt(index))
-            {
-                IsValid = false;
-            }
+            IsValid = asd.Engine.JoystickContainer.GetIsPresentAt(index);
 
             joystick = asd.Engine.JoystickContainer.GetJoystickAt(index);
 
