@@ -59,6 +59,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Compile Include="Tool.fs" />
+    <Compile Include="Input\Controller\KeyboardController.fs" />
+    <Compile Include="UI\Button\ButtonComponent.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Altseed">
