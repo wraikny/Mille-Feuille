@@ -22,7 +22,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         Exit,
     }
 
-    public abstract class ButtonComponentBase : Object.Object2DComponent
+    public abstract class ButtonComponentBase : Object.Object2DComponent<asd.Object2D>
     {
         public ButtonState State { get; set; }
 
