@@ -101,6 +101,7 @@ type Scene() =
                     (Button.ControllerSelect.Right , asd.Keys.Right)
                     (Button.ControllerSelect.Left  , asd.Keys.Left)
                     (Button.ControllerSelect.Select, asd.Keys.Space)
+                    (Button.ControllerSelect.Cancel, asd.Keys.Escape)
                 ]
             |> KeyboardBuilder.build
 

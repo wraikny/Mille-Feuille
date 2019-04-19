@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +15,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         Right,
         Left,
         Select,
+        Cancel,
     }
 
     public class ControllerButtonSelecter : asd.Layer2DComponent
