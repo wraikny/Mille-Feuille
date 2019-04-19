@@ -9,6 +9,13 @@ namespace wraikny.MilleFeuille.Core.Object
     public class Object2DComponent<T> : asd.Object2DComponent
         where T : asd.Object2D
     {
+        public string Name { get; }
+
+        public Object2DComponent(string name)
+        {
+            Name = name;
+        }
+
         public event Action<T> OnOwnerAdded = delegate { };
         public event Action<T> OnOwnerRemoved = delegate { };
         public event Action<T> OnOwnerDisposed = delegate { };
