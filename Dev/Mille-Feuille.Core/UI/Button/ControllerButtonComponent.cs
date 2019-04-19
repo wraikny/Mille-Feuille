@@ -71,9 +71,33 @@ namespace wraikny.MilleFeuille.Core.UI.Button
             return next;
         }
 
+
         public void Update(ButtonOperation operation)
         {
-            UpdateState(operation);
+            // Escape
+            if(
+                (operation == ButtonOperation.Exit) && (State != ButtonState.Default)
+            )
+            {
+                UpdateState(operation);
+                return;
+            }
+
+            bool UpdateWithState(ButtonState state_, ButtonOperation operation_)
+            {
+                var flag = (State == state_ && operation == operation_);
+
+                if (flag)
+                {
+                    UpdateState(operation);
+                }
+
+                return flag;
+            }
+
+            if (UpdateWithState(ButtonState.Default, ButtonOperation.Enter)) return;
+            if (UpdateWithState(ButtonState.Hover, ButtonOperation.Push)) return;
+            if (UpdateWithState(ButtonState.Hold, ButtonOperation.Release)) return;
         }
 
         public static void ConnetButtons(
