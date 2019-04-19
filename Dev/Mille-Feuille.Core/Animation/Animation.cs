@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 namespace wraikny.MilleFeuille.Core.Animation
 {
     [Serializable]
-    public class Animation<T>
+    public class Animation<TObj>
     {
         public string Name { get; private set; }
         public bool IsLooping { get; private set; }
 
-        public Func<T, IEnumerator> Generator { get; private set; }
+        public Func<TObj, IEnumerator> Generator { get; private set; }
 
-        public Animation(string name, Func<T, IEnumerator> generator)
+        public Animation(string name, Func<TObj, IEnumerator> generator)
         {
             Name = name;
             Generator = generator;
