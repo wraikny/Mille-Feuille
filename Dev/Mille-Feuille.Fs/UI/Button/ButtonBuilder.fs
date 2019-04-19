@@ -87,16 +87,16 @@ module ButtonBuilder =
             button.add_OnExited(fun owner -> f owner)
 
 
-    let buildController (builder : ButtonBuilder<'T>) =
-        let button = new ControllerButtonComponent<'T>()
+    let buildController (name) (builder : ButtonBuilder<'T>) =
+        let button = new ControllerButtonComponent<'T>(name)
 
         button |> addEvents builder
 
         button
 
 
-    let buildMouse (mouseButton) (builder : ButtonBuilder<'T>) =
-        let button = new MouseButtonComponent<'T>(mouseButton)
+    let buildMouse (name) (mouseButton) (builder : ButtonBuilder<'T>) =
+        let button = new MouseButtonComponent<'T>(name, mouseButton)
 
         button |> addEvents builder
 

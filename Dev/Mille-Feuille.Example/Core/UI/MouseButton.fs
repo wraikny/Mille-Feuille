@@ -70,11 +70,11 @@ type Scene() =
                 printfn "Button%d: Onexited" index
                 owner.Color <- defaultColor
             )
-            |> ButtonBuilder.buildMouse asd.MouseButtons.ButtonLeft
+            |> ButtonBuilder.buildMouse "Button"  asd.MouseButtons.ButtonLeft
 
         let btn0 = buttonComponent 0
 
-        buttonObj.AddComponent(btn0, "Button")
+        buttonObj.AddComponent(btn0, btn0.Name)
 
         uiLayer.AddObject(buttonObj)
 

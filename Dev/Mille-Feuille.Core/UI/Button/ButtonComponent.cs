@@ -26,7 +26,8 @@ namespace wraikny.MilleFeuille.Core.UI.Button
     {
         public ButtonState State { get; set; }
 
-        public ButtonComponentBase()
+        public ButtonComponentBase(string name)
+            : base(name)
         {
             State = ButtonState.Default;
         }
@@ -86,8 +87,8 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         where T : asd.Object2D
     {
 
-        public ButtonComponent()
-            : base()
+        public ButtonComponent(string name)
+            : base(name)
         {
 
         }

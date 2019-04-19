@@ -66,17 +66,17 @@ type Scene() =
                 printfn "Button%d: Onexited" index
                 owner.Color <- defaultColor
             )
-            |> ButtonBuilder.buildController
+            |> ButtonBuilder.buildController "Button"
 
         let btnCmp1 = createButton 1
         let btnCmp2 = createButton 2
         let btnCmp3 = createButton 3
         let btnCmp4 = createButton 4
 
-        (createButtonObj -100.0f -100.0f).AddComponent(btnCmp1, "Button")
-        (createButtonObj -100.0f  100.0f).AddComponent(btnCmp2, "Button")
-        (createButtonObj  100.0f  100.0f).AddComponent(btnCmp3, "Button")
-        (createButtonObj  100.0f -100.0f).AddComponent(btnCmp4, "Button")
+        (createButtonObj -100.0f -100.0f).AddComponent(btnCmp1, btnCmp1.Name)
+        (createButtonObj -100.0f  100.0f).AddComponent(btnCmp2, btnCmp2.Name)
+        (createButtonObj  100.0f  100.0f).AddComponent(btnCmp3, btnCmp3.Name)
+        (createButtonObj  100.0f -100.0f).AddComponent(btnCmp4, btnCmp4.Name)
 
         btnCmp1
             .Chain(btnCmp2, Button.ButtonDirection.Down)

@@ -46,7 +46,8 @@ namespace wraikny.MilleFeuille.Core.UI.Button
             ConnectedButtons => connectedButtons;
 
         
-        public ControllerButtonComponent()
+        public ControllerButtonComponent(string name)
+            : base(name)
         {
             connectedButtons = new Dictionary<ButtonDirection, IControllerButton>();
         }
