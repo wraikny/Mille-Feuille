@@ -48,6 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Animation\Animation.cs" />
+    <Compile Include="Animation\AnimationController.cs" />
     <Compile Include="Animation\AnimatorComponent.cs" />
     <Compile Include="Input\Config\Joystick.cs" />
     <Compile Include="Input\Controller\IController.cs" />
