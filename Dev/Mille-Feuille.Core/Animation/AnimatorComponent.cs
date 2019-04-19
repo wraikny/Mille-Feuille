@@ -8,13 +8,17 @@ using wraikny.MilleFeuille.Core.Object;
 
 namespace wraikny.MilleFeuille.Core.Animation
 {
-    public class AnimatorComponent<T> : Object2DComponent<T>
-        where T : asd.Object2D
+    public class AnimatorComponent<TObj, TState> : Object2DComponent<TObj>
+        where TObj : asd.Object2D
     {
-        public AnimationController<T> Controller { get; }
+        public AnimationController<TObj, TState> Controller { get; }
 
-        
-        public AnimatorComponent(string name, AnimationController<T> controller)
+        TState State { get; set; }
+
+        public AnimatorComponent(
+            string name
+            , AnimationController<TObj, TState> controller
+        )
             : base(name)
         {
             Controller = controller;
