@@ -10,6 +10,7 @@ namespace wraikny.MilleFeuille.Core.Animation
     public class AnimationNode<TObj, TState>
     {
         public Animation<TObj> Animation { get; }
+        public string Name => Animation.Name;
         public List<AnimationNode<TObj, TState>> Nexts { get; }
 
         private Func<TState, AnimationNode<TObj, TState>> predicate;
@@ -37,7 +38,7 @@ namespace wraikny.MilleFeuille.Core.Animation
 
         private AnimationNode<TObj, TState> current;
 
-        private AnimationNode<TObj, TState> anyState;
+        private readonly AnimationNode<TObj, TState> anyState;
 
         private readonly List<AnimationNode<TObj, TState>> nodes;
 
@@ -51,7 +52,7 @@ namespace wraikny.MilleFeuille.Core.Animation
             Name = name;
             current = null;
             nodes = new List<AnimationNode<TObj, TState>>();
-            nodes.Add(anyState);
+            // nodes.Add(anyState);
             this.anyState = anyState;
         }
 
