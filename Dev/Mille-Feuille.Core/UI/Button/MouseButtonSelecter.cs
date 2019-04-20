@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -62,7 +62,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
 
                 var collidedButton = buttons
                     .FirstOrDefault(button =>
-                        collidedObject.Equals(button.ButtOn)
+                        collidedObject.Equals(button.Button)
                     );
 
                 if (collidedButton != null)
