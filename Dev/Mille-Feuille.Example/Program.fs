@@ -5,7 +5,7 @@ module Program =
         asd.Engine.Initialize("Example Fs", 800, 600, new asd.EngineOption())
         |> ignore
         
-        let scene = new Core.UI.ControllerButton.Scene()
+        let scene = new Core.UI.MouseButton.Scene()
 
         asd.Engine.ChangeScene(scene)
     
