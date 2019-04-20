@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,6 +7,9 @@ using wraikny.MilleFeuille.Core;
 
 namespace wraikny.MilleFeuille.Core.UI.Button
 {
+    /// <summary>
+    /// ボタンの状態を表す列挙体。
+    /// </summary>
     public enum ButtonState
     {
         Default,
@@ -14,6 +17,9 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         Hold,
     }
 
+    /// <summary>
+    /// ボタンに対する操作を表す列挙体。
+    /// </summary>
     public enum ButtonOperation
     {
         Enter,
@@ -22,8 +28,14 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         Exit,
     }
 
+    /// <summary>
+    /// ボタン機能を提供するコンポーネントの基底クラス。
+    /// </summary>
     public abstract class ButtonComponentBase : Object.Object2DComponent<asd.Object2D>
     {
+        /// <summary>
+        /// ボタンの状態を取得または設定する。
+        /// </summary>
         public ButtonState State { get; set; }
 
         public ButtonComponentBase(string name)
@@ -31,6 +43,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         {
             State = ButtonState.Default;
         }
+
 
         protected abstract void CallDefault();
         protected abstract void CallHover();
@@ -59,6 +72,10 @@ namespace wraikny.MilleFeuille.Core.UI.Button
             }
         }
 
+        /// <summary>
+        /// ボタンに対する操作を元に状態を更新する。
+        /// </summary>
+        /// <param name="op"></param>
         public void UpdateState(ButtonOperation op)
         {
             switch (op)
@@ -83,6 +100,9 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         }
     }
 
+    /// <summary>
+    /// ボタン機能を提供するコンポーネントのクラス。
+    /// </summary>
     public class ButtonComponent<T> : ButtonComponentBase
         where T : asd.Object2D
     {

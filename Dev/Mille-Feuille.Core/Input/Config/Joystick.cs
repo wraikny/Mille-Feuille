@@ -15,6 +15,9 @@ namespace wraikny.MilleFeuille.Core.Input.Config
     {
     }
 
+    /// <summary>
+    /// ジョイスティックのボタンの対応関係を保存するためのクラス。
+    /// </summary>
     [Serializable]
     public class ButtonInputConfig : IJoystickInputConfig
     {
@@ -26,6 +29,9 @@ namespace wraikny.MilleFeuille.Core.Input.Config
         }
     }
 
+    /// <summary>
+    /// ジョイスティックのスティックの対応関係を保存するためのクラス。
+    /// </summary>
     [Serializable]
     public class AxisInputConfig : IJoystickInputConfig
     {
@@ -39,9 +45,16 @@ namespace wraikny.MilleFeuille.Core.Input.Config
         }
     }
 
+    /// <summary>
+    /// ジョイスティックの入力と操作の対応関係を保存するためのクラス。
+    /// </summary>
+    /// <typeparam name="TControl"></typeparam>
     [Serializable]
     public class Joystick<TControl>
     {
+        /// <summary>
+        /// ジョイスティックの名前を取得する。
+        /// </summary>
         public string Name { get; }
         private readonly Dictionary<TControl, IJoystickInputConfig> binding;
 
@@ -51,16 +64,32 @@ namespace wraikny.MilleFeuille.Core.Input.Config
             binding = new Dictionary<TControl, IJoystickInputConfig>();
         }
 
+        /// <summary>
+        /// ボタン入力に操作を対応付ける。
+        /// </summary>
+        /// <param name="abstractKey"></param>
+        /// <param name="buttonIndex"></param>
         public void BindButton(TControl abstractKey, int buttonIndex)
         {
             binding[abstractKey] = new ButtonInputConfig(buttonIndex);
         }
 
+        /// <summary>
+        /// スティック入力に操作を対応付ける。
+        /// </summary>
+        /// <param name="abstractKey"></param>
+        /// <param name="axisIndex"></param>
+        /// <param name="direction"></param>
         public void BindAxis(TControl abstractKey, int axisIndex, Controller.AxisDirection direction)
         {
             binding[abstractKey] = new AxisInputConfig(axisIndex, direction);
         }
 
+        /// <summary>
+        /// 対応関係から実行するためのコントローラーを作成する。
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public Controller.JoystickController<TControl> CreateController(int index)
         {
             var controller = new Controller.JoystickController<TControl>(index);
@@ -80,6 +109,10 @@ namespace wraikny.MilleFeuille.Core.Input.Config
             return controller;
         }
 
+        /// <summary>
+        /// バイナリとして保存する。
+        /// </summary>
+        /// <param name="path"></param>
         public void SaveToBinaryFile(string path)
         {
             using (var fs = new FileStream(path, FileMode.Create, FileAccess.Write))
@@ -89,6 +122,12 @@ namespace wraikny.MilleFeuille.Core.Input.Config
             }
         }
 
+        /// <summary>
+        /// バイナリから読み込む。
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static Joystick<T> LoadFromBinaryFile<T>(string path)
         {
             using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read))
