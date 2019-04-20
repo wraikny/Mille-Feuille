@@ -12,9 +12,11 @@ namespace wraikny.MilleFeuille.ExampleCs
         {
             asd.Engine.Initialize("Example Cs", 800, 600, new asd.EngineOption());
 
+            var scene = new Core.UI.ControllerButton();
 
+            asd.Engine.ChangeScene(scene);
 
-            while(asd.Engine.DoEvents())
+            while (asd.Engine.DoEvents())
             {
                 asd.Engine.Update();
             }
