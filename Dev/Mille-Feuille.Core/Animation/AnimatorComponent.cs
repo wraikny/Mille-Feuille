@@ -11,6 +11,7 @@ namespace wraikny.MilleFeuille.Core.Animation
 {
     public class AnimatorComponent<TObj, TState> : Object2DComponent<TObj>
         where TObj : asd.Object2D
+        where TState : class
     {
         public AnimationController<TObj, TState> Controller { get; }
 

@@ -8,21 +8,23 @@ namespace wraikny.MilleFeuille.Core.Animation
 {
     [Serializable]
     public class Node<TObj, TState>
+        where TState : class
     {
         public Animation<TObj> Animation { get; set; }
 
-        public TState NextState { get; }
+        public TState NextState { get; set;  }
 
-        public Node(Animation<TObj> anim, TState next)
+        public Node(Animation<TObj> anim)
         {
             Animation = anim;
-            NextState = next;
+            NextState = null;
         }
     }
 
 
     [Serializable]
     public class AnimationController<TObj, TState>
+        where TState : class
     {
         public string Name { get; set; }
 

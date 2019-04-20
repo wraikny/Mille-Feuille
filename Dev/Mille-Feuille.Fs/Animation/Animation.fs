@@ -18,6 +18,13 @@ module AnimationBuilder =
             coroutines = []
         }
 
+
+    let addCoroutine coroutines builder =
+        { builder with
+            coroutines = builder.coroutines @ coroutines
+        }
+
+
     let build builder =
         new Animation<_>(
             builder.name
