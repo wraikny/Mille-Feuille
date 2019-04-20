@@ -28,8 +28,7 @@ type ActorsUpdater<'Actor, 'ActorViewModel, 'ViewModel
     let mutable nextID = 0u
     let actors = new Dictionary<uint32, 'Actor>()
 
-    let viewModelSelecter : 'ViewModel -> UpdaterViewModel<'ActorViewModel> =
-        viewModelSelecter
+    let viewModelSelecter = viewModelSelecter
 
     
     interface IObserver<'ViewModel> with
