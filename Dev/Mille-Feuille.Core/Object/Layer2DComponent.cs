@@ -16,34 +16,48 @@ namespace wraikny.MilleFeuille.Core.Object
             Name = name;
         }
 
-        public event Action<T> OnAdded = delegate { };
-        public event Action<T> OnUpdated = delegate { };
-        public event Action<T> OnRemoved = delegate { };
-        public event Action<T> OnComponentUpdate = delegate { };
+        /// <summary>
+        /// このコンポーネントを持つレイヤーがシーンに登録されたときのイベント。
+        /// </summary>
+        public event Action<T> OnAddedEvent = delegate { };
+
+        /// <summary>
+        /// このコンポーネントを持つレイヤーがシーンから登録解除されたときの直前のイベント。
+        /// </summary>
+        public event Action<T> OnRemovedEvent = delegate { };
+
+        /// <summary>
+        /// このコンポーネントを持つレイヤーが更新される直前のイベント。
+        /// </summary>
+        public event Action<T> OnUpdatingEvent = delegate { };
+
+        /// <summary>
+        /// このコンポーネントを持つレイヤーが更新される直後のイベント。
+        /// </summary>
+        public event Action<T> OnUpdatedEvent = delegate { };
 
         protected override void OnLayerAdded()
         {
             base.OnLayerAdded();
-            OnAdded((T)Owner);
+            OnAddedEvent((T)Owner);
+        }
+        protected override void OnLayerRemoved()
+        {
+            base.OnLayerRemoved();
+            OnRemovedEvent((T)Owner);
+        }
+
+        protected override void OnUpdating()
+        {
+            base.OnUpdating();
+            OnUpdatingEvent((T)Owner);
         }
 
         protected override void OnLayerUpdated()
         {
             base.OnLayerUpdated();
 
-            OnUpdated((T)Owner);
-        }
-
-        protected override void OnLayerRemoved()
-        {
-            base.OnLayerRemoved();
-            OnRemoved((T)Owner);
-        }
-
-        protected override void OnUpdating()
-        {
-            base.OnUpdating();
-            OnComponentUpdate((T)Owner);
+            OnUpdatedEvent((T)Owner);
         }
     }
 }
