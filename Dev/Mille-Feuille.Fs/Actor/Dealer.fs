@@ -1,8 +1,9 @@
-namespace wraikny.MilleFeuille.Fs.Actor
+﻿namespace wraikny.MilleFeuille.Fs.Actor
 
 open System.Collections.Generic;
 open System.Linq;
 
+open wraikny.Tart.Helper
 
 [<Interface>]
 type IActor<'ActorViewModel> =
@@ -17,18 +18,26 @@ type DealerViewModel<'ActorViewModel> =
 
 
 [<Class>]
-type Dealer<'Actor, 'ActorViewModel
+type Dealer<'Actor, 'ActorViewModel, 'ViewModel
     when 'Actor :> asd.Object2D
     and  'Actor :> IActor<'ActorViewModel>
     and  'Actor : (new : unit -> 'Actor )
-    >() =
+    >(viewModelSelecter) =
     inherit asd.Layer2DComponent()
 
     let mutable nextID = 0u
     let actors = new Dictionary<uint32, 'Actor>()
+
+    let viewModelSelecter : 'ViewModel -> DealerViewModel<'ActorViewModel> =
+        viewModelSelecter
+
+    
+    interface IObserver<'ViewModel> with
+        member this.UpdateFromNotify(input) =
+            this.Update(viewModelSelecter input)
     
 
-    member this.Update(viewModel : DealerViewModel<_> inref) =
+    member this.Update(viewModel : DealerViewModel<_>) =
         if this.IsUpdated then
             this.AddActors(&viewModel)
             this.UpdateActors(&viewModel)
