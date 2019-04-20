@@ -1,8 +1,8 @@
-﻿namespace wraikny.MilleFeuille.Example
+﻿namespace wraikny.MilleFeuille.ExampleFs
 
 module Program =
     let startScene() =
-        asd.Engine.Initialize("Keyboard Button", 800, 600, new asd.EngineOption())
+        asd.Engine.Initialize("Example Fs", 800, 600, new asd.EngineOption())
         |> ignore
         
         let scene = new Core.UI.ControllerButton.Scene()

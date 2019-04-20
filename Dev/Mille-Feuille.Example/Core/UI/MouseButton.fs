@@ -1,4 +1,4 @@
-﻿module wraikny.MilleFeuille.Example.Core.UI.MouseButton
+﻿module wraikny.MilleFeuille.ExampleFs.Core.UI.MouseButton
 
 open wraikny.MilleFeuille.Core
 open wraikny.MilleFeuille.Fs.UI.Button
