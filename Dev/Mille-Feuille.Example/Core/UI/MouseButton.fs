@@ -74,7 +74,7 @@ type Scene() =
 
         let btn0 = buttonComponent 0
 
-        btn0.add_OnOwnerAdded(fun owner ->
+        btn0.add_OnAdded(fun owner ->
             let collider = new asd.RectangleCollider(Area = buttonArea, IsVisible = true)
             owner.AddCollider(collider)
         )

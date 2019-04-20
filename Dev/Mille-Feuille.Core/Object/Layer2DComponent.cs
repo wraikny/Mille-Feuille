@@ -6,41 +6,43 @@ using System.Threading.Tasks;
 
 namespace wraikny.MilleFeuille.Core.Object
 {
-    public class Object2DComponent<T> : asd.Object2DComponent
-        where T : asd.Object2D
+    public class Layer2DComponent<T> : asd.Layer2DComponent
+        where T : asd.Layer2D
     {
         public string Name { get; }
 
-        public Object2DComponent(string name)
+        public Layer2DComponent(string name)
         {
             Name = name;
         }
 
         public event Action<T> OnAdded = delegate { };
+        public event Action<T> OnUpdated = delegate { };
         public event Action<T> OnRemoved = delegate { };
-        public event Action<T> OnDisposed = delegate { };
         public event Action<T> OnComponentUpdate = delegate { };
 
-        protected override void OnObjectAdded()
+        protected override void OnLayerAdded()
         {
-            base.OnObjectAdded();
+            base.OnLayerAdded();
             OnAdded((T)Owner);
         }
 
-        protected override void OnObjectRemoved()
+        protected override void OnLayerUpdated()
         {
-            base.OnObjectRemoved();
+            base.OnLayerUpdated();
+
+            OnUpdated((T)Owner);
+        }
+
+        protected override void OnLayerRemoved()
+        {
+            base.OnLayerRemoved();
             OnRemoved((T)Owner);
         }
 
-        protected override void OnObjectDisposed()
+        protected override void OnUpdating()
         {
-            base.OnObjectDisposed();
-            OnDisposed((T)Owner);
-        }
-        protected override void OnUpdate()
-        {
-            base.OnUpdate();
+            base.OnUpdating();
             OnComponentUpdate((T)Owner);
         }
     }

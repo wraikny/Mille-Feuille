@@ -62,7 +62,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
 
                 var collidedButton = buttons
                     .FirstOrDefault(button =>
-                        collidedObject.Equals(button.ButtonOwner)
+                        collidedObject.Equals(button.ButtOn)
                     );
 
                 if (collidedButton != null)

@@ -4,6 +4,7 @@ open System.Collections.Generic;
 open System.Linq;
 
 open wraikny.Tart.Helper
+open wraikny.MilleFeuille.Core.Object
 
 [<Interface>]
 type IActor<'ActorViewModel> =
@@ -22,8 +23,8 @@ type ActorsUpdater<'Actor, 'ActorViewModel, 'ViewModel
     when 'Actor :> asd.Object2D
     and  'Actor :> IActor<'ActorViewModel>
     and  'Actor : (new : unit -> 'Actor )
-    >(viewModelSelecter) =
-    inherit asd.Layer2DComponent()
+    >(name, viewModelSelecter) =
+    inherit Layer2DComponent<asd.Layer2D>(name)
 
     let mutable nextID = 0u
     let actors = new Dictionary<uint32, 'Actor>()
