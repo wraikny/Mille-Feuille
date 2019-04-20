@@ -104,7 +104,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         }
 
         /// <summary>
-        /// コントローラーお操作を元にボタンの状態を更新する。
+        /// コントローラーの操作を元にボタンの状態を更新する。
         /// </summary>
         private void UpdateButtonsState()
         {

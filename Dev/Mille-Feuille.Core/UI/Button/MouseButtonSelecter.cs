@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,8 +7,14 @@ using wraikny.MilleFeuille.Core.Input.Mouse;
 
 namespace wraikny.MilleFeuille.Core.UI.Button
 {
+    /// <summary>
+    /// コントローラーボタンに対する操作を行うレイヤーコンポーネント。
+    /// </summary>
     public class MouseButtonSelecter : asd.Layer2DComponent
     {
+        /// <summary>
+        /// マウスを取得する。
+        /// </summary>
         public CollidableMouse Mouse { get; }
         private readonly List<IMouseButton> buttons;
 
@@ -25,12 +31,20 @@ namespace wraikny.MilleFeuille.Core.UI.Button
             UpdateButtonsState();
         }
 
+        /// <summary>
+        /// ボタンを追加する。
+        /// </summary>
+        /// <param name="button"></param>
+        /// <returns></returns>
         public MouseButtonSelecter AddButton(IMouseButton button)
         {
             buttons.Add(button);
             return this;
         }
 
+        /// <summary>
+        /// マウスの操作を元にボタンの状態を更新する。
+        /// </summary>
         private void UpdateButtonsState()
         {
             var collisionsDict = GetCollisionsInfo();
@@ -52,6 +66,10 @@ namespace wraikny.MilleFeuille.Core.UI.Button
             }
         }
 
+        /// <summary>
+        /// ボタン毎に対応する、マウスとの当たり判定を、辞書として取得する。
+        /// </summary>
+        /// <returns></returns>
         private IReadOnlyDictionary<IMouseButton, asd.Collision2DInfo> GetCollisionsInfo()
         {
             var result = new List<(IMouseButton, asd.Collision2DInfo)>();

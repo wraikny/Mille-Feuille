@@ -20,8 +20,17 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         where T : asd.Object2D
     {
         public asd.Object2D Button { get; private set; }
+
+        /// <summary>
+        /// 操作できるボタンの種類を取得する。
+        /// </summary>
         public asd.MouseButtons TriggerButton { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="button">操作できるボタンの種類</param>
         public MouseButtonComponent(string name, asd.MouseButtons button)
             : base(name)
         {
@@ -34,6 +43,10 @@ namespace wraikny.MilleFeuille.Core.UI.Button
             Button = Owner;
         }
 
+        /// <summary>
+        /// マウスの衝突とボタンの状態を元にボタンの状態の更新を行う。
+        /// </summary>
+        /// <param name="operation"></param>
         public void Update(asd.CollisionType collision, asd.ButtonState state)
         {
             if (
