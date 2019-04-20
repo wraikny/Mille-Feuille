@@ -118,7 +118,7 @@ module Counter =
                     .Initialize()
                     .SetUpdater(updater)
 
-            IMessenger.createMessenger
+            Messenger.createMessenger
                 env
                 Core.program
                 
