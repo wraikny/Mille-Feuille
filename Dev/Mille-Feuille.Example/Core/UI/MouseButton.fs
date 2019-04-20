@@ -51,22 +51,22 @@ type Scene() =
             let holdColor = new asd.Color(50uy, 50uy, 50uy)
 
             ButtonBuilder.init()
-            //|> ButtonBuilder.addDefault(fun owner -> ())
-            //|> ButtonBuilder.addHover(fun owner -> ())
-            //|> ButtonBuilder.addHold(fun owner -> ())
-            |> ButtonBuilder.addOnEntered(fun (owner : asd.GeometryObject2D) ->
+            //|> ButtonBuilder.addDefaultEvent(fun owner -> ())
+            //|> ButtonBuilder.addHoverEvent(fun owner -> ())
+            //|> ButtonBuilder.addHoldEvent(fun owner -> ())
+            |> ButtonBuilder.addOnEnteredEvent(fun (owner : asd.GeometryObject2D) ->
                 printfn "Button%d: OnEntered" index
                 owner.Color <- hoverColor
             )
-            |> ButtonBuilder.addOnPushed(fun owner ->
+            |> ButtonBuilder.addOnPushedEvent(fun owner ->
                 printfn "Button%d: OnPushed" index
                 owner.Color <- holdColor
             )
-            |> ButtonBuilder.addOnReleased(fun owner ->
+            |> ButtonBuilder.addOnReleasedEvent(fun owner ->
                 printfn "Button%d: OnReleased" index
                 owner.Color <- hoverColor
             )
-            |> ButtonBuilder.addOnExited(fun owner ->
+            |> ButtonBuilder.addOnExitedEvent(fun owner ->
                 printfn "Button%d: Onexited" index
                 owner.Color <- defaultColor
             )

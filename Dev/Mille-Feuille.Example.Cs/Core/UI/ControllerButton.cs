@@ -104,22 +104,22 @@ namespace wraikny.MilleFeuille.ExampleCs.Core.UI
                 new ControllerButtonComponent
                     <asd.GeometryObject2D>("Button");
 
-            //button.Default += owner => { };
-            //button.Hover += owner => { };
-            //button.Hold += owner => { };
-            button.OnEntered += owner => {
+            //button.DefaultEvent += owner => { };
+            //button.HoverEvent += owner => { };
+            //button.HoldEvent += owner => { };
+            button.OnEnteredEvent += owner => {
                 Console.WriteLine("Button{0}: OnEntered", index);
                 owner.Color = hoverColor;
             };
-            button.OnPushed += owner => {
+            button.OnPushedEvent += owner => {
                 Console.WriteLine("Button{0}: OnPushed", index);
                 owner.Color = holdColor;
             };
-            button.OnReleased += owner => {
+            button.OnReleasedEvent += owner => {
                 Console.WriteLine("Button{0}: OnReleased", index);
                 owner.Color = hoverColor;
             };
-            button.OnExited += owner => {
+            button.OnExitedEvent += owner => {
                 Console.WriteLine("Button{0}: OnExited", index);
                 owner.Color = defaultColor;
             };

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -113,25 +113,28 @@ namespace wraikny.MilleFeuille.Core.UI.Button
 
         }
 
-        public event Action<T> Default = delegate { };
-        protected override void CallDefault() => Default((T)Owner);
+        /// <summary>
+        /// デフォルト時に毎フレーム呼び出されるイベント
+        /// </summary>
+        public event Action<T> DefaultEvent = delegate { };
+        protected override void CallDefault() => DefaultEvent((T)Owner);
 
-        public event Action<T> OnEntered = delegate { };
-        protected override void CallOnEntered() => OnEntered((T)Owner);
+        public event Action<T> OnEnteredEvent = delegate { };
+        protected override void CallOnEntered() => OnEnteredEvent((T)Owner);
 
-        public event Action<T> Hover = delegate { };
-        protected override void CallHover() => Hover((T)Owner);
+        public event Action<T> HoverEvent = delegate { };
+        protected override void CallHover() => HoverEvent((T)Owner);
 
-        public event Action<T> OnPushed = delegate { };
-        protected override void CallOnPushed() => OnPushed((T)Owner);
+        public event Action<T> OnPushedEvent = delegate { };
+        protected override void CallOnPushed() => OnPushedEvent((T)Owner);
 
-        public event Action<T> Hold = delegate { };
-        protected override void CallHold() => Hold((T)Owner);
+        public event Action<T> HoldEvent = delegate { };
+        protected override void CallHold() => HoldEvent((T)Owner);
 
-        public event Action<T> OnReleased = delegate { };
-        protected override void CallOnReleased() => OnReleased((T)Owner);
+        public event Action<T> OnReleasedEvent = delegate { };
+        protected override void CallOnReleased() => OnReleasedEvent((T)Owner);
 
-        public event Action<T> OnExited = delegate { };
-        protected override void CallOnExited() => OnExited((T)Owner);
+        public event Action<T> OnExitedEvent = delegate { };
+        protected override void CallOnExited() => OnExitedEvent((T)Owner);
     }
 }
