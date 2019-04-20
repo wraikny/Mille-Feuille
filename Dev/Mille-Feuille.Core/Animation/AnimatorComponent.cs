@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,20 @@ namespace wraikny.MilleFeuille.Core.Animation
     {
         public AnimationController<TObj, TState> Controller { get; }
 
-        TState State { get; set; }
+        private IEnumerator coroutine;
+
+        private TState state;
+        public TState ControllerState {
+            get
+            {
+                return state;
+            }
+            set
+            {
+                state = value;
+                coroutine = Controller.GetAnimation(state)?.Generator((TObj)Owner);
+            }
+        }
 
         public AnimatorComponent(
             string name
@@ -22,6 +36,14 @@ namespace wraikny.MilleFeuille.Core.Animation
             : base(name)
         {
             Controller = controller;
+            coroutine = Controller.GetAnimation(state)?.Generator((TObj)Owner);
+        }
+
+        protected override void OnUpdate()
+        {
+            base.OnUpdate();
+
+            coroutine?.MoveNext();
         }
     }
 }
