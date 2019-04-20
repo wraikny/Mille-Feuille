@@ -26,7 +26,8 @@ namespace wraikny.MilleFeuille.Core.UI.Button
     {
         public ButtonState State { get; set; }
 
-        public ButtonComponentBase()
+        public ButtonComponentBase(string name)
+            : base(name)
         {
             State = ButtonState.Default;
         }
@@ -37,7 +38,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
 
         protected abstract void CallOnEntered();
         protected abstract void CallOnPushed();
-        protected abstract void CallOnSelected();
+        protected abstract void CallOnReleased();
         protected abstract void CallOnExited();
 
         protected override void OnUpdate()
@@ -71,7 +72,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
                     State = ButtonState.Hold;
                     break;
                 case ButtonOperation.Release:
-                    CallOnSelected();
+                    CallOnReleased();
                     State = ButtonState.Hover;
                     break;
                 case ButtonOperation.Exit:
@@ -86,8 +87,8 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         where T : asd.Object2D
     {
 
-        public ButtonComponent()
-            : base()
+        public ButtonComponent(string name)
+            : base(name)
         {
 
         }
@@ -107,8 +108,8 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         public event Action<T> Hold = delegate { };
         protected override void CallHold() => Hold((T)Owner);
 
-        public event Action<T> OnSelected = delegate { };
-        protected override void CallOnSelected() => OnSelected((T)Owner);
+        public event Action<T> OnReleased = delegate { };
+        protected override void CallOnReleased() => OnReleased((T)Owner);
 
         public event Action<T> OnExited = delegate { };
         protected override void CallOnExited() => OnExited((T)Owner);

@@ -8,7 +8,7 @@
     <ProjectGuid>8fab469c-b647-469e-9bc3-c74e7fa2d454</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Mill_Feuille.Example</RootNamespace>
-    <AssemblyName>MilleFeuille.Example</AssemblyName>
+    <AssemblyName>MilleFeuille.Example.Fs</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <UseStandardResourceNames>true</UseStandardResourceNames>

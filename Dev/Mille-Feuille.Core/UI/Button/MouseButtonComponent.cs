@@ -19,7 +19,8 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         public asd.Object2D ButtonOwner { get; private set; }
         public asd.MouseButtons TriggerButton { get; }
 
-        public MouseButtonComponent(asd.MouseButtons button)
+        public MouseButtonComponent(string name, asd.MouseButtons button)
+            : base(name)
         {
             TriggerButton = button;
         }

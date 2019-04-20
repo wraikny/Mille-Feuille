@@ -15,6 +15,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         Right,
         Left,
         Select,
+        Cancel,
     }
 
     public class ControllerButtonSelecter : asd.Layer2DComponent
@@ -83,9 +84,28 @@ namespace wraikny.MilleFeuille.Core.UI.Button
                 ButtonDirection.Left,
             };
 
-            foreach(var controller in Controllers)
+            foreach (var controller in Controllers)
             {
-                foreach (var dir in dirs )
+                // Escape
+                if (controller.GetState(ControllerSelect.Cancel) != asd.ButtonState.Free)
+                {
+                    CursorButton.Update(ButtonOperation.Exit);
+                    return;
+                }
+
+                if (controller.GetState(ControllerSelect.Select) == asd.ButtonState.Push)
+                {
+                    CursorButton.Update(ButtonOperation.Push);
+                    return;
+                }
+
+                if (controller.GetState(ControllerSelect.Select) == asd.ButtonState.Release)
+                {
+                    CursorButton.Update(ButtonOperation.Release);
+                    return;
+                }
+
+                foreach (var dir in dirs)
                 {
                     var control = DirectionToControl(dir);
                     if (controller.GetState(control) == asd.ButtonState.Push)
@@ -98,19 +118,10 @@ namespace wraikny.MilleFeuille.Core.UI.Button
 
                         CursorButton = next;
 
-                        break;
+                        return;
                     }
                 }
 
-                if(controller.GetState(ControllerSelect.Select) == asd.ButtonState.Push)
-                {
-                    CursorButton.Update(ButtonOperation.Push);
-                }
-
-                if (controller.GetState(ControllerSelect.Select) == asd.ButtonState.Release)
-                {
-                    CursorButton.Update(ButtonOperation.Release);
-                }
             }
         }
     }

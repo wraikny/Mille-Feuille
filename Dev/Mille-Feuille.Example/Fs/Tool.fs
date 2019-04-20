@@ -1,4 +1,4 @@
-﻿namespace wraikny.MilleFeuille.Example.Fs.Tool
+﻿namespace wraikny.MilleFeuille.ExampleFs.Fs.Tool
 
 open wraikny.Tart.Core
 open wraikny.MilleFeuille.Fs

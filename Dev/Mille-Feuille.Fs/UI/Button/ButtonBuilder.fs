@@ -7,7 +7,7 @@ type ButtonBuilder< 'T when 'T :> asd.Object2D > =
         hoverEvents : ('T -> unit) list
         onPushedEvents : ('T -> unit) list
         holdEvents : ('T -> unit) list
-        onSelectedEvents : ('T -> unit) list
+        onReleasedEvents : ('T -> unit) list
         onExitedEvents : ('T -> unit) list
     }
 
@@ -23,7 +23,7 @@ module ButtonBuilder =
             hoverEvents = []
             onPushedEvents = []
             holdEvents = []
-            onSelectedEvents = []
+            onReleasedEvents = []
             onExitedEvents = []
         }
 
@@ -52,9 +52,9 @@ module ButtonBuilder =
             holdEvents = f::builder.holdEvents
         }
 
-    let addOnSelected f builder =
+    let addOnReleased f builder =
         { builder with
-            onSelectedEvents = f::builder.onSelectedEvents
+            onReleasedEvents = f::builder.onReleasedEvents
         }
 
     let addOnExited f builder =
@@ -80,23 +80,23 @@ module ButtonBuilder =
         for f in builder.holdEvents do
             button.add_Hold(fun owner -> f owner)
 
-        for f in builder.onSelectedEvents do
-            button.add_OnSelected(fun owner -> f owner)
+        for f in builder.onReleasedEvents do
+            button.add_OnReleased(fun owner -> f owner)
 
         for f in builder.onExitedEvents do
             button.add_OnExited(fun owner -> f owner)
 
 
-    let buildController (builder : ButtonBuilder<'T>) =
-        let button = new ControllerButtonComponent<'T>()
+    let buildController (name) (builder : ButtonBuilder<'T>) =
+        let button = new ControllerButtonComponent<'T>(name)
 
         button |> addEvents builder
 
         button
 
 
-    let buildMouse (mouseButton) (builder : ButtonBuilder<'T>) =
-        let button = new MouseButtonComponent<'T>(mouseButton)
+    let buildMouse (name) (mouseButton) (builder : ButtonBuilder<'T>) =
+        let button = new MouseButtonComponent<'T>(name, mouseButton)
 
         button |> addEvents builder
 

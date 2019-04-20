@@ -34,7 +34,27 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         IControllerButton GetButton(ButtonDirection dir);
         IControllerButton SetButton(ButtonDirection dir, IControllerButton button);
         IControllerButton Chain(IControllerButton next, ButtonDirection dir);
+        asd.Object2DComponent GetComponent();
         void Update(ButtonOperation operation);
+    }
+
+    public static class ControllerButtonConnects
+    {
+        public static void ConnetButtons(
+            IReadOnlyCollection<IControllerButton> buttons
+            , ButtonDirection dir
+        )
+        {
+            var count = buttons.Count();
+
+            for (int i = 0; i < count - 2; i++)
+            {
+                var b1 = buttons.ElementAt(i);
+                var b2 = buttons.ElementAt(i + 1);
+
+                b1.Chain(b2, dir);
+            }
+        }
     }
 
     public class ControllerButtonComponent<T> : ButtonComponent<T>, IControllerButton
@@ -46,7 +66,8 @@ namespace wraikny.MilleFeuille.Core.UI.Button
             ConnectedButtons => connectedButtons;
 
         
-        public ControllerButtonComponent()
+        public ControllerButtonComponent(string name)
+            : base(name)
         {
             connectedButtons = new Dictionary<ButtonDirection, IControllerButton>();
         }
@@ -63,6 +84,11 @@ namespace wraikny.MilleFeuille.Core.UI.Button
             return this;
         }
 
+        public asd.Object2DComponent GetComponent()
+        {
+            return this;
+        }
+
         public IControllerButton Chain(IControllerButton next, ButtonDirection dir)
         {
             this.SetButton(dir, next);
@@ -71,25 +97,33 @@ namespace wraikny.MilleFeuille.Core.UI.Button
             return next;
         }
 
+
         public void Update(ButtonOperation operation)
         {
-            UpdateState(operation);
-        }
-
-        public static void ConnetButtons(
-            IReadOnlyCollection<IControllerButton> buttons
-            , ButtonDirection dir
-        )
-        {
-            var count = buttons.Count();
-
-            for (int i = 0; i < count - 2; i++)
+            // Escape
+            if(
+                (operation == ButtonOperation.Exit) && (State != ButtonState.Default)
+            )
             {
-                var b1 = buttons.ElementAt(i);
-                var b2 = buttons.ElementAt(i + 1);
-
-                b1.Chain(b2, dir);
+                UpdateState(operation);
+                return;
             }
+
+            bool UpdateWithState(ButtonState state_, ButtonOperation operation_)
+            {
+                var flag = (State == state_ && operation == operation_);
+
+                if (flag)
+                {
+                    UpdateState(operation);
+                }
+
+                return flag;
+            }
+
+            if (UpdateWithState(ButtonState.Default, ButtonOperation.Enter)) return;
+            if (UpdateWithState(ButtonState.Hover, ButtonOperation.Push)) return;
+            if (UpdateWithState(ButtonState.Hold, ButtonOperation.Release)) return;
         }
     }
 }
