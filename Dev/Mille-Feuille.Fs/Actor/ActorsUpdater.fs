@@ -10,7 +10,7 @@ type IActor<'ActorViewModel> =
     abstract Update : 'ActorViewModel -> unit
 
 
-type DealerViewModel<'ActorViewModel> =
+type UpdaterViewModel<'ActorViewModel> =
     {
         nextID : uint32
         actors : Map<uint32, 'ActorViewModel>
@@ -18,7 +18,7 @@ type DealerViewModel<'ActorViewModel> =
 
 
 [<Class>]
-type Dealer<'Actor, 'ActorViewModel, 'ViewModel
+type ActorsUpdater<'Actor, 'ActorViewModel, 'ViewModel
     when 'Actor :> asd.Object2D
     and  'Actor :> IActor<'ActorViewModel>
     and  'Actor : (new : unit -> 'Actor )
@@ -28,7 +28,7 @@ type Dealer<'Actor, 'ActorViewModel, 'ViewModel
     let mutable nextID = 0u
     let actors = new Dictionary<uint32, 'Actor>()
 
-    let viewModelSelecter : 'ViewModel -> DealerViewModel<'ActorViewModel> =
+    let viewModelSelecter : 'ViewModel -> UpdaterViewModel<'ActorViewModel> =
         viewModelSelecter
 
     
@@ -37,7 +37,7 @@ type Dealer<'Actor, 'ActorViewModel, 'ViewModel
             this.Update(viewModelSelecter input)
     
 
-    member this.Update(viewModel : DealerViewModel<_>) =
+    member this.Update(viewModel : UpdaterViewModel<_>) =
         if this.IsUpdated then
             this.AddActors(&viewModel)
             this.UpdateActors(&viewModel)
