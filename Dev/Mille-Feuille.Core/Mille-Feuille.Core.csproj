@@ -59,6 +59,7 @@
     <Compile Include="Object\Layer2DComponent.cs" />
     <Compile Include="Object\Object2DComponent.cs" />
     <Compile Include="Object\Scene.cs" />
+    <Compile Include="Object\SceneComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\Button\ButtonComponent.cs" />
     <Compile Include="UI\Button\ControllerButtonComponent.cs" />
