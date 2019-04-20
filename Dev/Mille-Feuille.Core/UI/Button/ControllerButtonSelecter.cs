@@ -8,6 +8,9 @@ using wraikny.MilleFeuille.Core.Input.Controller;
 
 namespace wraikny.MilleFeuille.Core.UI.Button
 {
+    /// <summary>
+    /// コントローラー操作可能なボタンに対する操作を表す列挙体。
+    /// </summary>
     public enum ControllerSelect
     {
         Up,
@@ -18,11 +21,21 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         Cancel,
     }
 
+    /// <summary>
+    /// コントローラーボタンに対する操作を行うレイヤーコンポーネント。
+    /// </summary>
     public class ControllerButtonSelecter : asd.Layer2DComponent
     {
         private readonly List<IController<ControllerSelect>> controllers;
+
+        /// <summary>
+        /// 操作するコントローラーのコレクションを取得する。
+        /// </summary>
         public IEnumerable<IController<ControllerSelect>> Controllers => controllers;
 
+        /// <summary>
+        /// 現在カーソルがあるボタンを取得する。
+        /// </summary>
         public IControllerButton CursorButton { get; private set; }
 
         public ControllerButtonSelecter(
@@ -46,18 +59,33 @@ namespace wraikny.MilleFeuille.Core.UI.Button
             UpdateButtonsState();
         }
 
+        /// <summary>
+        /// 操作を行うコントローラーを追加する。
+        /// </summary>
+        /// <param name="controller"></param>
+        /// <returns></returns>
         public ControllerButtonSelecter AddController(IController<ControllerSelect> controller)
         {
             controllers.Add(controller);
             return this;
         }
 
+        /// <summary>
+        /// コレクションから操作を行うコントローラーを追加する。
+        /// </summary>
+        /// <param name="controllers"></param>
+        /// <returns></returns>
         public ControllerButtonSelecter AddControllers(IReadOnlyCollection<IController<ControllerSelect>> controllers)
         {
             this.controllers.AddRange(controllers);
             return this;
         }
 
+        /// <summary>
+        /// ボタンの方向から対応する操作を取得する。
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <returns></returns>
         private ControllerSelect DirectionToControl(ButtonDirection dir)
         {
             switch(dir)
@@ -75,6 +103,9 @@ namespace wraikny.MilleFeuille.Core.UI.Button
             }
         }
 
+        /// <summary>
+        /// コントローラーお操作を元にボタンの状態を更新する。
+        /// </summary>
         private void UpdateButtonsState()
         {
             ButtonDirection[] dirs = {
