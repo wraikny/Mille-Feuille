@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace wraikny.MilleFeuille.Core.Input.Mouse
 {
+    /// <summary>
+    /// 衝突判定を持ったマウスを扱うクラス。
+    /// </summary>
     public class CollidableMouse : asd.GeometryObject2D
     {
         private readonly asd.CircleCollider collider;
@@ -13,6 +16,9 @@ namespace wraikny.MilleFeuille.Core.Input.Mouse
         private readonly asd.CameraObject2D camera = null;
         private readonly asd.RectF area;
 
+        /// <summary>
+        /// コライダーを可視化する真偽を取得または追加する。
+        /// </summary>
         public bool ColliderVisible { get; set; }
 
         public CollidableMouse(float radius, asd.CameraObject2D camera)
@@ -59,6 +65,10 @@ namespace wraikny.MilleFeuille.Core.Input.Mouse
             }
         }
 
+        /// <summary>
+        /// マウスに登録された当たり判定が衝突した情報を取得する。
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<asd.Collision2DInfo> GetCollisionInfo()
         {
             return
@@ -72,6 +82,9 @@ namespace wraikny.MilleFeuille.Core.Input.Mouse
             ;
         }
 
+        /// <summary>
+        /// マウスの位置を元にレイヤー上での位置を計算する。
+        /// </summary>
         private void CalcPositionFromMouse()
         {
             var pos = asd.Engine.Mouse.Position;
@@ -91,6 +104,10 @@ namespace wraikny.MilleFeuille.Core.Input.Mouse
             }
         }
 
+        /// <summary>
+        /// マウスの位置が指定された範囲内にあるかどうかを取得する。
+        /// </summary>
+        /// <returns></returns>
         private bool InsideArea()
         {
             var area = (camera != null)

@@ -7,6 +7,9 @@ using wraikny.MilleFeuille.Core;
 
 namespace wraikny.MilleFeuille.Core.UI.Button
 {
+    /// <summary>
+    /// ボタンの状態を表す列挙体。
+    /// </summary>
     public enum ButtonState
     {
         Default,
@@ -14,6 +17,9 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         Hold,
     }
 
+    /// <summary>
+    /// ボタンに対する操作を表す列挙体。
+    /// </summary>
     public enum ButtonOperation
     {
         Enter,
@@ -22,8 +28,14 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         Exit,
     }
 
+    /// <summary>
+    /// ボタン機能を提供するコンポーネントの基底クラス。
+    /// </summary>
     public abstract class ButtonComponentBase : Object.Object2DComponent<asd.Object2D>
     {
+        /// <summary>
+        /// ボタンの状態を取得または設定する。
+        /// </summary>
         public ButtonState State { get; set; }
 
         public ButtonComponentBase(string name)
@@ -31,6 +43,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         {
             State = ButtonState.Default;
         }
+
 
         protected abstract void CallDefault();
         protected abstract void CallHover();
@@ -59,6 +72,10 @@ namespace wraikny.MilleFeuille.Core.UI.Button
             }
         }
 
+        /// <summary>
+        /// ボタンに対する操作を元に状態を更新する。
+        /// </summary>
+        /// <param name="op"></param>
         public void UpdateState(ButtonOperation op)
         {
             switch (op)
@@ -83,6 +100,9 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         }
     }
 
+    /// <summary>
+    /// ボタン機能を提供するコンポーネントのクラス。
+    /// </summary>
     public class ButtonComponent<T> : ButtonComponentBase
         where T : asd.Object2D
     {
@@ -93,25 +113,47 @@ namespace wraikny.MilleFeuille.Core.UI.Button
 
         }
 
-        public event Action<T> Default = delegate { };
-        protected override void CallDefault() => Default((T)Owner);
+        /// <summary>
+        /// デフォルト時に毎フレーム呼び出されるイベント
+        /// </summary>
+        public event Action<T> DefaultEvent = delegate { };
+        protected override void CallDefault() => DefaultEvent((T)Owner);
 
-        public event Action<T> OnEntered = delegate { };
-        protected override void CallOnEntered() => OnEntered((T)Owner);
+        /// <summary>
+        /// フォーカスが入った時に呼び出されるイベント
+        /// </summary>
+        public event Action<T> OnEnteredEvent = delegate { };
+        protected override void CallOnEntered() => OnEnteredEvent((T)Owner);
 
-        public event Action<T> Hover = delegate { };
-        protected override void CallHover() => Hover((T)Owner);
+        public event Action<T> HoverEvent = delegate { };
 
-        public event Action<T> OnPushed = delegate { };
-        protected override void CallOnPushed() => OnPushed((T)Owner);
+        /// <summary>
+        /// ホバー時に毎フレーム呼び出されるイベント
+        /// </summary>
+        protected override void CallHover() => HoverEvent((T)Owner);
 
-        public event Action<T> Hold = delegate { };
-        protected override void CallHold() => Hold((T)Owner);
+        /// <summary>
+        /// 選択ボタンが押された時に呼び出されるイベント
+        /// </summary>
+        public event Action<T> OnPushedEvent = delegate { };
+        protected override void CallOnPushed() => OnPushedEvent((T)Owner);
 
-        public event Action<T> OnReleased = delegate { };
-        protected override void CallOnReleased() => OnReleased((T)Owner);
+        /// <summary>
+        /// ホールド時に毎フレーム呼び出されるイベント
+        /// </summary>
+        public event Action<T> HoldEvent = delegate { };
+        protected override void CallHold() => HoldEvent((T)Owner);
 
-        public event Action<T> OnExited = delegate { };
-        protected override void CallOnExited() => OnExited((T)Owner);
+        /// <summary>
+        /// 選択ボタンが話された時に呼び出されるイベント
+        /// </summary>
+        public event Action<T> OnReleasedEvent = delegate { };
+        protected override void CallOnReleased() => OnReleasedEvent((T)Owner);
+
+        /// <summary>
+        /// フォーカスが外れた時に呼び出されるイベント
+        /// </summary>
+        public event Action<T> OnExitedEvent = delegate { };
+        protected override void CallOnExited() => OnExitedEvent((T)Owner);
     }
 }

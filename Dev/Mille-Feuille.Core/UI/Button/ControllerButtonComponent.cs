@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace wraikny.MilleFeuille.Core.UI.Button
 {
+    /// <summary>
+    /// 隣接するボタンの方向を表す列挙体。
+    /// </summary>
     public enum ButtonDirection
     {
         Up,
@@ -16,6 +19,11 @@ namespace wraikny.MilleFeuille.Core.UI.Button
 
     public static class ButtonDirectionExt
     {
+        /// <summary>
+        /// 逆の向きを取得する。
+        /// </summary>
+        /// <param name="self"></param>
+        /// <returns></returns>
         public static ButtonDirection Reverse(this ButtonDirection self)
         {
             switch (self)
@@ -29,6 +37,9 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         }
     }
 
+    /// <summary>
+    /// 親クラスによらずコントローラー操作可能なボタンを表すインターフェース。
+    /// </summary>
     public interface IControllerButton
     {
         IControllerButton GetButton(ButtonDirection dir);
@@ -38,8 +49,12 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         void Update(ButtonOperation operation);
     }
 
+
     public static class ControllerButtonConnects
     {
+        /// <summary>
+        /// コレクションからボタンを相互に接続する。
+        /// </summary>
         public static void ConnetButtons(
             IReadOnlyCollection<IControllerButton> buttons
             , ButtonDirection dir
@@ -57,6 +72,9 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         }
     }
 
+    /// <summary>
+    /// コントローラー操作可能なボタン機能を提供するコンポーネント。
+    /// </summary>
     public class ControllerButtonComponent<T> : ButtonComponent<T>, IControllerButton
         where T : asd.Object2D
     {
@@ -72,12 +90,23 @@ namespace wraikny.MilleFeuille.Core.UI.Button
             connectedButtons = new Dictionary<ButtonDirection, IControllerButton>();
         }
 
+        /// <summary>
+        /// その向きに接続されたボタンを取得する。
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <returns></returns>
         public IControllerButton GetButton(ButtonDirection dir)
         {
             connectedButtons.TryGetValue(dir, out var button);
             return button;
         }
 
+        /// <summary>
+        /// その向きにボタンを接続する。
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <param name="button"></param>
+        /// <returns></returns>
         public IControllerButton SetButton(ButtonDirection dir, IControllerButton button)
         {
             connectedButtons[dir] = button;
@@ -89,6 +118,12 @@ namespace wraikny.MilleFeuille.Core.UI.Button
             return this;
         }
 
+        /// <summary>
+        /// ボタンを相互に接続し、繋げていく。
+        /// </summary>
+        /// <param name="next"></param>
+        /// <param name="dir"></param>
+        /// <returns></returns>
         public IControllerButton Chain(IControllerButton next, ButtonDirection dir)
         {
             this.SetButton(dir, next);
@@ -97,7 +132,10 @@ namespace wraikny.MilleFeuille.Core.UI.Button
             return next;
         }
 
-
+        /// <summary>
+        /// 操作を元にボタンの状態の更新を行う。
+        /// </summary>
+        /// <param name="operation"></param>
         public void Update(ButtonOperation operation)
         {
             // Escape

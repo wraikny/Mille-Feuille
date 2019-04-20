@@ -9,6 +9,11 @@ using wraikny.MilleFeuille.Core.Object;
 
 namespace wraikny.MilleFeuille.Core.Animation
 {
+    /// <summary>
+    /// アニメーションをオブジェクトに適用するコンポーネント。
+    /// </summary>
+    /// <typeparam name="TObj"></typeparam>
+    /// <typeparam name="TState"></typeparam>
     public class AnimatorComponent<TObj, TState> : Object2DComponent<TObj>
         where TObj : asd.Object2D
         where TState : class
@@ -16,7 +21,9 @@ namespace wraikny.MilleFeuille.Core.Animation
         public AnimationController<TObj, TState> Controller { get; }
 
         private Node<TObj, TState> currentNode;
+
         private IEnumerator coroutine;
+
         private void UpdateNode(TState state)
         {
             currentNode = Controller.GetNode(state);
@@ -24,6 +31,10 @@ namespace wraikny.MilleFeuille.Core.Animation
         }
 
         private TState state;
+
+        /// <summary>
+        /// 現在のアニメーションステートを取得または設定する。
+        /// </summary>
         public TState State {
             get
             {

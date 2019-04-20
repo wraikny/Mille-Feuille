@@ -12,6 +12,10 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
         Positive,
     }
 
+    /// <summary>
+    /// ジョイスティックの入力と操作を対応付けるためのクラス。
+    /// </summary>
+    /// <typeparam name="TControl"></typeparam>
     public class JoystickController<TControl> : IController<TControl>
     {
         private interface IJoystickInput
@@ -79,8 +83,14 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
         private readonly asd.Joystick joystick;
         private readonly Dictionary<TControl, IJoystickInput> binding;
 
+        /// <summary>
+        /// コントローラーが有効かどうかを取得する。
+        /// </summary>
         public bool IsValid { get; private set; }
 
+        /// <summary>
+        /// 入力に対応付けられている操作のコレクションを取得する。
+        /// </summary>
         public IEnumerable<TControl> Keys => binding.Keys;
 
         public JoystickController(int index)
@@ -92,16 +102,34 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
             binding = new Dictionary<TControl, IJoystickInput>();
         }
 
+        /// <summary>
+        /// ボタン入力に操作を対応付ける。
+        /// </summary>
+        /// <param name="abstractKey"></param>
+        /// <param name="buttonIndex"></param>
         public void BindButton(TControl abstractKey, int buttonIndex)
         {
             binding[abstractKey] = new ButtonInput(buttonIndex);
         }
 
+        /// <summary>
+        /// スティック入力に操作を対応付ける。
+        /// </summary>
+        /// <param name="abstractKey"></param>
+        /// <param name="axisIndex"></param>
+        /// <param name="direction"></param>
         public void BindAxis(TControl abstractKey, int axisIndex, AxisDirection direction)
         {
             binding[abstractKey] = new AxisInput(axisIndex, direction);
         }
 
+        /// <summary>
+        /// スティック入力の上下左右に操作を対応付ける。
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <param name="up"></param>
+        /// <param name="down"></param>
         public void BindDirection(TControl left, TControl right, TControl up, TControl down)
         {
             BindAxis(left, 0, AxisDirection.Negative);
@@ -110,6 +138,11 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
             BindAxis(down, 1, AxisDirection.Positive);
         }
 
+        /// <summary>
+        /// 操作に対応する入力状態を取得する。
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public asd.ButtonState? GetState(TControl key)
         {
             if (IsValid && binding.TryGetValue(key, out var input))
@@ -120,6 +153,9 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
             return null;
         }
 
+        /// <summary>
+        /// コントローラーの状態を更新する。
+        /// </summary>
         public void Update()
         {
             if (!IsValid)

@@ -27,37 +27,37 @@ module ButtonBuilder =
             onExitedEvents = []
         }
 
-    let addDefault f builder =
+    let addDefaultEvent f builder =
         { builder with
             defaultEvents = f::builder.defaultEvents
         }
 
-    let addOnEntered f builder =
+    let addOnEnteredEvent f builder =
         { builder with
             onEnteredEvents = f::builder.onEnteredEvents
         }
 
-    let addHover f builder =
+    let addHoverEvent f builder =
         { builder with
             hoverEvents = f::builder.hoverEvents
         }
 
-    let addOnPushed f builder =
+    let addOnPushedEvent f builder =
         { builder with
             onPushedEvents = f::builder.onPushedEvents
         }
 
-    let addHold f builder =
+    let addHoldEvent f builder =
         { builder with
             holdEvents = f::builder.holdEvents
         }
 
-    let addOnReleased f builder =
+    let addOnReleasedEvent f builder =
         { builder with
             onReleasedEvents = f::builder.onReleasedEvents
         }
 
-    let addOnExited f builder =
+    let addOnExitedEvent f builder =
         { builder with
             onExitedEvents = f::builder.onExitedEvents
         }
@@ -66,25 +66,25 @@ module ButtonBuilder =
         (builder : ButtonBuilder<'T>)
         (button : 'U when 'U :> ButtonComponent<'T>) =
         for f in builder.defaultEvents do
-            button.add_Default(fun owner -> f owner)
+            button.add_DefaultEvent(fun owner -> f owner)
 
         for f in builder.onEnteredEvents do
-            button.add_OnEntered(fun owner -> f owner)
+            button.add_OnEnteredEvent(fun owner -> f owner)
 
         for f in builder.hoverEvents do
-            button.add_Hover(fun owner -> f owner)
+            button.add_HoverEvent(fun owner -> f owner)
 
         for f in builder.onPushedEvents do
-            button.add_OnPushed(fun owner -> f owner)
+            button.add_OnPushedEvent(fun owner -> f owner)
 
         for f in builder.holdEvents do
-            button.add_Hold(fun owner -> f owner)
+            button.add_HoldEvent(fun owner -> f owner)
 
         for f in builder.onReleasedEvents do
-            button.add_OnReleased(fun owner -> f owner)
+            button.add_OnReleasedEvent(fun owner -> f owner)
 
         for f in builder.onExitedEvents do
-            button.add_OnExited(fun owner -> f owner)
+            button.add_OnExitedEvent(fun owner -> f owner)
 
 
     let buildController (name) (builder : ButtonBuilder<'T>) =
