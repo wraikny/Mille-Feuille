@@ -16,28 +16,28 @@ namespace wraikny.MilleFeuille.Core.Object
             Name = name;
         }
 
-        public event Action<T> OnOwnerAdded = delegate { };
-        public event Action<T> OnOwnerUpdated = delegate { };
-        public event Action<T> OnOwnerRemoved = delegate { };
+        public event Action<T> OnAdded = delegate { };
+        public event Action<T> OnUpdated = delegate { };
+        public event Action<T> OnRemoved = delegate { };
         public event Action<T> OnComponentUpdate = delegate { };
 
         protected override void OnLayerAdded()
         {
             base.OnLayerAdded();
-            OnOwnerAdded((T)Owner);
+            OnAdded((T)Owner);
         }
 
         protected override void OnLayerUpdated()
         {
             base.OnLayerUpdated();
 
-            OnOwnerUpdated((T)Owner);
+            OnUpdated((T)Owner);
         }
 
         protected override void OnLayerRemoved()
         {
             base.OnLayerRemoved();
-            OnOwnerRemoved((T)Owner);
+            OnRemoved((T)Owner);
         }
 
         protected override void OnUpdating()
