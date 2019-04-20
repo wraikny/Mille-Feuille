@@ -14,7 +14,7 @@ namespace wraikny.MilleFeuille.Core.Animation
     {
         public AnimationController<TObj, TState> Controller { get; }
 
-        private Node<TObj> currentNode;
+        private Node<TObj, TState> currentNode;
         private IEnumerator coroutine;
         private void UpdateNode(TState state)
         {
@@ -58,7 +58,7 @@ namespace wraikny.MilleFeuille.Core.Animation
                 }
                 else
                 {
-                    currentNode = currentNode.Next;
+                    State = currentNode.NextState;
                 }
             }
         }

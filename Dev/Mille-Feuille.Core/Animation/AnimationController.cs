@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 namespace wraikny.MilleFeuille.Core.Animation
 {
     [Serializable]
-    public class Node<TObj>
+    public class Node<TObj, TState>
     {
         public Animation<TObj> Animation { get; set; }
 
-        public Node<TObj> Next { get; set; }
+        public TState NextState { get; }
 
-        public Node(Animation<TObj> anim)
+        public Node(Animation<TObj> anim, TState next)
         {
             Animation = anim;
-            Next = null;
+            NextState = next;
         }
     }
 
@@ -26,23 +26,31 @@ namespace wraikny.MilleFeuille.Core.Animation
     {
         public string Name { get; set; }
 
-        public Dictionary<TState, Node<TObj>> Nodes { get; }
+        public Dictionary<TState, Node<TObj, TState>> Nodes { get; }
 
         public AnimationController(
             string name
         )
         {
             Name = name;
-            Nodes = new Dictionary<TState, Node<TObj>>();
+            Nodes = new Dictionary<TState, Node<TObj, TState>>();
         }
 
-        public AnimationController<TObj, TState> AddAnimation(TState state, Node<TObj> node)
+        public void AddAnimations(IEnumerable<(TState, Node<TObj, TState>)> pairs)
+        {
+            foreach(var (state, node) in pairs)
+            {
+                AddAnimation(state, node);
+            }
+        }
+
+        public AnimationController<TObj, TState> AddAnimation(TState state, Node<TObj, TState> node)
         {
             Nodes.Add(state, node);
             return this;
         }
 
-        public Node<TObj> GetNode(TState state)
+        public Node<TObj, TState> GetNode(TState state)
         {
             Nodes.TryGetValue(state, out var result);
             return result;
