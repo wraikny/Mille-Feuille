@@ -46,11 +46,11 @@ type Scene() =
             let hoverColor = new asd.Color(150uy, 150uy, 150uy)
             let holdColor = new asd.Color(50uy, 50uy, 50uy)
 
-            (ButtonBuilder.init() : ButtonBuilder<asd.GeometryObject2D>)
+            ButtonBuilder.init()
             //|> ButtonBuilder.addDefault(fun owner -> ())
             //|> ButtonBuilder.addHover(fun owner -> ())
             //|> ButtonBuilder.addHold(fun owner -> ())
-            |> ButtonBuilder.addOnEntered(fun owner ->
+            |> ButtonBuilder.addOnEntered(fun (owner : asd.GeometryObject2D) ->
                 printfn "Button%d: OnEntered" index
                 owner.Color <- hoverColor
             )

@@ -29,9 +29,10 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
             }
         }
 
-        public void BindKey(TControl abstractKey, asd.Keys key)
+        public KeyboardController<TControl> BindKey(TControl abstractKey, asd.Keys key)
         {
             binding[abstractKey] = key;
+            return this;
         }
 
         public void BindKeys(IReadOnlyCollection<(TControl, asd.Keys)> collection)

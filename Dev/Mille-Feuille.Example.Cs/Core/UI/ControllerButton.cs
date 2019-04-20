@@ -42,9 +42,9 @@ namespace wraikny.MilleFeuille.ExampleCs.Core.UI
             );
 
             var button1 = CreateButton(1, -100.0f, -100.0f);
-            var button2 = CreateButton(2, -100.0f, 100.0f);
-            var button3 = CreateButton(3, 100.0f, 100.0f);
-            var button4 = CreateButton(4, 100.0f, -100.0f);
+            var button2 = CreateButton(2, -100.0f,  100.0f);
+            var button3 = CreateButton(3,  100.0f,  100.0f);
+            var button4 = CreateButton(4,  100.0f, -100.0f);
 
             button1
                 .Chain(button2, ButtonDirection.Down)
@@ -53,29 +53,29 @@ namespace wraikny.MilleFeuille.ExampleCs.Core.UI
                 .Chain(button1, ButtonDirection.Left)
             ;
 
-            uiLayer.AddObject(button1.Owner);
-            uiLayer.AddObject(button2.Owner);
-            uiLayer.AddObject(button3.Owner);
-            uiLayer.AddObject(button4.Owner);
+            uiLayer.AddObject(button1.GetComponent().Owner);
+            uiLayer.AddObject(button2.GetComponent().Owner);
+            uiLayer.AddObject(button3.GetComponent().Owner);
+            uiLayer.AddObject(button4.GetComponent().Owner);
 
             var selecter = new ControllerButtonSelecter(button1);
 
             var keyboard = new KeyboardController<ControllerSelect>();
-            keyboard.BindKey(ControllerSelect.Up, asd.Keys.Up);
-            keyboard.BindKey(ControllerSelect.Down, asd.Keys.Down);
-            keyboard.BindKey(ControllerSelect.Right, asd.Keys.Right);
-            keyboard.BindKey(ControllerSelect.Left, asd.Keys.Left);
-            keyboard.BindKey(ControllerSelect.Select, asd.Keys.Space);
-            keyboard.BindKey(ControllerSelect.Cancel, asd.Keys.Escape);
+            keyboard
+                .BindKey(ControllerSelect.Up, asd.Keys.Up)
+                .BindKey(ControllerSelect.Down, asd.Keys.Down)
+                .BindKey(ControllerSelect.Right, asd.Keys.Right)
+                .BindKey(ControllerSelect.Left, asd.Keys.Left)
+                .BindKey(ControllerSelect.Select, asd.Keys.Space)
+                .BindKey(ControllerSelect.Cancel, asd.Keys.Escape)
+            ;
 
             selecter.AddController(keyboard);
 
             uiLayer.AddComponent(selecter, "Selecter");
         }
 
-        private static
-            ControllerButtonComponent<asd.GeometryObject2D>
-            CreateButton(int index, float x, float y)
+        private static IControllerButton CreateButton(int index, float x, float y)
         {
             var defaultColor = new asd.Color(255, 255, 255);
             var hoverColor = new asd.Color(150, 150, 150);
@@ -94,7 +94,9 @@ namespace wraikny.MilleFeuille.ExampleCs.Core.UI
                     ,
                     Color = defaultColor
                     ,
-                    Position = asd.Engine.WindowSize.To2DF() / 2.0f + (new asd.Vector2DF(x, y))
+                    Position =
+                        asd.Engine.WindowSize.To2DF() / 2.0f
+                        + (new asd.Vector2DF(x, y))
                 }
             ;
 

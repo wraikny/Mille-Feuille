@@ -37,6 +37,6 @@ module KeyboardBuilder =
         let keyboard = new KeyboardController<'T>()
 
         for bind in builder.binding |> Map.toSeq do
-            keyboard.BindKey(bind)
+            keyboard.BindKey(bind) |> ignore
 
         keyboard
