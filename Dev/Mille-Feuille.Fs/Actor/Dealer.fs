@@ -1,18 +1,18 @@
-﻿namespace wraikny.MilleFeuille.Fs.Actor
+namespace wraikny.MilleFeuille.Fs.Actor
 
 open System.Collections.Generic;
 open System.Linq;
 
 
 [<Interface>]
-type IActor<'ViewModel> =
-    abstract Update : 'ViewModel -> unit
+type IActor<'ActorViewModel> =
+    abstract Update : 'ActorViewModel -> unit
 
 
-type DealerViewModel<'ViewModel> =
+type DealerViewModel<'ActorViewModel> =
     {
         nextID : uint32
-        actors : Map<uint32, 'ViewModel>
+        actors : Map<uint32, 'ActorViewModel>
     }
 
 
