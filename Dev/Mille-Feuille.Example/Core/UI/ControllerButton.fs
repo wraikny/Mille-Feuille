@@ -1,4 +1,4 @@
-﻿module wraikny.MilleFeuille.Example.Core.UI.ControllerButton
+﻿module wraikny.MilleFeuille.ExampleFs.Core.UI.ControllerButton
 
 open System.Linq
 open wraikny.MilleFeuille.Core

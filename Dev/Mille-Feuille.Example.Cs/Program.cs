@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mille_Feuille.Example.Cs
+namespace wraikny.MilleFeuille.ExampleCs
 {
     class Program
     {

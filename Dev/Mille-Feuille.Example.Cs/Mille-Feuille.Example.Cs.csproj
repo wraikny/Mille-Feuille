@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProjectGuid>{1143E458-E4DC-475F-9346-2B742BB4EC07}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>wraikny.MilleFeuille.Example.Cs</RootNamespace>
+    <RootNamespace>wraikny.MilleFeuille.ExampleCs</RootNamespace>
     <AssemblyName>MilleFeuille.Example.Cs</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -68,6 +68,9 @@
       <Project>{73984409-a0fe-476e-99f2-61be570a752f}</Project>
       <Name>Mille-Feuille.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Core\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

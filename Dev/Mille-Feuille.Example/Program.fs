@@ -1,4 +1,4 @@
-﻿namespace wraikny.MilleFeuille.Example
+﻿namespace wraikny.MilleFeuille.ExampleFs
 
 module Program =
     let startScene() =
