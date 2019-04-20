@@ -14,10 +14,16 @@ namespace wraikny.MilleFeuille.Core.Animation
     {
         public AnimationController<TObj, TState> Controller { get; }
 
+        private Node<TObj> currentNode;
         private IEnumerator coroutine;
+        private void UpdateNode(TState state)
+        {
+            currentNode = Controller.GetNode(state);
+            coroutine = currentNode.Animation.Generator((TObj)Owner);
+        }
 
         private TState state;
-        public TState ControllerState {
+        public TState State {
             get
             {
                 return state;
@@ -25,7 +31,7 @@ namespace wraikny.MilleFeuille.Core.Animation
             set
             {
                 state = value;
-                coroutine = Controller.GetAnimation(state)?.Generator((TObj)Owner);
+                UpdateNode(state);
             }
         }
 
@@ -36,14 +42,25 @@ namespace wraikny.MilleFeuille.Core.Animation
             : base(name)
         {
             Controller = controller;
-            coroutine = Controller.GetAnimation(state)?.Generator((TObj)Owner);
+            currentNode = null;
+            coroutine = null;
         }
 
         protected override void OnUpdate()
         {
             base.OnUpdate();
 
-            coroutine?.MoveNext();
+            if(coroutine != null)
+            {
+                if(coroutine.MoveNext())
+                {
+
+                }
+                else
+                {
+                    currentNode = currentNode.Next;
+                }
+            }
         }
     }
 }
