@@ -11,6 +11,7 @@ type Event<'Msg> =
 
 
 module TreeDef =
+    /// ウィンドウアイテムの構造を表す型。
     type Item<'Msg> =
         internal
         | Empty
@@ -27,12 +28,14 @@ module TreeDef =
         | Combo of label : string * current : int * items : string list * (int -> 'Msg)
 
 
+    /// カラムの構造を表す型。
     type Column<'Msg> =
         internal
         | NoColumn of Item<'Msg> list
         | Column of (float32 option * Item<'Msg> list) list
 
 
+    /// メニューの構造を表す型。
     type Menu<'Msg> =
         internal
         | Menu of label : string * (Menu<'Msg> list)
@@ -65,42 +68,60 @@ type ViewModel<'Msg> =
 
 
 module Event =
+    /// 何も行わないことを表す。
     let nothing = Nothing
 
+    /// 指定のメッセージを発火することを表す。
     let message = Msg
 
+    /// ファイルを開くダイアログを開くことを表す。
     let openDialog filter path msg = OpenDialog(filter, path, msg)
 
+    /// ファイルを保存するダイアログを開くことを表す。
     let saveDialog filter path msg = SaveDialog(filter, path, msg)
 
 
 module Tree =
     // Item
+
+    /// 何もないことを表す。
     let empty = Empty
 
+    /// 区切り線を表す。
     let separator = Separator
 
+    /// 改行しないことを表す。
     let sameLine = SameLine
 
+    /// 文字列を表す。
     let text = Text
 
+    /// 選択可能な文字列を表す。
     let selectable text selected msg = Selectable(text, selected, msg)
 
+    /// ボタンを表す。
     let button label event = Button(label, event)
 
+    /// 画像を表す。
     let image path size = Image(path, size)
 
+    /// 色選択機能を表す。
     let colorEdit4 label current msg = ColorEdit4(label, current, msg)
 
+    /// 整数の入力欄を表す。
     let inputInt label current msg = InputInt(label, current, msg)
 
+    /// 文字列の入力欄表す。
     let inputText label current maxbufferSize msg = InputText(label, current, maxbufferSize, msg)
 
+    /// リストボックスを表す。
     let listBox label currentIndex items msg = ListBox(label, currentIndex, items, msg)
 
+    /// コンボボックスを表す。
     let combo label currentIndex items msg = Combo(label, currentIndex, items, msg)
 
     // Column
+    /// カラムを表す。
     let column = function
         | [] ->
             NoColumn []
@@ -109,13 +130,17 @@ module Tree =
         | xs ->
             Column xs
 
+    /// カラムを持たないことを表す。
     let noColumn = NoColumn
 
     // Menu
+    /// メニューを表す。
     let menu label menus = Menu.Menu(label, menus)
 
+    /// メニュー要素を表す。
     let menuItem label shortcut selected event = MenuItem(label, shortcut, selected, event)
 
+    /// メインウィンドウを表す。
     let mainWindow name offset menuBar contents =
         {
             name = name
@@ -123,7 +148,7 @@ module Tree =
             contents = contents
         }, Fullscreen offset
     
-    
+    /// ウィンドウを表す。
     let window name menuBar contents =
         {
             name = name
@@ -131,7 +156,7 @@ module Tree =
             contents = contents
         }
     
-    
+    /// Tool機能のViewModel全体を表す。
     let viewModel mainWindow windows =
         {
             mainWindow = mainWindow
