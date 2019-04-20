@@ -16,32 +16,48 @@ namespace wraikny.MilleFeuille.Core.Object
             Name = name;
         }
 
-        public event Action<T> OnAdded = delegate { };
-        public event Action<T> OnRemoved = delegate { };
-        public event Action<T> OnDisposed = delegate { };
-        public event Action<T> OnComponentUpdate = delegate { };
+        /// <summary>
+        /// このコンポーネントを持つオブジェクトがレイヤーに登録されたときのイベント。
+        /// </summary>
+        public event Action<T> OnAddedEvent = delegate { };
+
+        /// <summary>
+        /// このコンポーネントを持つオブジェクトからレイヤーに登録解除されたときのイベント。
+        /// </summary>
+        public event Action<T> OnRemovedEvent = delegate { };
+
+        /// <summary>
+        /// このコンポーネントを持つオブジェクトが更新されるときのイベント。
+        /// </summary>
+        public event Action<T> OnUpdateEvent = delegate { };
+
+        /// <summary>
+        /// このコンポーネントを持つオブジェクトが破棄されたときのイベント。
+        /// </summary>
+        public event Action<T> OnDisposedEvent = delegate { };
 
         protected override void OnObjectAdded()
         {
             base.OnObjectAdded();
-            OnAdded((T)Owner);
+            OnAddedEvent((T)Owner);
         }
 
         protected override void OnObjectRemoved()
         {
             base.OnObjectRemoved();
-            OnRemoved((T)Owner);
+            OnRemovedEvent((T)Owner);
+        }
+
+        protected override void OnUpdate()
+        {
+            base.OnUpdate();
+            OnUpdateEvent((T)Owner);
         }
 
         protected override void OnObjectDisposed()
         {
             base.OnObjectDisposed();
-            OnDisposed((T)Owner);
-        }
-        protected override void OnUpdate()
-        {
-            base.OnUpdate();
-            OnComponentUpdate((T)Owner);
+            OnDisposedEvent((T)Owner);
         }
     }
 }
