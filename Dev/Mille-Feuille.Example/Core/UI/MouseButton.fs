@@ -50,11 +50,11 @@ type Scene() =
             let hoverColor = new asd.Color(150uy, 150uy, 150uy)
             let holdColor = new asd.Color(50uy, 50uy, 50uy)
 
-            (ButtonBuilder.init() : ButtonBuilder<asd.GeometryObject2D>)
+            ButtonBuilder.init()
             //|> ButtonBuilder.addDefault(fun owner -> ())
             //|> ButtonBuilder.addHover(fun owner -> ())
             //|> ButtonBuilder.addHold(fun owner -> ())
-            |> ButtonBuilder.addOnEntered(fun owner ->
+            |> ButtonBuilder.addOnEntered(fun (owner : asd.GeometryObject2D) ->
                 printfn "Button%d: OnEntered" index
                 owner.Color <- hoverColor
             )
@@ -73,6 +73,11 @@ type Scene() =
             |> ButtonBuilder.buildMouse "Button"  asd.MouseButtons.ButtonLeft
 
         let btn0 = buttonComponent 0
+
+        btn0.add_OnOwnerAdded(fun owner ->
+            let collider = new asd.RectangleCollider(Area = buttonArea, IsVisible = true)
+            owner.AddCollider(collider)
+        )
 
         buttonObj.AddComponent(btn0, btn0.Name)
 
