@@ -1,5 +1,6 @@
 ﻿module wraikny.MilleFeuille.ExampleFs.Core.Animation
 
+open wraikny.Tart.Helper
 open wraikny.Tart.Helper.Math
 
 open wraikny.MilleFeuille.Core.Object
@@ -15,28 +16,6 @@ type AnimState =
 
 
 module TestAnims =
-    open System.Collections
-    open System.Linq
-
-    let waitFrames n = seq{ for _ in 1..n -> () }
-
-    let asParallel (coroutines : #seq<seq<unit>>) =
-        seq {
-            let coroutines =
-                (coroutines
-                |> Seq.map(fun c -> c.GetEnumerator() :> IEnumerator)
-                ).ToList()
-
-            let mutable isContinue = true
-
-            while isContinue do
-                isContinue <- false
-                for c in coroutines do
-                    if c.MoveNext() && isContinue = false then
-                        isContinue <- true
-                yield ()
-        }
-
     let firstAnim =
         AnimationBuilder.init "First Animation"
         |> AnimationBuilder.addCoroutine
@@ -65,8 +44,8 @@ module TestAnims =
 
                 owner.Color <- new asd.Color(0uy, 0uy, 0uy)
 
-                yield! waitFrames 60
-                yield! asParallel [rot; col]
+                yield! Coroutine.waitFrames 60
+                yield! Coroutine.asParallel [rot; col]
 
                 printfn "First Animation: End"
                 yield()
@@ -95,7 +74,7 @@ module TestAnims =
                     owner.Angle <- firstRotation + float32 i
                     yield ()
     
-                yield! waitFrames 60
+                yield! Coroutine.waitFrames 60
 
                 printfn "Rotate Animation: End"
                 yield ()
@@ -117,7 +96,7 @@ module TestAnims =
                     owner.Color <- new asd.Color(i, i, i)
                     yield ()
     
-                yield! waitFrames 30
+                yield! Coroutine.waitFrames 30
                     
                 printfn "Color Animation: End"
                 yield()
