@@ -4,6 +4,7 @@ open System.Collections
 
 open wraikny.MilleFeuille.Core.Animation
 
+/// アニメーションクラスを作成するビルダー。
 type AnimationBuilder<'Obj> =
     {
         name : string
@@ -12,19 +13,20 @@ type AnimationBuilder<'Obj> =
 
 
 module AnimationBuilder =
+    /// アニメーションクラスを作成するビルダーを作る。
     let init name =
         {
             name = name
             coroutines = []
         }
 
-
+    /// アニメーションにコルーチンを追加する。
     let addCoroutine coroutines builder =
         { builder with
             coroutines = builder.coroutines @ coroutines
         }
 
-
+    /// ビルダーからアニメーションクラスを作成する。
     let build builder =
         new Animation<_>(
             builder.name

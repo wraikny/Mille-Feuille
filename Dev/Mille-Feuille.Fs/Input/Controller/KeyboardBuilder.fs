@@ -5,7 +5,7 @@ open System.Linq
 
 open wraikny.MilleFeuille.Core.Input.Controller
 
-
+/// キーボードコントローラクラスを作成するビルダー。
 type KeyboardBuilder<'T when 'T : comparison> =
     {
         binding : Map<'T, asd.Keys>
@@ -13,6 +13,7 @@ type KeyboardBuilder<'T when 'T : comparison> =
 
 
 module KeyboardBuilder =
+    /// キーボードコントローラクラスを作成するビルダーを作る。
     let init() =
         {
             binding = Map.empty
@@ -20,11 +21,13 @@ module KeyboardBuilder =
 
     let internal binding builder = builder.binding
 
+    /// キー入力に操作を対応付ける。
     let bindKey control key builder =
         { builder with
             binding = builder.binding |> Map.add control key
         }
 
+    /// リストを元にキー入力に操作を対応付ける。
     let rec bindKeys bindings builder =
         bindings |> function
         | [] -> builder
@@ -33,6 +36,7 @@ module KeyboardBuilder =
             |> bindKey c k
             |> bindKeys xs
 
+    /// ビルダーからキーボードコントローラクラスを作成する。
     let build (builder : KeyboardBuilder<'T>) =
         let keyboard = new KeyboardController<'T>()
 

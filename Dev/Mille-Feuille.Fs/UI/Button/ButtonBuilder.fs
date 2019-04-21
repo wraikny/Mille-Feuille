@@ -1,5 +1,7 @@
 ﻿namespace wraikny.MilleFeuille.Fs.UI.Button
 
+
+/// ボタンクラスを作成するビルダー。
 type ButtonBuilder< 'T when 'T :> asd.Object2D > =
     {
         defaultEvents : ('T -> unit) list
@@ -16,6 +18,7 @@ open wraikny.MilleFeuille.Core.UI.Button
 
 
 module ButtonBuilder =
+    /// ボタンクラスを作成するビルダーを作る。
     let init() =
         {
             defaultEvents = []
@@ -27,36 +30,44 @@ module ButtonBuilder =
             onExitedEvents = []
         }
 
+
+    /// デフォルト時に毎フレーム呼び出されるイベントを追加する。
     let addDefaultEvent f builder =
         { builder with
             defaultEvents = f::builder.defaultEvents
         }
 
+    /// フォーカスが入った時に呼び出されるイベントを追加する。
     let addOnEnteredEvent f builder =
         { builder with
             onEnteredEvents = f::builder.onEnteredEvents
         }
 
+    /// ホバー時に毎フレーム呼び出されるイベントを追加する。
     let addHoverEvent f builder =
         { builder with
             hoverEvents = f::builder.hoverEvents
         }
 
+    /// 選択ボタンが押された時に呼び出されるイベントを追加する。
     let addOnPushedEvent f builder =
         { builder with
             onPushedEvents = f::builder.onPushedEvents
         }
 
+    /// ホールド時に毎フレーム呼び出されるイベントを追加する。
     let addHoldEvent f builder =
         { builder with
             holdEvents = f::builder.holdEvents
         }
 
+    /// 選択ボタンが離された時に呼び出されるイベントを追加する。
     let addOnReleasedEvent f builder =
         { builder with
             onReleasedEvents = f::builder.onReleasedEvents
         }
 
+    /// フォーカスが外れた時に呼び出されるイベントを追加する。
     let addOnExitedEvent f builder =
         { builder with
             onExitedEvents = f::builder.onExitedEvents
@@ -87,6 +98,7 @@ module ButtonBuilder =
             button.add_OnExitedEvent(fun owner -> f owner)
 
 
+    /// ボタンの情報をもとに、コントローラ操作可能なボタンを作成する。
     let buildController (name) (builder : ButtonBuilder<'T>) =
         let button = new ControllerButtonComponent<'T>(name)
 
@@ -94,7 +106,7 @@ module ButtonBuilder =
 
         button
 
-
+    /// ボタンの情報をもとに、マウス操作可能なボタンを作成する。
     let buildMouse (name) (mouseButton) (builder : ButtonBuilder<'T>) =
         let button = new MouseButtonComponent<'T>(name, mouseButton)
 

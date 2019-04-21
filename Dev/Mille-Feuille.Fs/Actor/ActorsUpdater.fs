@@ -6,11 +6,14 @@ open System.Linq;
 open wraikny.Tart.Helper
 open wraikny.MilleFeuille.Core.Object
 
+
+/// 追加削除の発生するオブジェクトのクラスが実装するインターフェース。
 [<Interface>]
 type IActor<'ActorViewModel> =
     abstract Update : 'ActorViewModel -> unit
 
 
+/// 追加削除の発生するオブジェクトの更新を行うためのビューモデル。
 type UpdaterViewModel<'ActorViewModel> =
     {
         nextID : uint32
@@ -18,6 +21,7 @@ type UpdaterViewModel<'ActorViewModel> =
     }
 
 
+/// 追加削除の発生するオブジェクトの更新管理を行うクラス。
 [<Class>]
 type ActorsUpdater<'Actor, 'ActorViewModel, 'ViewModel
     when 'Actor :> asd.Object2D
@@ -37,12 +41,14 @@ type ActorsUpdater<'Actor, 'ActorViewModel, 'ViewModel
             this.Update(viewModelSelecter input)
     
 
+    /// ビューモデルを元にオブジェクトの更新を行う。
     member this.Update(viewModel : UpdaterViewModel<_>) =
         if this.IsUpdated then
             this.AddActors(&viewModel)
             this.UpdateActors(&viewModel)
 
 
+    /// ビューモデルを元にidを照合してオブジェクトの追加を行う。
     member this.AddActors (viewModel : _ inref) =
         let newNextID = viewModel.nextID
         if nextID <> newNextID then
@@ -60,6 +66,7 @@ type ActorsUpdater<'Actor, 'ActorViewModel, 'ViewModel
             nextID <- newNextID
 
 
+    /// ビューモデルを元にオブジェクトの更新と破棄を行う。
     member this.UpdateActors (viewModel : _ inref) =
         let actors' =
             actors

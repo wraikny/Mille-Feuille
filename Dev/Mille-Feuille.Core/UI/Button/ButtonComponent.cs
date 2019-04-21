@@ -114,13 +114,13 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         }
 
         /// <summary>
-        /// デフォルト時に毎フレーム呼び出されるイベント
+        /// デフォルト時に毎フレーム呼び出されるイベント。
         /// </summary>
         public event Action<T> DefaultEvent = delegate { };
         protected override void CallDefault() => DefaultEvent((T)Owner);
 
         /// <summary>
-        /// フォーカスが入った時に呼び出されるイベント
+        /// フォーカスが入った時に呼び出されるイベント。
         /// </summary>
         public event Action<T> OnEnteredEvent = delegate { };
         protected override void CallOnEntered() => OnEnteredEvent((T)Owner);
@@ -128,30 +128,30 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         public event Action<T> HoverEvent = delegate { };
 
         /// <summary>
-        /// ホバー時に毎フレーム呼び出されるイベント
+        /// ホバー時に毎フレーム呼び出されるイベント。
         /// </summary>
         protected override void CallHover() => HoverEvent((T)Owner);
 
         /// <summary>
-        /// 選択ボタンが押された時に呼び出されるイベント
+        /// 選択ボタンが押された時に呼び出されるイベント。
         /// </summary>
         public event Action<T> OnPushedEvent = delegate { };
         protected override void CallOnPushed() => OnPushedEvent((T)Owner);
 
         /// <summary>
-        /// ホールド時に毎フレーム呼び出されるイベント
+        /// ホールド時に毎フレーム呼び出されるイベント。
         /// </summary>
         public event Action<T> HoldEvent = delegate { };
         protected override void CallHold() => HoldEvent((T)Owner);
 
         /// <summary>
-        /// 選択ボタンが話された時に呼び出されるイベント
+        /// 選択ボタンが離された時に呼び出されるイベント。
         /// </summary>
         public event Action<T> OnReleasedEvent = delegate { };
         protected override void CallOnReleased() => OnReleasedEvent((T)Owner);
 
         /// <summary>
-        /// フォーカスが外れた時に呼び出されるイベント
+        /// フォーカスが外れた時に呼び出されるイベント。
         /// </summary>
         public event Action<T> OnExitedEvent = delegate { };
         protected override void CallOnExited() => OnExitedEvent((T)Owner);

@@ -2,6 +2,7 @@
 
 open wraikny.MilleFeuille.Core
 
+/// アニメーションコントローラで保持するノードを作成するビルダー。
 type NodeBuilder<'Obj, 'State> =
     {
         animation : AnimationBuilder<'Obj>
@@ -10,6 +11,7 @@ type NodeBuilder<'Obj, 'State> =
 
 
 module NodeBuilder =
+    /// ノードクラスを作成するビルダーを作る。
     let build builder =
         let anim =
             builder.animation
@@ -23,6 +25,8 @@ module NodeBuilder =
         node
 
 
+
+/// アニメーションコントローラクラスを作成するビルダー。
 type AnimationControllerBuilder<'Obj, 'State when 'State : comparison> =
     {
         name : string
@@ -31,15 +35,16 @@ type AnimationControllerBuilder<'Obj, 'State when 'State : comparison> =
 
 
 module AnimationControllerBuilder =
+    /// アニメーションコントローラを作成するビルダーを作る。
     let init name nodes = { name = name; nodes = nodes |> Map.ofList }
 
-
+    /// コントローラにアニメーションノードを追加する。
     let addNode state node builder =
         { builder with
             nodes = builder.nodes |> Map.add state node
         }
 
-
+    /// ビルダーからアニメーションコントローラクラスを作成する。
     let build builder =
         let controller = new Animation.AnimationController<'Obj, 'State>(builder.name)
 
@@ -52,7 +57,7 @@ module AnimationControllerBuilder =
 
         controller
 
-
+    /// ビルダーからアニメーションコンポーネントクラスを作成する。
     let buildComponent name builder =
         let controller =
             builder
