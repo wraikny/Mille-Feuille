@@ -74,7 +74,7 @@ namespace wraikny.MilleFeuille.Core.Animation
         /// </summary>
         public AnimationController<TObj, TState> AddAnimation(TState state, Node<TObj, TState> node)
         {
-            Nodes.Add(state, node);
+            Nodes[state] = node;
             return this;
         }
 
@@ -83,6 +83,8 @@ namespace wraikny.MilleFeuille.Core.Animation
         /// </summary>
         public Node<TObj, TState> GetNode(TState state)
         {
+            if (state == null) return null;
+
             Nodes.TryGetValue(state, out var result);
             return result;
         }

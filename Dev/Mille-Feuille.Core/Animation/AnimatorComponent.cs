@@ -26,6 +26,7 @@ namespace wraikny.MilleFeuille.Core.Animation
 
         private void UpdateNode(TState state)
         {
+            if (state == null) return;
             currentNode = Controller.GetNode(state);
             coroutine = currentNode.Animation.Generator((TObj)Owner);
         }
