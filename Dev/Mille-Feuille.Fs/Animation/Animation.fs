@@ -21,7 +21,13 @@ module AnimationBuilder =
         }
 
     /// アニメーションにコルーチンを追加する。
-    let addCoroutine coroutines builder =
+    let addCoroutine coroutine builder =
+        { builder with
+            coroutines = builder.coroutines @ [coroutine]
+        }
+
+    /// リストを元にアニメーションにコルーチンを追加する。
+    let addCoroutines coroutines builder =
         { builder with
             coroutines = builder.coroutines @ coroutines
         }
