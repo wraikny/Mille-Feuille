@@ -1,7 +1,7 @@
 ﻿module wraikny.MilleFeuille.ExampleFs.Core.Animation
 
 open wraikny.Tart.Helper
-open wraikny.Tart.Helper.Math
+open wraikny.Tart.Helper.Math.Interpolation
 
 open wraikny.MilleFeuille.Core.Object
 open wraikny.MilleFeuille.Fs.Animation
@@ -16,39 +16,46 @@ type AnimState =
 
 
 module TestAnims =
-    let firstAnim =
+    let rotation easing frame (s, e) (owner : asd.GeometryObject2D) =
+        seq {
+            for i in 0..frame do
+                let x = getEasing easing frame i
+
+                owner.Angle <- s + (e - s) * x
+                yield ()
+        }
+
+
+    let color easing frame (s, e) (owner : asd.GeometryObject2D) =
+        seq {
+            for i in 0..frame do
+                let x = getEasing easing frame i
+
+                let b = (s + (e - s) * x) |> byte
+                owner.Color <- new asd.Color(b, b, b)
+                yield ()
+        }
+
+    let firstAnim isFinishedFirst =
         AnimationBuilder.init "First Animation"
         |> AnimationBuilder.addCoroutine
             (fun (owner : asd.GeometryObject2D) -> seq {
                 printfn "First Animation: Begin"
 
-                let rot = seq {
-                    let frame = 120
-                    for i in 0..frame do
-                        let x =
-                            Interpolation.getEasing
-                                Interpolation.Easing.InOutQuad
-                                frame
-                                i
-
-                        owner.Angle <- x * 180.0f
-                        yield ()
-                }
-
-                let col = seq {
-                    for i in 0..60 do
-                        let i = 255.0f * (float32 i / float32 60) |> byte
-                        owner.Color <- new asd.Color(i, i, i)
-                        yield ()
-                }
-
+                isFinishedFirst := false
                 owner.Color <- new asd.Color(0uy, 0uy, 0uy)
+                yield ()
 
                 yield! Coroutine.waitFrames 60
-                yield! Coroutine.asParallel [rot; col]
+                yield! Coroutine.asParallel
+                    [
+                        owner |> rotation Easing.OutQuad 120 (0.0f, 180.0f)
+                        owner |> color Easing.OutQuad 120 (0.0f, 255.0f)
+                    ]
 
                 printfn "First Animation: End"
-                yield()
+                isFinishedFirst := true
+                yield ()
             })
 
     let defaultAnim defaultColor =
@@ -59,6 +66,7 @@ module TestAnims =
                 owner.Angle <- 0.0f
                 owner.Color <- defaultColor
                 yield ()
+
                 printfn "Default Animation: Begin"
                 yield()
             })
@@ -68,12 +76,9 @@ module TestAnims =
         |> AnimationBuilder.addCoroutine
             (fun (owner : asd.GeometryObject2D) -> seq {
                 printfn "Rotate Animation: Begin"
-                let firstRotation = owner.Angle
+                let first = owner.Angle
 
-                for i in 1..(60 * 3) do
-                    owner.Angle <- firstRotation + float32 i
-                    yield ()
-    
+                yield! owner |> rotation Easing.InOutBack 180 (first, first + 180.0f)
                 yield! Coroutine.waitFrames 60
 
                 printfn "Rotate Animation: End"
@@ -86,16 +91,9 @@ module TestAnims =
             (fun (owner : asd.GeometryObject2D) -> seq {
                 printfn "Color Animation: Begin"
                 let frame = 60
-                for i in 0..frame do
-                    let i = (1.0f - float32 i / float32 frame) * 255.0f |> byte
-                    owner.Color <- new asd.Color(i, i, i)
-                    yield ()
 
-                for i in 0..frame do
-                    let i = (float32 i / float32 frame) * 255.0f |> byte
-                    owner.Color <- new asd.Color(i, i, i)
-                    yield ()
-    
+                yield! owner |> color Easing.InOutCubic frame (255.0f, 0.0f)
+                yield! owner |> color Easing.InOutCubic frame (0.0f, 255.0f)
                 yield! Coroutine.waitFrames 30
                     
                 printfn "Color Animation: End"
@@ -103,13 +101,25 @@ module TestAnims =
 
             })
 
-    let createComponent defaultColor =
+    let createComponent defaultColor isFinishedFirst =
         AnimationControllerBuilder.init "Test Animation"
             [
-                (First, {animation = firstAnim; next = Some Default })
-                (Default, {animation = defaultAnim defaultColor; next = None })
-                (Rotate, {animation = rotateAnim; next = Some Color })
-                (Color, {animation = colorAnim; next = Some Rotate })
+                (First, {
+                    animation = firstAnim isFinishedFirst
+                    next = Some Default
+                })
+                (Default, {
+                    animation = defaultAnim defaultColor
+                    next = None
+                })
+                (Rotate, {
+                    animation = rotateAnim
+                    next = Some Color
+                })
+                (Color, {
+                    animation = colorAnim
+                    next = Some Rotate
+                })
             ]
         |> AnimationControllerBuilder.buildComponent "TestObj Animator"
 
@@ -129,9 +139,12 @@ type AnimScene() =
         |> KeyboardBuilder.build
 
     let defaultColor = new asd.Color(255uy, 255uy, 255uy)
+    let isFinishedFirst = ref false
+
     let animComponent =
         TestAnims.createComponent
             defaultColor
+            isFinishedFirst
     
 
     override this.OnRegistered() =
@@ -151,21 +164,21 @@ type AnimScene() =
         testObj.AddComponent(animComponent, animComponent.Name)
         animComponent.State <- First
 
-
         this.AddLayer(mainLayer)
         mainLayer.AddObject(testObj)
 
 
     override this.OnUpdated() =
-        let setAnimationStates state =
-            keyboard.GetState(state) |> Option.ofNullable
-            |> function
-            | Some asd.ButtonState.Push ->
-                animComponent.State <- state
-            | _ -> ()
+        if !isFinishedFirst then
+            let setAnimationStates state =
+                keyboard.GetState(state) |> Option.ofNullable
+                |> function
+                | Some asd.ButtonState.Push ->
+                    animComponent.State <- state
+                | _ -> ()
 
-        setAnimationStates Default
-        setAnimationStates Rotate
-        setAnimationStates Color
+            setAnimationStates Default
+            setAnimationStates Rotate
+            setAnimationStates Color
 
 
