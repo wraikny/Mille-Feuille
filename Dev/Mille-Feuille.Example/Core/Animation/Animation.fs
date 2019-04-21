@@ -1,7 +1,7 @@
 ﻿module wraikny.MilleFeuille.ExampleFs.Core.Animation
 
 open wraikny.Tart.Helper
-open wraikny.Tart.Helper.Math.Interpolation
+open wraikny.Tart.Helper.Math
 
 open wraikny.MilleFeuille.Core.Object
 open wraikny.MilleFeuille.Fs.Animation
@@ -19,7 +19,7 @@ module TestAnims =
     let rotation easing frame (s, e) (owner : asd.GeometryObject2D) =
         seq {
             for i in 0..frame do
-                let x = getEasing easing frame i
+                let x = Easing.calculate easing frame i
 
                 owner.Angle <- s + (e - s) * x
                 yield ()
@@ -29,7 +29,7 @@ module TestAnims =
     let color easing frame (s, e) (owner : asd.GeometryObject2D) =
         seq {
             for i in 0..frame do
-                let x = getEasing easing frame i
+                let x = Easing.calculate easing frame i
 
                 let b = (s + (e - s) * x) |> byte
                 owner.Color <- new asd.Color(b, b, b)
