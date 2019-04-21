@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>f0694096-423d-4328-ab20-cef9052b2f31</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Mille_Feuille.Fs</RootNamespace>
+    <AssemblyName>MilleFeuille.Fs</AssemblyName>
+    <UseStandardResourceNames>true</UseStandardResourceNames>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <WarningsAsErrors>3239;$(WarningsAsErrors)</WarningsAsErrors>
+    <Name>Mille-Feuille.Fs</Name>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <Tailcalls>false</Tailcalls>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <WarningLevel>3</WarningLevel>
+    <DocumentationFile>bin\$(Configuration)\$(AssemblyName).XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <Tailcalls>true</Tailcalls>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <WarningLevel>3</WarningLevel>
+    <DocumentationFile>bin\$(Configuration)\$(AssemblyName).XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(FSharpTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\FSharp\Microsoft.FSharp.Targets') ">
+    <FSharpTargetsPath>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\FSharp\Microsoft.FSharp.Targets</FSharpTargetsPath>
+  </PropertyGroup>
+  <Import Project="$(FSharpTargetsPath)" />
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.fs" />
+    <Content Include="packages.config" />
+    <None Include="..\Lib\Altseed.dll">
+      <Link>Altseed.dll</Link>
+    </None>
+    <None Include="..\Lib\Altseed_core.dll">
+      <Link>Altseed_core.dll</Link>
+    </None>
+    <None Include="..\Lib\Tart.Core.dll">
+      <Link>Tart.Core.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Lib\Tart.Helper.dll">
+      <Link>Tart.Helper.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <Compile Include="Sound.fs" />
+    <Compile Include="Tool.fs" />
+    <Compile Include="Animation\Animation.fs" />
+    <Compile Include="Animation\AnimationController.fs" />
+    <Compile Include="Input\Controller\KeyboardBuilder.fs" />
+    <Compile Include="Input\Controller\JoystickBuilder.fs" />
+    <Compile Include="UI\Button\ButtonBuilder.fs" />
+    <Compile Include="Actor\ActorsUpdater.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Altseed">
+      <HintPath>..\Lib\Altseed.dll</HintPath>
+    </Reference>
+    <Reference Include="FSharp.Core">
+      <HintPath>..\packages\FSharp.Core.4.6.2\lib\net45\FSharp.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.ValueTuple">
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Tart.Core">
+      <HintPath>..\Lib\Tart.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Tart.Helper">
+      <HintPath>..\Lib\Tart.Helper.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mille-Feuille.Core\Mille-Feuille.Core.csproj">
+      <Name>Mille-Feuille.Core</Name>
+      <Project>{73984409-a0fe-476e-99f2-61be570a752f}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
