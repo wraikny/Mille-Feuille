@@ -105,26 +105,25 @@ module TestAnims =
         (AnimationControllerBuilder.init "Test Animation"
             : AnimationControllerBuilder<asd.GeometryObject2D, _>
         )
-        |> AnimationControllerBuilder.addNode
-            (First, {
-                animation = firstAnim isFinishedFirst
-                next = Some Default
-            })
-        |> AnimationControllerBuilder.addNode
-            (Default, {
-                animation = defaultAnim defaultColor
-                next = None
-            })
-        |> AnimationControllerBuilder.addNode
-            (Rotate, {
-                animation = rotateAnim
-                next = Some Color
-            })
-        |> AnimationControllerBuilder.addNode
-            (Color, {
-                animation = colorAnim
-                next = Some Rotate
-            })
+        |> AnimationControllerBuilder.addNodesList
+            [
+                (First, {
+                    animation = firstAnim isFinishedFirst
+                    next = Some Default
+                } |> NodeBuilder.build)
+                (Default, {
+                    animation = defaultAnim defaultColor
+                    next = None
+                } |> NodeBuilder.build)
+                (Rotate, {
+                    animation = rotateAnim
+                    next = Some Color
+                } |> NodeBuilder.build)
+                (Color, {
+                    animation = colorAnim
+                    next = Some Rotate
+                } |> NodeBuilder.build)
+            ]
         |> AnimationControllerBuilder.buildComponent "TestObj Animator"
 
 

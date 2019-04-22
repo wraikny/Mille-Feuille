@@ -11,7 +11,7 @@ type NodeBuilder<'Obj, 'State> =
 
 
 module NodeBuilder =
-    /// ノードクラスを作成するビルダーを作る。
+    /// ビルダーからノードクラスを作成する。
     let build builder =
         let anim =
             builder.animation
@@ -46,8 +46,24 @@ module AnimationControllerBuilder =
         { builder with
             nodes =
                 builder.nodes
-                |> Map.add state (NodeBuilder.build node)
+                |> Map.add state node
         }
+
+
+    /// ビルダーを元にコントローラにアニメーションノードを追加する。
+    let addNodeBuilder (state, node) builder =
+        builder
+        |> addNode (state, NodeBuilder.build node)
+
+
+    let rec addNodesList list builder =
+        list |> function
+        | [] -> builder
+        | x::xs ->
+            builder
+            |> addNode x
+            |> addNodesList xs
+
 
     /// ビルダーからアニメーションコントローラクラスを作成する。
     let build builder =
