@@ -28,13 +28,13 @@ module KeyboardBuilder =
         }
 
     /// リストを元にキー入力に操作を対応付ける。
-    let rec bindKeys bindings builder =
+    let rec bindKeysList bindings builder =
         bindings |> function
         | [] -> builder
         | (c, k)::xs ->
             builder
             |> bindKey c k
-            |> bindKeys xs
+            |> bindKeysList xs
 
     /// ビルダーからキーボードコントローラクラスを作成する。
     let build (builder : KeyboardBuilder<'T>) =

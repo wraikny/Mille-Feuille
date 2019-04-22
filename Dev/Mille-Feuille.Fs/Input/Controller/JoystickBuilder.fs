@@ -1,4 +1,4 @@
-﻿namespace wraikny.MilleFeuille.Fs.Input.Controller
+namespace wraikny.MilleFeuille.Fs.Input.Controller
 
 open System.Collections.Generic
 open System.Linq
@@ -12,10 +12,14 @@ type JoystickInput<'T> =
 
 
 /// ジョイスティックコントローラクラスを作成するビルダー。
-type JoystickBuilder<'T when 'T : comparison> =
+type JoystickBuilder<'T, 'U
+    when 'T : comparison
+    and  'U : comparison
+    > =
     {
         index : int
         binding : Map<'T, JoystickInput<'T>>
+        axisTiltBinding : Map<'U, int>
     }
 
 
@@ -25,10 +29,11 @@ module JoystickBuilder =
         {
             index = index
             binding = Map.empty
+            axisTiltBinding = Map.empty
         }
 
     /// ジョイスティック入力に操作を対応付ける。
-    let bindInput control input (builder : JoystickBuilder<'T>) =
+    let bindInput control input (builder : JoystickBuilder<_, _>) =
         { builder with
             binding = builder.binding |> Map.add control input
         }
@@ -43,6 +48,15 @@ module JoystickBuilder =
     let bindAxis control input builder =
         builder
         |> bindInput control (Axis input)
+
+
+    /// スティックのインデックスに操作を対応付ける。
+    let bindAxisTilt control index builder =
+        { builder with
+            axisTiltBinding =
+                builder.axisTiltBinding
+                |> Map.add control index
+        }
 
 
     /// リストをもとにジョイスティック入力に操作を対応付ける。
@@ -75,9 +89,19 @@ module JoystickBuilder =
         |> bindInputs bindings
 
 
+    /// リストをもとにスティックのインデックスに操作を対応付ける。
+    let rec bindAxesTiltList bindings builder =
+        bindings |> function
+        | [] -> builder
+        | (c, i)::xs ->
+            builder
+            |> bindAxisTilt c i
+            |> bindAxesTiltList xs
+
+
     /// ビルダーからジョイスティックコントローラクラスを作成する。
-    let build (builder : JoystickBuilder<'T>) =
-        let joystick = new JoystickController<'T>(builder.index)
+    let build (builder : JoystickBuilder<'T, 'U>) =
+        let joystick = new JoystickController<'T, 'U>(builder.index)
 
         for (control, input) in builder.binding |> Map.toSeq do
             input |> function
