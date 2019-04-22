@@ -16,7 +16,7 @@ type AnimState =
 
 
 module TestAnims =
-    let rotation easing frame (s, e) (owner : asd.GeometryObject2D) =
+    let rotation easing frame (s, e) (owner : asd.Object2D) =
         seq {
             for i in 0..frame do
                 let x = Easing.calculate easing frame i
@@ -26,7 +26,7 @@ module TestAnims =
         }
 
 
-    let color easing frame (s, e) (owner : asd.GeometryObject2D) =
+    let color easing frame (s, e) (owner : asd.DrawnObject2D) =
         seq {
             for i in 0..frame do
                 let x = Easing.calculate easing frame i
@@ -39,7 +39,7 @@ module TestAnims =
     let firstAnim isFinishedFirst =
         AnimationBuilder.init "First Animation"
         |> AnimationBuilder.addCoroutine
-            (fun (owner : asd.GeometryObject2D) -> seq {
+            (fun (owner : asd.DrawnObject2D) -> seq {
                 printfn "First Animation: Begin"
 
                 isFinishedFirst := false
@@ -61,7 +61,7 @@ module TestAnims =
     let defaultAnim defaultColor =
         AnimationBuilder.init "Default Animation"
         |> AnimationBuilder.addCoroutine
-            (fun (owner : asd.GeometryObject2D) -> seq {
+            (fun (owner : asd.DrawnObject2D) -> seq {
                 printfn "Default Animation: Begin"
                 owner.Angle <- 0.0f
                 owner.Color <- defaultColor
@@ -74,7 +74,7 @@ module TestAnims =
     let rotateAnim =
         AnimationBuilder.init "Rotate Animation"
         |> AnimationBuilder.addCoroutine
-            (fun (owner : asd.GeometryObject2D) -> seq {
+            (fun (owner : asd.Object2D) -> seq {
                 printfn "Rotate Animation: Begin"
                 let first = owner.Angle
 
@@ -88,7 +88,7 @@ module TestAnims =
     let colorAnim =
         AnimationBuilder.init "Color Animation"
         |> AnimationBuilder.addCoroutine
-            (fun (owner : asd.GeometryObject2D) -> seq {
+            (fun (owner : asd.DrawnObject2D) -> seq {
                 printfn "Color Animation: Begin"
                 let frame = 60
 
@@ -103,24 +103,26 @@ module TestAnims =
 
     let createComponent defaultColor isFinishedFirst =
         AnimationControllerBuilder.init "Test Animation"
-            [
-                (First, {
-                    animation = firstAnim isFinishedFirst
-                    next = Some Default
-                })
-                (Default, {
-                    animation = defaultAnim defaultColor
-                    next = None
-                })
-                (Rotate, {
-                    animation = rotateAnim
-                    next = Some Color
-                })
-                (Color, {
-                    animation = colorAnim
-                    next = Some Rotate
-                })
-            ]
+        |> AnimationControllerBuilder.addNode
+            (First, {
+                animation = firstAnim isFinishedFirst
+                next = Some Default
+            })
+        |> AnimationControllerBuilder.addNode
+            (Default, {
+                animation = defaultAnim defaultColor
+                next = None
+            })
+        |> AnimationControllerBuilder.addNode
+            (Rotate, {
+                animation = rotateAnim
+                next = Some Color
+            })
+        |> AnimationControllerBuilder.addNode
+            (Color, {
+                animation = colorAnim
+                next = Some Rotate
+            })
         |> AnimationControllerBuilder.buildComponent "TestObj Animator"
 
 

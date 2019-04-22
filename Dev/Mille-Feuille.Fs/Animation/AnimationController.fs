@@ -22,36 +22,43 @@ module NodeBuilder =
         | None -> ()
         | Some next -> node.NextState <- next
 
-        node
+        node :> Animation.INode<'State>
 
 
 
 /// アニメーションコントローラクラスを作成するビルダー。
-type AnimationControllerBuilder<'Obj, 'State when 'State : comparison> =
+type AnimationControllerBuilder<'Owner, 'State
+    when 'State : comparison
+    and  'State : not struct
+    > =
     {
         name : string
-        nodes: Map<'State, NodeBuilder<'Obj, 'State>>
+        nodes: Map<'State, Animation.INode<'State>>
     }
 
 
 module AnimationControllerBuilder =
     /// アニメーションコントローラを作成するビルダーを作る。
-    let init name nodes = { name = name; nodes = nodes |> Map.ofList }
+    let init name = { name = name; nodes = Map.empty }
 
     /// コントローラにアニメーションノードを追加する。
-    let addNode state node builder =
+    let addNode (state, node) builder =
         { builder with
-            nodes = builder.nodes |> Map.add state node
+            nodes =
+                builder.nodes
+                |> Map.add state (NodeBuilder.build node)
         }
 
     /// ビルダーからアニメーションコントローラクラスを作成する。
     let build builder =
-        let controller = new Animation.AnimationController<'Obj, 'State>(builder.name)
+        let controller = new Animation.AnimationController<'State>(builder.name)
 
         let nodes =
             builder.nodes
             |> Map.toSeq
-            |> Seq.map(fun (s, n) -> struct (s, NodeBuilder.build n))
+            |> Seq.map(fun (s, n) ->
+                struct (s, n)
+            )
 
         controller.AddAnimations(nodes)
 

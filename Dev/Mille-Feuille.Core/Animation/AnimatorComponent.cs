@@ -12,15 +12,15 @@ namespace wraikny.MilleFeuille.Core.Animation
     /// <summary>
     /// アニメーションをオブジェクトに適用するコンポーネント。
     /// </summary>
-    /// <typeparam name="TObj"></typeparam>
+    /// <typeparam name="TOwner"></typeparam>
     /// <typeparam name="TState"></typeparam>
-    public class AnimatorComponent<TObj, TState> : Object2DComponent<TObj>
-        where TObj : asd.Object2D
+    public class AnimatorComponent<TOwner, TState> : Object2DComponent<TOwner>
+        where TOwner : asd.Object2D
         where TState : class
     {
-        public AnimationController<TObj, TState> Controller { get; }
+        public AnimationController<TState> Controller { get; }
 
-        private Node<TObj, TState> currentNode;
+        private INode<TState> currentNode;
 
         private IEnumerator coroutine;
 
@@ -28,7 +28,7 @@ namespace wraikny.MilleFeuille.Core.Animation
         {
             if (state == null) return;
             currentNode = Controller.GetNode(state);
-            coroutine = currentNode.Animation.Generator((TObj)Owner);
+            coroutine = currentNode.Generate((TOwner)Owner);
         }
 
         private TState state;
@@ -50,7 +50,7 @@ namespace wraikny.MilleFeuille.Core.Animation
 
         public AnimatorComponent(
             string name
-            , AnimationController<TObj, TState> controller
+            , AnimationController<TState> controller
         )
             : base(name)
         {

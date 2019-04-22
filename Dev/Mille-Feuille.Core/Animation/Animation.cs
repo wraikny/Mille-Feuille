@@ -13,18 +13,31 @@ namespace wraikny.MilleFeuille.Core.Animation
     /// <typeparam name="TObj"></typeparam>
     [Serializable]
     public class Animation<TObj>
+        where TObj : class
     {
         public string Name { get; private set; }
 
+        public readonly Func<TObj, IEnumerator> generator;
+
         /// <summary>
-        /// アニメーション開始時のオブジェクトを参照してコルーチンを生成する関数。
+        /// アニメーション開始時のオブジェクトを参照してコルーチンを生成する
         /// </summary>
-        public Func<TObj, IEnumerator> Generator { get; private set; }
+        public IEnumerator Generate(object owner)
+        {
+            if(owner is TObj owner_)
+            {
+                return generator(owner_);
+            }
+            else
+            {
+                throw new Exception("Type is mismatch");
+            }
+        }
 
         public Animation(string name, Func<TObj, IEnumerator> generator)
         {
             Name = name;
-            Generator = generator;
+            this.generator = generator;
         }
     }
 }
