@@ -1,4 +1,4 @@
-namespace wraikny.MilleFeuille.Fs.Actor
+﻿namespace wraikny.MilleFeuille.Fs.Actor
 
 open System.Collections.Generic;
 open System.Linq;
@@ -83,3 +83,27 @@ type ActorsUpdater<'Actor, 'ActorViewModel, 'ViewModel
 
             | None ->
                 actors.Remove(id) |> ignore
+
+
+/// ActorsUpdaterクラスを作成するビルダー。
+type ActorsUpdaterBuilder<'Actor, 'ActorViewModel, 'ViewModel
+    when 'Actor :> asd.Object2D
+    and  'Actor :> IActor<'ActorViewModel>
+    > =
+    {
+        initializeActor : unit -> 'Actor
+        viewModelSelecter : 'ViewModel -> UpdaterViewModel<'ActorViewModel>
+    }
+
+
+module ActorsUpdaterBuilder =
+    /// ビルダーからActorsUpdaterクラスを作成する。
+    let build name builder =
+        let actorsUpdater =
+            new ActorsUpdater<_, _, _>(
+                name
+                , builder.initializeActor
+                , builder.viewModelSelecter
+            )
+
+        actorsUpdater
