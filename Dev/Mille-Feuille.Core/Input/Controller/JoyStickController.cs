@@ -82,6 +82,7 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
 
         private readonly asd.Joystick joystick;
         private readonly Dictionary<TControl, IJoystickInput> binding;
+        private readonly Dictionary<TControl, int> axisTiltBinding;
 
         /// <summary>
         /// コントローラーが有効かどうかを取得する。
@@ -100,6 +101,7 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
             joystick = asd.Engine.JoystickContainer.GetJoystickAt(index);
 
             binding = new Dictionary<TControl, IJoystickInput>();
+            axisTiltBinding = new Dictionary<TControl, int>();
         }
 
         /// <summary>
@@ -150,6 +152,30 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
                 return input.GetState(joystick);
             }
 
+            return null;
+        }
+
+        /// <summary>
+        /// スティックのインデックスに操作を対応付ける。
+        /// </summary>
+        /// <param name="abstractKey"></param>
+        /// <param name="index"></param>
+        public void BindAxisTilt(TControl abstractKey, int index)
+        {
+            axisTiltBinding[abstractKey] = index;
+        }
+
+        /// <summary>
+        /// 操作に対応する軸の倒し具合を取得する。
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public float? GetAxisTilt(TControl key)
+        {
+            if(IsValid && axisTiltBinding.TryGetValue(key, out var index))
+            {
+                return joystick.GetAxisState(index);
+            }
             return null;
         }
 
