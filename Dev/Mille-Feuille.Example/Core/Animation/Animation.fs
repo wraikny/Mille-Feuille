@@ -102,7 +102,9 @@ module TestAnims =
             })
 
     let createComponent defaultColor isFinishedFirst =
-        AnimationControllerBuilder.init "Test Animation"
+        (AnimationControllerBuilder.init "Test Animation"
+            : AnimationControllerBuilder<asd.GeometryObject2D, _>
+        )
         |> AnimationControllerBuilder.addNode
             (First, {
                 animation = firstAnim isFinishedFirst
