@@ -1,4 +1,4 @@
-﻿namespace wraikny.MilleFeuille.Fs.Actor
+namespace wraikny.MilleFeuille.Fs.Actor
 
 open System.Collections.Generic;
 open System.Linq;
@@ -26,13 +26,13 @@ type UpdaterViewModel<'ActorViewModel> =
 type ActorsUpdater<'Actor, 'ActorViewModel, 'ViewModel
     when 'Actor :> asd.Object2D
     and  'Actor :> IActor<'ActorViewModel>
-    and  'Actor : (new : unit -> 'Actor )
-    >(name, viewModelSelecter) =
+    >(name, initializeActor, viewModelSelecter) =
     inherit Layer2DComponent<asd.Layer2D>(name)
 
     let mutable nextID = 0u
     let actors = new Dictionary<uint32, 'Actor>()
 
+    let initializeActor = initializeActor
     let viewModelSelecter = viewModelSelecter
 
     
@@ -59,7 +59,7 @@ type ActorsUpdater<'Actor, 'ActorViewModel, 'ViewModel
                 |> function
                 | None -> ()
                 | Some actorViewModel ->
-                    let actor = new 'Actor()
+                    let actor : 'Actor = initializeActor()
                     actor.Update(actorViewModel)
 
                     actors.Add(id, actor)
