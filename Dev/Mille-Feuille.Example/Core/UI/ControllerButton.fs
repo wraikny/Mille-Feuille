@@ -94,7 +94,7 @@ type Scene() =
 
         let keyboard =
             KeyboardBuilder.init()
-            |> KeyboardBuilder.bindKeys
+            |> KeyboardBuilder.bindKeysList
                 [
                     (Button.ControllerSelect.Up    , asd.Keys.Up)
                     (Button.ControllerSelect.Down  , asd.Keys.Down)

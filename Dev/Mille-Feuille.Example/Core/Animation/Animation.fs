@@ -130,7 +130,7 @@ type AnimScene() =
     let mainLayer = new asd.Layer2D()
     let keyboard =
         KeyboardBuilder.init()
-        |> KeyboardBuilder.bindKeys
+        |> KeyboardBuilder.bindKeysList
             [
                 (Default, asd.Keys.Num1)
                 (Rotate , asd.Keys.Num2)

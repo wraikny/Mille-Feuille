@@ -1,4 +1,4 @@
-namespace wraikny.MilleFeuille.Fs.Input.Controller
+﻿namespace wraikny.MilleFeuille.Fs.Input.Controller
 
 open System.Collections.Generic
 open System.Linq
@@ -35,16 +35,18 @@ module JoystickBuilder =
     /// ジョイスティック入力に操作を対応付ける。
     let bindInput control input (builder : JoystickBuilder<_, _>) =
         { builder with
-            binding = builder.binding |> Map.add control input
+            binding =
+                builder.binding
+                |> Map.add control input
         }
 
-    /// ジョイスティックのボタン入力に操作を対応付ける。
+    /// ボタン入力に操作を対応付ける。
     let bindButton control index (builder) =
         builder
         |> bindInput control (Button index)
 
 
-    /// ジョイスティックのスティック入力に操作を対応付ける。
+    /// スティック入力に操作を対応付ける。
     let bindAxis control input builder =
         builder
         |> bindInput control (Axis input)
@@ -70,7 +72,7 @@ module JoystickBuilder =
 
 
     /// リストをもとにジョイスティックのボタン入力に操作を対応付ける。
-    let bindButtons bindings builder =
+    let bindButtonsList bindings builder =
         let bindings =
             bindings
             |> List.map(fun (c, i) -> (c, Button i))
@@ -80,7 +82,7 @@ module JoystickBuilder =
 
 
     /// リストをもとにジョイスティックのスティック入力に操作を対応付ける。
-    let bindAxes bindings builder =
+    let bindAxesList bindings builder =
         let bindings =
             bindings
             |> List.map(fun (c, i) -> (c, Axis i))
