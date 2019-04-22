@@ -51,7 +51,8 @@ module AnimationControllerBuilder =
 
     /// ビルダーからアニメーションコントローラクラスを作成する。
     let build builder =
-        let controller = new Animation.AnimationController<'State>(builder.name)
+        let controller =
+            new Animation.AnimationController<'State>(builder.name)
 
         let nodes =
             builder.nodes
@@ -65,11 +66,12 @@ module AnimationControllerBuilder =
         controller
 
     /// ビルダーからアニメーションコンポーネントクラスを作成する。
-    let buildComponent name builder =
+    let buildComponent name (builder : AnimationControllerBuilder<'Owner, 'State>) =
         let controller =
             builder
             |> build
 
-        let component' = new Animation.AnimatorComponent<_, _>(name, controller)
+        let component' =
+            new Animation.AnimatorComponent<'Owner, 'State>(name, controller)
 
         component'
