@@ -58,10 +58,12 @@ type ActorsUpdater<'Actor, 'ActorViewModel, 'ViewModel
                 |> Map.tryFind id
                 |> function
                 | None -> ()
-                | Some actorVM ->
-                    let obj = new 'Actor()
-                    actors.Add(id, obj)
-                    this.Owner.AddObject(obj)
+                | Some actorViewModel ->
+                    let actor = new 'Actor()
+                    actor.Update(actorViewModel)
+
+                    actors.Add(id, actor)
+                    this.Owner.AddObject(actor)
 
             nextID <- newNextID
 
