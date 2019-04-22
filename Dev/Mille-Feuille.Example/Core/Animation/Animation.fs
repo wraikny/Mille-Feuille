@@ -107,22 +107,22 @@ module TestAnims =
         )
         |> AnimationControllerBuilder.addNodesList
             [
-                (First, {
+                First, {
                     animation = firstAnim isFinishedFirst
                     next = Some Default
-                } |> NodeBuilder.build)
-                (Default, {
+                } |> NodeBuilder.build
+                Default, {
                     animation = defaultAnim defaultColor
                     next = None
-                } |> NodeBuilder.build)
-                (Rotate, {
+                } |> NodeBuilder.build
+                Rotate, {
                     animation = rotateAnim
                     next = Some Color
-                } |> NodeBuilder.build)
-                (Color, {
+                } |> NodeBuilder.build
+                Color, {
                     animation = colorAnim
                     next = Some Rotate
-                } |> NodeBuilder.build)
+                } |> NodeBuilder.build
             ]
         |> AnimationControllerBuilder.buildComponent "TestObj Animator"
 
@@ -135,9 +135,9 @@ type AnimScene() =
         KeyboardBuilder.init()
         |> KeyboardBuilder.bindKeysList
             [
-                (Default, asd.Keys.Num1)
-                (Rotate , asd.Keys.Num2)
-                (Color  , asd.Keys.Num3)
+                Default, asd.Keys.Num1
+                Rotate , asd.Keys.Num2
+                Color  , asd.Keys.Num3
             ]
         |> KeyboardBuilder.build
 
