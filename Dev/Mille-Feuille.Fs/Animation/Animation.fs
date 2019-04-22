@@ -34,19 +34,18 @@ module AnimationBuilder =
 
     /// ビルダーからアニメーションクラスを作成する。
     let build builder =
-        let coroutines =
-            builder.coroutines |>
-            if List.length builder.coroutines > 1 then
-                List.rev
-            else
-                fun x -> x
+            let generator =
+                builder.coroutines |> function
+                | [] ->
+                    fun _ -> (Seq.empty).GetEnumerator() :> IEnumerator
+                | coroutine::[] ->
+                    fun owner -> (coroutine owner).GetEnumerator() :> IEnumerator
+                | coroutines ->
+                    fun owner ->
+                        let coroutine = seq {
+                            for c in (List.rev coroutines) do
+                                yield! (c owner)
+                        }
+                        coroutine.GetEnumerator() :> IEnumerator
 
-        new Animation<_>(
-            builder.name
-            , fun owner ->
-                let coroutine = seq {
-                    for c in coroutines do
-                        yield! (c owner)
-                }
-                coroutine.GetEnumerator() :> IEnumerator
-        )
+            new Animation<_>(builder.name, System.Func<_, _> generator)
