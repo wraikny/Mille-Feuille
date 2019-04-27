@@ -12,12 +12,12 @@ open wraikny.MilleFeuille.Core.Object
 type ActorsUpdater<'ViewModel, 'Actor, 'ActorViewModel
     when 'Actor :> asd.Object2D
     and  'Actor :> IUpdated<'ActorViewModel>
-    >(name, init, selecter) =
+    >(name, init, selecter) as this =
     inherit Layer2DComponent<asd.Layer2D>(name)
 
     let selecter = selecter
 
-    member private this.Updater =
+    let updater =
         new ObjectsUpdater<'ViewModel, 'Actor, 'ActorViewModel>(
             init
             , (fun o -> this.Owner.AddObject(o))
@@ -28,7 +28,7 @@ type ActorsUpdater<'ViewModel, 'Actor, 'ActorViewModel
     interface IObserver<'ViewModel> with
         member this.UpdateFromNotify(input) =
             if this.IsUpdated then
-                this.Updater.Update(selecter input)
+                updater.Update(selecter input)
 
 
 

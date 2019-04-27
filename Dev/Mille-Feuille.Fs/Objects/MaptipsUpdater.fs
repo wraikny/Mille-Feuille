@@ -12,13 +12,13 @@ open wraikny.MilleFeuille.Core.Object
 type MaptipsUpdater<'ViewModel, 'Chip, 'ChipViewModel
     when 'Chip :> asd.Chip2D
     and  'Chip :> IUpdated<'ChipViewModel>
-    >(init, selecter) =
+    >(init, selecter) as this =
     inherit asd.MapObject2D()
 
     let init = init
     let selecter = selecter
 
-    member private this.Updater =
+    let updater =
         new ObjectsUpdater<'ViewModel, 'Chip, 'ChipViewModel>(
             init
             , (fun o -> this.AddChip(o) |> ignore)
@@ -28,7 +28,7 @@ type MaptipsUpdater<'ViewModel, 'Chip, 'ChipViewModel
     interface IObserver<'ViewModel> with
         member this.UpdateFromNotify(input) =
             if this.IsUpdated then
-                this.Updater.Update(selecter input)
+                updater.Update(selecter input)
 
 
 
