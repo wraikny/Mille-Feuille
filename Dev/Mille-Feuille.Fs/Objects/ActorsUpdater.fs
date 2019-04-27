@@ -82,7 +82,9 @@ type ActorsUpdater<'Actor, 'ActorViewModel, 'ViewModel
                 actor.Update(actorViewModel)
 
             | None ->
+                actor.Dispose()
                 actors.Remove(id) |> ignore
+
 
 
 /// ActorsUpdaterクラスを作成するビルダー。
