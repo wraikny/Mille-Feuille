@@ -65,6 +65,7 @@
     <Compile Include="Input\Controller\KeyboardBuilder.fs" />
     <Compile Include="Input\Controller\JoystickBuilder.fs" />
     <Compile Include="UI\Button\ButtonBuilder.fs" />
+    <Compile Include="Objects\ObjectsUpdater.fs" />
     <Compile Include="Objects\ActorsUpdater.fs" />
   </ItemGroup>
   <ItemGroup>
