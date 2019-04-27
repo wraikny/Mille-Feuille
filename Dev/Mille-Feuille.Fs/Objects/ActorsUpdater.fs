@@ -1,4 +1,4 @@
-﻿namespace wraikny.MilleFeuille.Fs.Actor
+﻿namespace wraikny.MilleFeuille.Fs.Objects
 
 open System.Collections.Generic;
 open System.Linq;
