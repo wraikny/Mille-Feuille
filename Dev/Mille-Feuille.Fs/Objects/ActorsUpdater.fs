@@ -7,7 +7,7 @@ open wraikny.Tart.Helper
 open wraikny.MilleFeuille.Core.Object
 
 
-/// 追加削除の発生するオブジェクトの更新管理を行うクラス。
+/// 追加削除の発生するasd.Object2Dの更新管理を行うクラス。
 [<Class>]
 type ActorsUpdater<'ViewModel, 'Actor, 'ActorViewModel
     when 'Actor :> asd.Object2D
@@ -33,7 +33,7 @@ type ActorsUpdater<'ViewModel, 'Actor, 'ActorViewModel
 
 
 /// ActorsUpdaterクラスを作成するビルダー。
-type ActorsUpdaterBuilder<'Actor, 'ActorViewModel, 'ViewModel
+type ActorsUpdaterBuilder<'ViewModel, 'Actor, 'ActorViewModel
     when 'Actor :> asd.Object2D
     and  'Actor :> IUpdated<'ActorViewModel>
     > =
