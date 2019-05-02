@@ -65,7 +65,9 @@
     <Compile Include="Input\Controller\KeyboardBuilder.fs" />
     <Compile Include="Input\Controller\JoystickBuilder.fs" />
     <Compile Include="UI\Button\ButtonBuilder.fs" />
-    <Compile Include="Actor\ActorsUpdater.fs" />
+    <Compile Include="Objects\ObjectsUpdater.fs" />
+    <Compile Include="Objects\ActorsUpdater.fs" />
+    <Compile Include="Objects\MaptipsUpdater.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Altseed">

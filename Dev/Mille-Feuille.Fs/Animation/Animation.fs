@@ -23,22 +23,29 @@ module AnimationBuilder =
     /// アニメーションにコルーチンを追加する。
     let addCoroutine coroutine builder =
         { builder with
-            coroutines = builder.coroutines @ [coroutine]
+            coroutines = coroutine::builder.coroutines
         }
 
     /// リストを元にアニメーションにコルーチンを追加する。
     let addCoroutines coroutines builder =
         { builder with
-            coroutines = builder.coroutines @ coroutines
+            coroutines = (List.rev coroutines) @ builder.coroutines
         }
 
     /// ビルダーからアニメーションクラスを作成する。
     let build builder =
-        new Animation<_>(
-            builder.name
-            , fun owner ->
-                let coroutine = seq {
-                    for c in builder.coroutines do yield! (c owner)
-                }
-                coroutine.GetEnumerator() :> IEnumerator
-        )
+        let generator =
+            builder.coroutines |> function
+            | [] ->
+                fun _ -> (Seq.empty).GetEnumerator() :> IEnumerator
+            | coroutine::[] ->
+                fun owner -> (coroutine owner).GetEnumerator() :> IEnumerator
+            | coroutines ->
+                fun owner ->
+                    let coroutine = seq {
+                        for c in (List.rev coroutines) do
+                            yield! (c owner)
+                    }
+                    coroutine.GetEnumerator() :> IEnumerator
+
+        new Animation<_>(builder.name, System.Func<_, _> generator)

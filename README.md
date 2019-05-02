@@ -3,8 +3,16 @@ Mille-Feuille is a Altseed Extension Library for F#
   
 MIT (c) wraikny 2019  
 
+Building:
+1. Download Altseed 1.1.6 C# at https://github.com/altseed/Altseed/releases/tag/116\
+1. Then, place Rutime/*.dll and *.xml files under Dev/Lib folder
+1. Download Tart v0.0.2 at https://github.com/wraikny/Tart/releases
+1. Then, place all files under Dev/Lib folder
+1. Open Mille-Feuille.sln in Visual Studio 2019 and build.
+
 Reference:
-* Altseed.Reactive.Input (at Mille-Feuille.Core.Input.Controller)
+* [Altseed.Reactive](https://github.com/NumAniCloud/Altseed.Reactive)
+* [BaseComponent](https://github.com/gon6109/BaseComponent)
   
 Dependencies:
 * Altseed 1.1.6 : MIT (c) Altseed 2013-2018

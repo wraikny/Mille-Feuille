@@ -16,7 +16,7 @@ type AnimState =
 
 
 module TestAnims =
-    let rotation easing frame (s, e) (owner : asd.GeometryObject2D) =
+    let rotation easing frame (s, e) (owner : asd.Object2D) =
         seq {
             for i in 0..frame do
                 let x = Easing.calculate easing frame i
@@ -26,7 +26,7 @@ module TestAnims =
         }
 
 
-    let color easing frame (s, e) (owner : asd.GeometryObject2D) =
+    let color easing frame (s, e) (owner : asd.DrawnObject2D) =
         seq {
             for i in 0..frame do
                 let x = Easing.calculate easing frame i
@@ -39,7 +39,7 @@ module TestAnims =
     let firstAnim isFinishedFirst =
         AnimationBuilder.init "First Animation"
         |> AnimationBuilder.addCoroutine
-            (fun (owner : asd.GeometryObject2D) -> seq {
+            (fun (owner : asd.DrawnObject2D) -> seq {
                 printfn "First Animation: Begin"
 
                 isFinishedFirst := false
@@ -61,7 +61,7 @@ module TestAnims =
     let defaultAnim defaultColor =
         AnimationBuilder.init "Default Animation"
         |> AnimationBuilder.addCoroutine
-            (fun (owner : asd.GeometryObject2D) -> seq {
+            (fun (owner : asd.DrawnObject2D) -> seq {
                 printfn "Default Animation: Begin"
                 owner.Angle <- 0.0f
                 owner.Color <- defaultColor
@@ -74,7 +74,7 @@ module TestAnims =
     let rotateAnim =
         AnimationBuilder.init "Rotate Animation"
         |> AnimationBuilder.addCoroutine
-            (fun (owner : asd.GeometryObject2D) -> seq {
+            (fun (owner : asd.Object2D) -> seq {
                 printfn "Rotate Animation: Begin"
                 let first = owner.Angle
 
@@ -88,7 +88,7 @@ module TestAnims =
     let colorAnim =
         AnimationBuilder.init "Color Animation"
         |> AnimationBuilder.addCoroutine
-            (fun (owner : asd.GeometryObject2D) -> seq {
+            (fun (owner : asd.DrawnObject2D) -> seq {
                 printfn "Color Animation: Begin"
                 let frame = 60
 
@@ -102,24 +102,27 @@ module TestAnims =
             })
 
     let createComponent defaultColor isFinishedFirst =
-        AnimationControllerBuilder.init "Test Animation"
+        (AnimationControllerBuilder.init "Test Animation"
+            : AnimationControllerBuilder<asd.GeometryObject2D, _>
+        )
+        |> AnimationControllerBuilder.addNodesList
             [
-                (First, {
+                First, {
                     animation = firstAnim isFinishedFirst
                     next = Some Default
-                })
-                (Default, {
+                } |> NodeBuilder.build
+                Default, {
                     animation = defaultAnim defaultColor
                     next = None
-                })
-                (Rotate, {
+                } |> NodeBuilder.build
+                Rotate, {
                     animation = rotateAnim
                     next = Some Color
-                })
-                (Color, {
+                } |> NodeBuilder.build
+                Color, {
                     animation = colorAnim
                     next = Some Rotate
-                })
+                } |> NodeBuilder.build
             ]
         |> AnimationControllerBuilder.buildComponent "TestObj Animator"
 
@@ -130,11 +133,11 @@ type AnimScene() =
     let mainLayer = new asd.Layer2D()
     let keyboard =
         KeyboardBuilder.init()
-        |> KeyboardBuilder.bindKeys
+        |> KeyboardBuilder.bindKeysList
             [
-                (Default, asd.Keys.Num1)
-                (Rotate , asd.Keys.Num2)
-                (Color  , asd.Keys.Num3)
+                Default, asd.Keys.Num1
+                Rotate , asd.Keys.Num2
+                Color  , asd.Keys.Num3
             ]
         |> KeyboardBuilder.build
 

@@ -49,19 +49,22 @@ namespace wraikny.MilleFeuille.Core.Input.Config
     /// ジョイスティックの入力と操作の対応関係を保存するためのクラス。
     /// </summary>
     /// <typeparam name="TControl"></typeparam>
+    /// <typeparam name="TTiltControl"></typeparam>
     [Serializable]
-    public class Joystick<TControl>
+    public class Joystick<TControl, TTiltControl>
     {
         /// <summary>
         /// ジョイスティックの名前を取得する。
         /// </summary>
         public string Name { get; }
         private readonly Dictionary<TControl, IJoystickInputConfig> binding;
+        private readonly Dictionary<TTiltControl, int> axisTiltBinding;
 
         public Joystick(string name)
         {
             Name = name;
             binding = new Dictionary<TControl, IJoystickInputConfig>();
+            axisTiltBinding = new Dictionary<TTiltControl, int>();
         }
 
         /// <summary>
@@ -86,13 +89,23 @@ namespace wraikny.MilleFeuille.Core.Input.Config
         }
 
         /// <summary>
+        /// スティックのインデックスに操作を対応付ける。
+        /// </summary>
+        /// <param name="abstractKey"></param>
+        /// <param name="index"></param>
+        public void BindAxisTilt(TTiltControl abstractKey, int index)
+        {
+            axisTiltBinding[abstractKey] = index;
+        }
+
+        /// <summary>
         /// 対応関係から実行するためのコントローラーを作成する。
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public Controller.JoystickController<TControl> CreateController(int index)
+        public Controller.JoystickController<TControl, TTiltControl> CreateController(int index)
         {
-            var controller = new Controller.JoystickController<TControl>(index);
+            var controller = new Controller.JoystickController<TControl, TTiltControl>(index);
 
             foreach(var item in binding)
             {
@@ -104,6 +117,11 @@ namespace wraikny.MilleFeuille.Core.Input.Config
                 {
                     controller.BindAxis(item.Key, axis.Index, axis.Direction);
                 }
+            }
+
+            foreach(var item in axisTiltBinding)
+            {
+                controller.BindAxisTilt(item.Key, item.Value);
             }
 
             return controller;
@@ -128,12 +146,12 @@ namespace wraikny.MilleFeuille.Core.Input.Config
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static Joystick<T> LoadFromBinaryFile<T>(string path)
+        public static Joystick<T, U> LoadFromBinaryFile<T, U>(string path)
         {
             using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read))
             {
                 var bf = new BinaryFormatter();
-                var obj = (Joystick<T>)bf.Deserialize(fs);
+                var obj = (Joystick<T, U>)bf.Deserialize(fs);
                 return obj;
             }
         }

@@ -12,10 +12,14 @@ type JoystickInput<'T> =
 
 
 /// ジョイスティックコントローラクラスを作成するビルダー。
-type JoystickBuilder<'T when 'T : comparison> =
+type JoystickBuilder<'T, 'U
+    when 'T : comparison
+    and  'U : comparison
+    > =
     {
         index : int
         binding : Map<'T, JoystickInput<'T>>
+        axisTiltBinding : Map<'U, int>
     }
 
 
@@ -25,24 +29,36 @@ module JoystickBuilder =
         {
             index = index
             binding = Map.empty
+            axisTiltBinding = Map.empty
         }
 
     /// ジョイスティック入力に操作を対応付ける。
-    let bindInput control input (builder : JoystickBuilder<'T>) =
+    let bindInput control input (builder : JoystickBuilder<_, _>) =
         { builder with
-            binding = builder.binding |> Map.add control input
+            binding =
+                builder.binding
+                |> Map.add control input
         }
 
-    /// ジョイスティックのボタン入力に操作を対応付ける。
+    /// ボタン入力に操作を対応付ける。
     let bindButton control index (builder) =
         builder
         |> bindInput control (Button index)
 
 
-    /// ジョイスティックのスティック入力に操作を対応付ける。
+    /// スティック入力に操作を対応付ける。
     let bindAxis control input builder =
         builder
         |> bindInput control (Axis input)
+
+
+    /// スティックのインデックスに操作を対応付ける。
+    let bindAxisTilt control index builder =
+        { builder with
+            axisTiltBinding =
+                builder.axisTiltBinding
+                |> Map.add control index
+        }
 
 
     /// リストをもとにジョイスティック入力に操作を対応付ける。
@@ -56,7 +72,7 @@ module JoystickBuilder =
 
 
     /// リストをもとにジョイスティックのボタン入力に操作を対応付ける。
-    let bindButtons bindings builder =
+    let bindButtonsList bindings builder =
         let bindings =
             bindings
             |> List.map(fun (c, i) -> (c, Button i))
@@ -66,7 +82,7 @@ module JoystickBuilder =
 
 
     /// リストをもとにジョイスティックのスティック入力に操作を対応付ける。
-    let bindAxes bindings builder =
+    let bindAxesList bindings builder =
         let bindings =
             bindings
             |> List.map(fun (c, i) -> (c, Axis i))
@@ -75,9 +91,19 @@ module JoystickBuilder =
         |> bindInputs bindings
 
 
+    /// リストをもとにスティックのインデックスに操作を対応付ける。
+    let rec bindAxesTiltList bindings builder =
+        bindings |> function
+        | [] -> builder
+        | (c, i)::xs ->
+            builder
+            |> bindAxisTilt c i
+            |> bindAxesTiltList xs
+
+
     /// ビルダーからジョイスティックコントローラクラスを作成する。
-    let build (builder : JoystickBuilder<'T>) =
-        let joystick = new JoystickController<'T>(builder.index)
+    let build (builder : JoystickBuilder<'T, 'U>) =
+        let joystick = new JoystickController<'T, 'U>(builder.index)
 
         for (control, input) in builder.binding |> Map.toSeq do
             input |> function

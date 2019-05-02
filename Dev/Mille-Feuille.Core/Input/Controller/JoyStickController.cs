@@ -16,7 +16,8 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
     /// ジョイスティックの入力と操作を対応付けるためのクラス。
     /// </summary>
     /// <typeparam name="TControl"></typeparam>
-    public class JoystickController<TControl> : IController<TControl>
+    /// <typeparam name="TTiltControl"></typeparam>
+    public class JoystickController<TControl, TTiltControl> : IController<TControl>
     {
         private interface IJoystickInput
         {
@@ -82,6 +83,7 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
 
         private readonly asd.Joystick joystick;
         private readonly Dictionary<TControl, IJoystickInput> binding;
+        private readonly Dictionary<TTiltControl, int> axisTiltBinding;
 
         /// <summary>
         /// コントローラーが有効かどうかを取得する。
@@ -100,6 +102,7 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
             joystick = asd.Engine.JoystickContainer.GetJoystickAt(index);
 
             binding = new Dictionary<TControl, IJoystickInput>();
+            axisTiltBinding = new Dictionary<TTiltControl, int>();
         }
 
         /// <summary>
@@ -139,6 +142,16 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
         }
 
         /// <summary>
+        /// スティックのインデックスに操作を対応付ける。
+        /// </summary>
+        /// <param name="abstractKey"></param>
+        /// <param name="index"></param>
+        public void BindAxisTilt(TTiltControl abstractKey, int index)
+        {
+            axisTiltBinding[abstractKey] = index;
+        }
+
+        /// <summary>
         /// 操作に対応する入力状態を取得する。
         /// </summary>
         /// <param name="key"></param>
@@ -150,6 +163,20 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
                 return input.GetState(joystick);
             }
 
+            return null;
+        }
+
+        /// <summary>
+        /// 操作に対応する軸の倒し具合を取得する。
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public float? GetAxisTilt(TTiltControl key)
+        {
+            if(IsValid && axisTiltBinding.TryGetValue(key, out var index))
+            {
+                return joystick.GetAxisState(index);
+            }
             return null;
         }
 

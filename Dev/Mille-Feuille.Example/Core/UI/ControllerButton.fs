@@ -94,14 +94,14 @@ type Scene() =
 
         let keyboard =
             KeyboardBuilder.init()
-            |> KeyboardBuilder.bindKeys
+            |> KeyboardBuilder.bindKeysList
                 [
-                    (Button.ControllerSelect.Up    , asd.Keys.Up)
-                    (Button.ControllerSelect.Down  , asd.Keys.Down)
-                    (Button.ControllerSelect.Right , asd.Keys.Right)
-                    (Button.ControllerSelect.Left  , asd.Keys.Left)
-                    (Button.ControllerSelect.Select, asd.Keys.Space)
-                    (Button.ControllerSelect.Cancel, asd.Keys.Escape)
+                    Button.ControllerSelect.Up    , asd.Keys.Up
+                    Button.ControllerSelect.Down  , asd.Keys.Down
+                    Button.ControllerSelect.Right , asd.Keys.Right
+                    Button.ControllerSelect.Left  , asd.Keys.Left
+                    Button.ControllerSelect.Select, asd.Keys.Space
+                    Button.ControllerSelect.Cancel, asd.Keys.Escape
                 ]
             |> KeyboardBuilder.build
 
