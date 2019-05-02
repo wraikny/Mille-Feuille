@@ -46,7 +46,7 @@ module Counter =
                     tmp = t
                 }, Cmd.none
             | Clear ->
-                init, Cmd.pushViewMsgs [Print "Cleared!"]
+                init, Cmd.viewMsg [Print "Cleared!"]
             | Random ->
                 let a, b = model.range
                 model, (Random.generate SetCount (Random.int a b))
