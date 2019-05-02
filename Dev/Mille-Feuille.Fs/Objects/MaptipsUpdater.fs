@@ -44,8 +44,8 @@ type MaptipsUpdaterBuilder<'ViewModel, 'Chip, 'ChipViewModel
     and  'Chip :> IUpdated<'ChipViewModel>
     > =
     {
-        init : unit -> 'Chip
-        selecter : 'ViewModel -> UpdaterViewModel<'ChipViewModel>
+        initChip : unit -> 'Chip
+        selectChip : 'ViewModel -> UpdaterViewModel<'ChipViewModel>
     }
 
 
@@ -54,8 +54,8 @@ module MaptipsUpdaterBuilder =
     let build builder =
         let actorsUpdater =
             new MaptipsUpdater<_, _, _>(
-                builder.init
-                , builder.selecter
+                builder.initChip
+                , builder.selectChip
             )
 
         actorsUpdater

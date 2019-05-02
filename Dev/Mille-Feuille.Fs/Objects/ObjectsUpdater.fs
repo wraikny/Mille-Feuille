@@ -47,13 +47,13 @@ type ObjectsUpdater<'ViewModel, 'Object, 'ObjectViewModel
 
     /// ビューモデルを元にオブジェクトの更新を行う。
     member this.Update(viewModel : UpdaterViewModel<_>) =
-        this.AddActors(&viewModel)
+        this.AddObjects(&viewModel)
         if (this :> IUpdater).UpdatingEnabled then
             this.UpdateActors(&viewModel)
 
 
     /// ビューモデルを元にidを照合してオブジェクトの追加を行う。
-    member this.AddActors (viewModel : _ inref) =
+    member this.AddObjects (viewModel : _ inref) =
         let newNextID = viewModel.nextID
         if nextID <> newNextID then
             

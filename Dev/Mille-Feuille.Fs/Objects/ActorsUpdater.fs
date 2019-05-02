@@ -44,8 +44,8 @@ type ActorsUpdaterBuilder<'ViewModel, 'Actor, 'ActorViewModel
     and  'Actor :> IUpdated<'ActorViewModel>
     > =
     {
-        init : unit -> 'Actor
-        selecter : 'ViewModel -> UpdaterViewModel<'ActorViewModel>
+        initActor : unit -> 'Actor
+        selectActor : 'ViewModel -> UpdaterViewModel<'ActorViewModel>
     }
 
 
@@ -55,8 +55,8 @@ module ActorsUpdaterBuilder =
         let actorsUpdater =
             new ActorsUpdater<_, _, _>(
                 name
-                , builder.init
-                , builder.selecter
+                , builder.initActor
+                , builder.selectActor
             )
 
         actorsUpdater
