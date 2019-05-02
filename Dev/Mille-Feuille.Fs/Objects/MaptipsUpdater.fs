@@ -25,6 +25,12 @@ type MaptipsUpdater<'ViewModel, 'Chip, 'ChipViewModel
             , (fun o -> this.RemoveChip(o) |> ignore)
         )
 
+
+    interface IUpdater with
+        member this.UpdatingEnabled
+            with get() = (updater :> IUpdater).UpdatingEnabled
+            and  set(value) = (updater :> IUpdater).UpdatingEnabled <- value
+
     interface IObserver<'ViewModel> with
         member this.UpdateFromNotify(input) =
             if this.IsUpdated then

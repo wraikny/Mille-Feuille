@@ -24,6 +24,12 @@ type ActorsUpdater<'ViewModel, 'Actor, 'ActorViewModel
             , (fun o -> o.Dispose())
         )
 
+
+    interface IUpdater with
+        member this.UpdatingEnabled
+            with get() = (updater :> IUpdater).UpdatingEnabled
+            and  set(value) = (updater :> IUpdater).UpdatingEnabled <- value
+
     
     interface IObserver<'ViewModel> with
         member this.UpdateFromNotify(input) =

@@ -12,6 +12,13 @@ type IUpdated<'ViewModel> =
     abstract Update : 'ViewModel -> unit
 
 
+/// 追加削除の発生するオブジェクトの更新を行うクラスが実装するインターフェース。
+[<Interface>]
+type IUpdater =
+    abstract UpdatingEnabled : bool with get, set
+
+
+
 /// 追加削除の発生するオブジェクトの更新を行うためのビューモデル。
 type UpdaterViewModel<'ActorViewModel> =
     {
@@ -20,6 +27,7 @@ type UpdaterViewModel<'ActorViewModel> =
     }
 
 
+/// 追加削除の発生するオブジェクトの更新を行うクラス。
 [<Class>]
 type ObjectsUpdater<'ViewModel, 'Object, 'ObjectViewModel
     when 'Object :> obj
@@ -33,10 +41,15 @@ type ObjectsUpdater<'ViewModel, 'Object, 'ObjectViewModel
     let remove = remove
 
 
+    interface IUpdater with
+        member val UpdatingEnabled = true with get, set
+
+
     /// ビューモデルを元にオブジェクトの更新を行う。
     member this.Update(viewModel : UpdaterViewModel<_>) =
         this.AddActors(&viewModel)
-        this.UpdateActors(&viewModel)
+        if (this :> IUpdater).UpdatingEnabled then
+            this.UpdateActors(&viewModel)
 
 
     /// ビューモデルを元にidを照合してオブジェクトの追加を行う。
