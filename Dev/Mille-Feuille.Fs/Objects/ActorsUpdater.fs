@@ -1,9 +1,9 @@
 ﻿namespace wraikny.MilleFeuille.Fs.Objects
 
-open System.Collections.Generic;
-open System.Linq;
 
 open wraikny.Tart.Helper
+open wraikny.Tart.Core.View
+
 open wraikny.MilleFeuille.Core.Object
 
 
@@ -11,7 +11,7 @@ open wraikny.MilleFeuille.Core.Object
 [<Class>]
 type ActorsUpdater<'ViewModel, 'Actor, 'ActorViewModel
     when 'Actor :> asd.Object2D
-    and  'Actor :> IUpdated<'ActorViewModel>
+    and  'Actor :> IObjectUpdatee<'ActorViewModel>
     >(name, init, selecter) as this =
     inherit Layer2DComponent<asd.Layer2D>(name)
 
@@ -25,10 +25,10 @@ type ActorsUpdater<'ViewModel, 'Actor, 'ActorViewModel
         )
 
 
-    interface IUpdater with
+    interface IObjectsUpdater with
         member this.UpdatingEnabled
-            with get() = (updater :> IUpdater).UpdatingEnabled
-            and  set(value) = (updater :> IUpdater).UpdatingEnabled <- value
+            with get() = (updater :> IObjectsUpdater).UpdatingEnabled
+            and  set(value) = (updater :> IObjectsUpdater).UpdatingEnabled <- value
 
     
     interface IObserver<'ViewModel> with
@@ -41,7 +41,7 @@ type ActorsUpdater<'ViewModel, 'Actor, 'ActorViewModel
 /// ActorsUpdaterクラスを作成するビルダー。
 type ActorsUpdaterBuilder<'ViewModel, 'Actor, 'ActorViewModel
     when 'Actor :> asd.Object2D
-    and  'Actor :> IUpdated<'ActorViewModel>
+    and  'Actor :> IObjectUpdatee<'ActorViewModel>
     > =
     {
         initActor : unit -> 'Actor

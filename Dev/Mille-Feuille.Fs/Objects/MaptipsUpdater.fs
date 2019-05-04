@@ -1,17 +1,15 @@
 ﻿namespace wraikny.MilleFeuille.Fs.Objects
 
-open System.Collections.Generic;
-open System.Linq;
 
 open wraikny.Tart.Helper
-open wraikny.MilleFeuille.Core.Object
+open wraikny.Tart.Core.View
 
 
 /// 追加削除の発生するマップチップの更新管理を行うクラス。
 [<Class>]
 type MaptipsUpdater<'ViewModel, 'Chip, 'ChipViewModel
     when 'Chip :> asd.Chip2D
-    and  'Chip :> IUpdated<'ChipViewModel>
+    and  'Chip :> IObjectUpdatee<'ChipViewModel>
     >(init, selecter) as this =
     inherit asd.MapObject2D()
 
@@ -26,10 +24,10 @@ type MaptipsUpdater<'ViewModel, 'Chip, 'ChipViewModel
         )
 
 
-    interface IUpdater with
+    interface IObjectsUpdater with
         member this.UpdatingEnabled
-            with get() = (updater :> IUpdater).UpdatingEnabled
-            and  set(value) = (updater :> IUpdater).UpdatingEnabled <- value
+            with get() = (updater :> IObjectsUpdater).UpdatingEnabled
+            and  set(value) = (updater :> IObjectsUpdater).UpdatingEnabled <- value
 
     interface IObserver<'ViewModel> with
         member this.UpdateFromNotify(input) =
@@ -41,7 +39,7 @@ type MaptipsUpdater<'ViewModel, 'Chip, 'ChipViewModel
 /// MaptipsUpdaterクラスを作成するビルダー。
 type MaptipsUpdaterBuilder<'ViewModel, 'Chip, 'ChipViewModel
     when 'Chip :> asd.Chip2D
-    and  'Chip :> IUpdated<'ChipViewModel>
+    and  'Chip :> IObjectUpdatee<'ChipViewModel>
     > =
     {
         initChip : unit -> 'Chip
