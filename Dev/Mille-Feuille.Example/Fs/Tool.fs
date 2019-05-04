@@ -20,13 +20,6 @@ module Counter =
                 range : int * int
             }
 
-        let init : Model =
-            {
-                count = 0
-                tmp = 0
-                range = (1, 6)
-            }
-
         type Msg =
             | SetValue of count : int * tmp : int
             | Clear
@@ -35,6 +28,13 @@ module Counter =
             | SetTmp of int
             | SetRange of int * int
 
+
+        let init : Model * Cmd<Msg, ViewMsg> =
+            {
+                count = 0
+                tmp = 0
+                range = (1, 6)
+            }, Cmd.none
 
 
         let update msg model : Model * Cmd<Msg, ViewMsg> =
@@ -46,7 +46,7 @@ module Counter =
                     tmp = t
                 }, Cmd.none
             | Clear ->
-                init, Cmd.viewMsg [Print "Cleared!"]
+                fst init, Cmd.viewMsg [Print "Cleared!"]
             | Random ->
                 let a, b = model.range
                 model, (Random.generate SetCount (Random.int a b))
@@ -90,6 +90,7 @@ module Counter =
                     ]
                 ]
             ]
+
 
         let program =
             {
