@@ -6,6 +6,7 @@ open System.Linq
 open wraikny.MilleFeuille.Core.Input.Controller
 
 /// キーボードコントローラクラスを作成するビルダー。
+[<Struct>]
 type KeyboardBuilder<'T when 'T : comparison> =
     {
         binding : Map<'T, asd.Keys>

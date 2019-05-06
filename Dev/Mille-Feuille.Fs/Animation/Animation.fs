@@ -5,6 +5,7 @@ open System.Collections
 open wraikny.MilleFeuille.Core.Animation
 
 /// アニメーションクラスを作成するビルダー。
+[<Struct>]
 type AnimationBuilder<'Obj> =
     {
         name : string

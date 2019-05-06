@@ -3,6 +3,7 @@
 open wraikny.MilleFeuille.Core
 
 /// アニメーションコントローラで保持するノードを作成するビルダー。
+[<Struct>]
 type NodeBuilder<'Obj, 'State> =
     {
         animation : AnimationBuilder<'Obj>
@@ -27,6 +28,7 @@ module NodeBuilder =
 
 
 /// アニメーションコントローラクラスを作成するビルダー。
+[<Struct>]
 type AnimationControllerBuilder<'Owner, 'State
     when 'State : comparison
     and  'State : not struct

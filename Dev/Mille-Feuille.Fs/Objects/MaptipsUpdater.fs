@@ -37,6 +37,7 @@ type MaptipsUpdater<'ViewModel, 'Chip, 'ChipViewModel
 
 
 /// MaptipsUpdaterクラスを作成するビルダー。
+[<Struct>]
 type MaptipsUpdaterBuilder<'ViewModel, 'Chip, 'ChipViewModel
     when 'Chip :> asd.Chip2D
     and  'Chip :> IObjectUpdatee<'ChipViewModel>

@@ -12,6 +12,7 @@ type JoystickInput<'T> =
 
 
 /// ジョイスティックコントローラクラスを作成するビルダー。
+[<Struct>]
 type JoystickBuilder<'T, 'U
     when 'T : comparison
     and  'U : comparison

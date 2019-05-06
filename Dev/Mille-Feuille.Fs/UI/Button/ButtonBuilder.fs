@@ -2,6 +2,7 @@
 
 
 /// ボタンクラスを作成するビルダー。
+[<Struct>]
 type ButtonBuilder< 'T when 'T :> asd.Object2D > =
     {
         defaultEvents : ('T -> unit) list

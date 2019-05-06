@@ -39,6 +39,7 @@ type ActorsUpdater<'ViewModel, 'Actor, 'ActorViewModel
 
 
 /// ActorsUpdaterクラスを作成するビルダー。
+[<Struct>]
 type ActorsUpdaterBuilder<'ViewModel, 'Actor, 'ActorViewModel
     when 'Actor :> asd.Object2D
     and  'Actor :> IObjectUpdatee<'ActorViewModel>
