@@ -43,7 +43,7 @@ type MaptipsUpdaterBuilder<'ViewModel, 'Chip, 'ChipViewModel
     > =
     {
         initChip : unit -> 'Chip
-        selectChip : 'ViewModel -> UpdaterViewModel<'ChipViewModel>
+        selectChip : 'ViewModel -> UpdaterViewModel<'ChipViewModel> option
     }
 
 
