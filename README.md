@@ -21,5 +21,5 @@ Dependencies:
 * System.ValueTuple 4.0.4.0 : MIT (c) Microsoft Corporation.
   https://github.com/dotnet/corefx/blob/master/LICENSE.TXT
 
-* Tart v0.0.3 : MIT (c) wraikny 2019
+* Tart latest : MIT (c) wraikny 2019
   https://github.com/wraikny/Tart/blob/master/LICENSE
