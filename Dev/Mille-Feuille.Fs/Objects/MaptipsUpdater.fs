@@ -1,7 +1,7 @@
 ﻿namespace wraikny.MilleFeuille.Fs.Objects
 
 
-open wraikny.Tart.Helper
+open wraikny.Tart.Helper.Utils
 open wraikny.Tart.Core.View
 
 
