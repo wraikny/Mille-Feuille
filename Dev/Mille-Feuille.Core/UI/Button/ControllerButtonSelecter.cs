@@ -104,6 +104,18 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         }
 
         /// <summary>
+        /// ボタンにフォーカスを当てる
+        /// </summary>
+        /// <param name="next"></param>
+        public void Focus(IControllerButton next)
+        {
+            CursorButton.Update(ButtonOperation.Exit);
+            next.Update(ButtonOperation.Enter);
+
+            CursorButton = next;
+        }
+
+        /// <summary>
         /// コントローラーの操作を元にボタンの状態を更新する。
         /// </summary>
         private void UpdateButtonsState()
@@ -144,10 +156,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
                         var next = CursorButton.GetButton(dir);
                         if (next == null) continue;
 
-                        CursorButton.Update(ButtonOperation.Exit);
-                        next.Update(ButtonOperation.Enter);
-
-                        CursorButton = next;
+                        Focus(next);
 
                         return;
                     }
