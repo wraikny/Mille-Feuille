@@ -99,8 +99,8 @@ module Counter =
                 view = view
             }
  
-    type CounterUpdater() =
-        inherit Updater<ViewMsg>()
+    type CounterPort() =
+        inherit Port<ViewMsg>()
 
         override this.OnUpdate(msg) =
             msg |> function
@@ -111,13 +111,13 @@ module Counter =
         asd.Engine.Initialize("Counter", 800, 600, new asd.EngineOption())
         |> ignore
 
-        let updater = CounterUpdater()
+        let port = CounterPort()
 
         let messenger =
             let env =
                 Environment
                     .Initialize()
-                    .SetUpdater(updater)
+                    .SetUpdater(port)
 
             Messenger.createMessenger
                 env
@@ -131,7 +131,7 @@ module Counter =
                 if asd.Engine.DoEvents() then
                     Tool.render view messenger
 
-                    updater.Update()
+                    port.Pop()
 
                     asd.Engine.Update()
 
