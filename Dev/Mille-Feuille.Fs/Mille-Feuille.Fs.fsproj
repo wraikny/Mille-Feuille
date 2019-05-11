@@ -58,6 +58,7 @@
       <Link>Tart.Helper.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Compile Include="Math.fs" />
     <Compile Include="Sound.fs" />
     <Compile Include="Tool.fs" />
     <Compile Include="Animation\Animation.fs" />
