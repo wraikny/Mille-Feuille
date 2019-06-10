@@ -16,8 +16,8 @@ type ActorsUpdater<'ViewModel, 'Actor, 'ActorViewModel
 
     let selecter = selecter
 
-    let updater =
-        new ObjectsUpdater<'ViewModel, 'Actor, 'ActorViewModel>(this)
+    let updater = new ObjectsUpdater<'ViewModel, 'Actor, 'ActorViewModel>(this)
+    let iUpdater = updater :> IObjectsUpdater
 
     abstract Create : unit -> 'Actor
     abstract Update : 'Actor * 'ActorViewModel -> unit
@@ -31,12 +31,12 @@ type ActorsUpdater<'ViewModel, 'Actor, 'ActorViewModel
 
     interface IObjectsUpdater with
         member this.EnabledUpdating
-            with get() = (updater :> IObjectsUpdater).EnabledUpdating
-            and  set(value) = (updater :> IObjectsUpdater).EnabledUpdating <- value
+            with get() = iUpdater.EnabledUpdating
+            and  set(value) = iUpdater.EnabledUpdating <- value
 
         member this.EnabledPooling
-            with get() = (updater :> IObjectsUpdater).EnabledPooling
-            and  set(value) = (updater :> IObjectsUpdater).EnabledPooling <- value
+            with get() = iUpdater.EnabledPooling
+            and  set(value) = iUpdater.EnabledPooling <- value
 
     
     interface IObserver<'ViewModel> with

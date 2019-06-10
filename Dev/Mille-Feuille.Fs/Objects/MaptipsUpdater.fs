@@ -15,6 +15,7 @@ type MaptipsUpdater<'ViewModel, 'Chip, 'ChipViewModel
     let selecter = selecter
 
     let updater = new ObjectsUpdater<'ViewModel, 'Chip, 'ChipViewModel>(this)
+    let iUpdater = updater :> IObjectsUpdater
 
     abstract Create : unit -> 'Chip
     abstract Update : 'Chip * 'ChipViewModel -> unit
@@ -29,12 +30,12 @@ type MaptipsUpdater<'ViewModel, 'Chip, 'ChipViewModel
 
     interface IObjectsUpdater with
         member this.EnabledUpdating
-            with get() = (updater :> IObjectsUpdater).EnabledUpdating
-            and  set(value) = (updater :> IObjectsUpdater).EnabledUpdating <- value
+            with get() = iUpdater.EnabledUpdating
+            and  set(value) = iUpdater.EnabledUpdating <- value
 
         member this.EnabledPooling
-            with get() = (updater :> IObjectsUpdater).EnabledPooling
-            and  set(value) = (updater :> IObjectsUpdater).EnabledPooling <- value
+            with get() = iUpdater.EnabledPooling
+            and  set(value) = iUpdater.EnabledPooling <- value
 
     interface IObserver<'ViewModel> with
         member this.UpdateFromNotify(input) =
