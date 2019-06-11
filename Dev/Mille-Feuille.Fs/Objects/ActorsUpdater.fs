@@ -8,26 +8,23 @@ open wraikny.MilleFeuille.Core.Object
 
 
 /// 追加削除の発生するasd.Object2Dの更新管理を行うクラス。
-[<AbstractClass>]
+[<Class>]
 type ActorsUpdater<'ViewModel, 'Actor, 'ActorViewModel
     when 'Actor :> asd.Object2D
-    >(name, selecter) as this =
+    and 'Actor :> IUpdatee<'ActorViewModel>
+    >(name, create, selecter) as this =
     inherit Layer2DComponent<asd.Layer2D>(name)
 
     let selecter = selecter
 
-    let updater = new ObjectsUpdater<'ViewModel, 'Actor, 'ActorViewModel>(this)
+    let updater = new ObjectsUpdater<'ViewModel, 'Actor, 'ActorViewModel>({
+        create = create
+        add = fun actor -> this.Owner.AddObject(actor) |> ignore
+        remove = fun actor -> this.Owner.RemoveObject(actor) |> ignore
+        dispose = fun actor -> actor.Dispose()
+    })
+
     let iUpdater = updater :> IObjectsUpdater
-
-    abstract Create : unit -> 'Actor
-    abstract Update : 'Actor * 'ActorViewModel -> unit
-
-    interface IObjectsUpdaterParent<'Actor, 'ActorViewModel> with
-        member this.Create() = this.Create()
-        member this.Add(actor) = this.Owner.AddObject(actor) |> ignore
-        member this.Remove(actor) = this.Owner.RemoveObject(actor) |> ignore
-        member this.Dispose(actor) = actor.Dispose()
-        member this.Update(chip, viewModel) = this.Update(chip, viewModel)
 
     interface IObjectsUpdater with
         member this.EnabledUpdating
@@ -47,24 +44,24 @@ type ActorsUpdater<'ViewModel, 'Actor, 'ActorViewModel
 
 
 /// ActorsUpdaterクラスを作成するビルダー。
-//[<Struct>]
-//type ActorsUpdaterBuilder<'ViewModel, 'Actor, 'ActorViewModel
-//    when 'Actor :> asd.Object2D
-//    > =
-//    {
-//        initActor : unit -> 'Actor
-//        selectActor : 'ViewModel -> UpdaterViewModel<'ActorViewModel> option
-//    }
+[<Struct>]
+type ActorsUpdaterBuilder<'ViewModel, 'Actor, 'ActorViewModel
+    when 'Actor :> asd.Object2D
+    > =
+    {
+        initActor : unit -> 'Actor
+        selectActor : 'ViewModel -> UpdaterViewModel<'ActorViewModel> option
+    }
 
 
-//module ActorsUpdaterBuilder =
-//    /// ビルダーからActorsUpdaterクラスを作成する。
-//    let build name builder =
-//        let actorsUpdater =
-//            new ActorsUpdater<_, _, _>(
-//                name
-//                , builder.initActor
-//                , builder.selectActor
-//            )
+module ActorsUpdaterBuilder =
+    /// ビルダーからActorsUpdaterクラスを作成する。
+    let build name builder =
+        let actorsUpdater =
+            new ActorsUpdater<_, _, _>(
+                name
+                , builder.initActor
+                , builder.selectActor
+            )
 
-//        actorsUpdater
+        actorsUpdater
