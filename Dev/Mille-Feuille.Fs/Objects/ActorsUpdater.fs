@@ -50,7 +50,7 @@ type ActorsUpdaterBuilder<'ViewModel, 'Actor, 'ActorViewModel
     > =
     {
         initActor : unit -> 'Actor
-        selectActor : 'ViewModel -> UpdaterViewModel<'ActorViewModel> option
+        selectActor : 'ViewModel -> UpdaterViewModel<'ActorViewModel>
     }
 
 
