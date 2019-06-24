@@ -5,10 +5,10 @@ open System.Linq
 
 open wraikny.MilleFeuille.Core.Input.Controller
 
-
+[<Struct>]
 type JoystickInput<'T> =
-    | Button of index : int
-    | Axis of index : int * dir : AxisDirection
+    | Button of buttonIndex : int
+    | Axis of axisIndex : int * dir : AxisDirection
 
 
 /// ジョイスティックコントローラクラスを作成するビルダー。
@@ -63,20 +63,19 @@ module JoystickBuilder =
 
 
     /// リストをもとにジョイスティック入力に操作を対応付ける。
-    let rec bindInputs bindings builder =
-        bindings |> function
-        | [] -> builder
-        | (c, i)::xs ->
-            builder
-            |> bindInput c i
-            |> bindInputs xs
+    let rec bindInputs (bindings : #seq<_>) builder =
+        let mutable m = builder.binding
+        for (k, v) in bindings do
+            m <- m |> Map.add k v
+
+        { builder with binding = m }
 
 
     /// リストをもとにジョイスティックのボタン入力に操作を対応付ける。
     let bindButtonsList bindings builder =
         let bindings =
             bindings
-            |> List.map(fun (c, i) -> (c, Button i))
+            |> List.map(fun (c, i) -> c, Button i)
 
         builder
         |> bindInputs bindings
@@ -86,7 +85,7 @@ module JoystickBuilder =
     let bindAxesList bindings builder =
         let bindings =
             bindings
-            |> List.map(fun (c, i) -> (c, Axis i))
+            |> List.map(fun (c, i) -> c, Axis i)
 
         builder
         |> bindInputs bindings
