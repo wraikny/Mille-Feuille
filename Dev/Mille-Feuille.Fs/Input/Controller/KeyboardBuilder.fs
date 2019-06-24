@@ -15,21 +15,21 @@ type KeyboardBuilder<'T when 'T : comparison> =
 
 module KeyboardBuilder =
     /// キーボードコントローラクラスを作成するビルダーを作る。
-    let init() =
+    let inline init() =
         {
             binding = Map.empty
         }
 
-    let internal binding builder = builder.binding
+    let inline internal binding builder = builder.binding
 
     /// キー入力に操作を対応付ける。
-    let bindKey control key builder =
+    let inline bindKey control key builder =
         { builder with
             binding = builder.binding |> Map.add control key
         }
 
     /// リストを元にキー入力に操作を対応付ける。
-    let rec bindKeysList (bindings : #seq<_>) builder =
+    let bindKeysList (bindings : #seq<_>) builder =
         let mutable m = builder.binding
         for (k, v) in bindings do
             m <- m |> Map.add k v

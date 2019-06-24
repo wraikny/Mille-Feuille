@@ -56,12 +56,9 @@ type ActorsUpdaterBuilder<'ViewModel, 'Actor, 'ActorViewModel
 
 module ActorsUpdaterBuilder =
     /// ビルダーからActorsUpdaterクラスを作成する。
-    let build name builder =
-        let actorsUpdater =
-            new ActorsUpdater<_, _, _>(
-                name
-                , builder.initActor
-                , builder.selectActor
-            )
-
-        actorsUpdater
+    let inline build name builder =
+        new ActorsUpdater<_, _, _>(
+            name
+            , builder.initActor
+            , builder.selectActor
+        )

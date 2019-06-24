@@ -26,7 +26,7 @@ type JoystickBuilder<'T, 'U
 
 module JoystickBuilder =
     /// ジョイスティックコントローラクラスを作成するビルダーを作る。
-    let init(index) =
+    let inline init(index) =
         {
             index = index
             binding = Map.empty
@@ -34,7 +34,7 @@ module JoystickBuilder =
         }
 
     /// ジョイスティック入力に操作を対応付ける。
-    let bindInput control input (builder : JoystickBuilder<_, _>) =
+    let inline bindInput control input (builder : JoystickBuilder<_, _>) =
         { builder with
             binding =
                 builder.binding
@@ -42,19 +42,19 @@ module JoystickBuilder =
         }
 
     /// ボタン入力に操作を対応付ける。
-    let bindButton control index (builder) =
+    let inline bindButton control index (builder) =
         builder
         |> bindInput control (Button index)
 
 
     /// スティック入力に操作を対応付ける。
-    let bindAxis control input builder =
+    let inline bindAxis control input builder =
         builder
         |> bindInput control (Axis input)
 
 
     /// スティックのインデックスに操作を対応付ける。
-    let bindAxisTilt control index builder =
+    let inline bindAxisTilt control index builder =
         { builder with
             axisTiltBinding =
                 builder.axisTiltBinding
@@ -63,7 +63,7 @@ module JoystickBuilder =
 
 
     /// リストをもとにジョイスティック入力に操作を対応付ける。
-    let rec bindInputs (bindings : #seq<_>) builder =
+    let bindInputs (bindings : #seq<_>) builder =
         let mutable m = builder.binding
         for (k, v) in bindings do
             m <- m |> Map.add k v
@@ -92,13 +92,12 @@ module JoystickBuilder =
 
 
     /// リストをもとにスティックのインデックスに操作を対応付ける。
-    let rec bindAxesTiltList bindings builder =
-        bindings |> function
-        | [] -> builder
-        | (c, i)::xs ->
-            builder
-            |> bindAxisTilt c i
-            |> bindAxesTiltList xs
+    let bindAxesTiltList bindings builder =
+        let mutable m = builder.axisTiltBinding
+        for (k, v) in bindings do
+            m <- m |> Map.add k v
+
+        { builder with axisTiltBinding = m }
 
 
     /// ビルダーからジョイスティックコントローラクラスを作成する。

@@ -15,20 +15,20 @@ type AnimationBuilder<'Obj> =
 
 module AnimationBuilder =
     /// アニメーションクラスを作成するビルダーを作る。
-    let init name =
+    let inline init name =
         {
             name = name
             coroutines = []
         }
 
     /// アニメーションにコルーチンを追加する。
-    let addCoroutine coroutine builder =
+    let inline addCoroutine coroutine builder =
         { builder with
             coroutines = coroutine::builder.coroutines
         }
 
     /// リストを元にアニメーションにコルーチンを追加する。
-    let addCoroutines coroutines builder =
+    let inline addCoroutines coroutines builder =
         { builder with
             coroutines = (List.rev coroutines) @ builder.coroutines
         }

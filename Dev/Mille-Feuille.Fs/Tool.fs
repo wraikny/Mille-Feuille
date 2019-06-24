@@ -200,45 +200,45 @@ module Tree =
     ]
 
 
-let open' f =
+let inline open' f =
     asd.Engine.OpenTool()
     f()
     asd.Engine.CloseTool()
 
 
 module private Helper =
-    let window label f =
+    let inline window label f =
         if asd.Engine.Tool.Begin(label) then
             f()
             asd.Engine.Tool.End()
 
-    let fullscreen label offset f =
+    let inline fullscreen label offset f =
         if asd.Engine.Tool.BeginFullscreen(label, offset) then
             f()
             asd.Engine.Tool.End()
 
-    let menuBar f =
+    let inline menuBar f =
         if asd.Engine.Tool.BeginMenuBar() then
             f()
             asd.Engine.Tool.EndMenuBar()
 
-    let mainMenuBar f =
+    let inline mainMenuBar f =
         if asd.Engine.Tool.BeginMainMenuBar() then
             f()
             asd.Engine.Tool.EndMainMenuBar()
 
 
-    let menu label f =
+    let inline menu label f =
         if asd.Engine.Tool.BeginMenu(label) then
             f()
             asd.Engine.Tool.EndMenu()
 
 
-    let menuItem label shortcut selected f =
+    let inline menuItem label shortcut selected f =
         if asd.Engine.Tool.MenuItem(label, shortcut, [|selected|]) then
             f()
 
-    let combo label preview f =
+    let inline combo label preview f =
         if asd.Engine.Tool.BeginCombo(label, preview) then
             f()
             asd.Engine.Tool.EndCombo()
@@ -262,7 +262,7 @@ module internal Render =
             |> sender.Enqueue
 
 
-    let selectable (label, selected, msg) (sender : IMsgQueue<'Msg>) =
+    let inline selectable (label, selected, msg) (sender : IMsgQueue<'Msg>) =
         if asd.Engine.Tool.Selectable(label, selected) then
             sender.Enqueue(msg)
 

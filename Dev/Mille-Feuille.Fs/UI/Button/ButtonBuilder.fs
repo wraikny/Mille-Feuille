@@ -20,7 +20,7 @@ open wraikny.MilleFeuille.Core.UI.Button
 
 module ButtonBuilder =
     /// ボタンクラスを作成するビルダーを作る。
-    let init() =
+    let inline init() =
         {
             defaultEvents = []
             onEnteredEvents = []
@@ -33,43 +33,43 @@ module ButtonBuilder =
 
 
     /// デフォルト時に毎フレーム呼び出されるイベントを追加する。
-    let addDefaultEvent f builder =
+    let inline addDefaultEvent f builder =
         { builder with
             defaultEvents = f::builder.defaultEvents
         }
 
     /// フォーカスが入った時に呼び出されるイベントを追加する。
-    let addOnEnteredEvent f builder =
+    let inline addOnEnteredEvent f builder =
         { builder with
             onEnteredEvents = f::builder.onEnteredEvents
         }
 
     /// ホバー時に毎フレーム呼び出されるイベントを追加する。
-    let addHoverEvent f builder =
+    let inline addHoverEvent f builder =
         { builder with
             hoverEvents = f::builder.hoverEvents
         }
 
     /// 選択ボタンが押された時に呼び出されるイベントを追加する。
-    let addOnPushedEvent f builder =
+    let inline addOnPushedEvent f builder =
         { builder with
             onPushedEvents = f::builder.onPushedEvents
         }
 
     /// ホールド時に毎フレーム呼び出されるイベントを追加する。
-    let addHoldEvent f builder =
+    let inline addHoldEvent f builder =
         { builder with
             holdEvents = f::builder.holdEvents
         }
 
     /// 選択ボタンが離された時に呼び出されるイベントを追加する。
-    let addOnReleasedEvent f builder =
+    let inline addOnReleasedEvent f builder =
         { builder with
             onReleasedEvents = f::builder.onReleasedEvents
         }
 
     /// フォーカスが外れた時に呼び出されるイベントを追加する。
-    let addOnExitedEvent f builder =
+    let inline addOnExitedEvent f builder =
         { builder with
             onExitedEvents = f::builder.onExitedEvents
         }

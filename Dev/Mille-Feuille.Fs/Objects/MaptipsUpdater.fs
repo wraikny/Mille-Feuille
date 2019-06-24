@@ -54,11 +54,8 @@ type MaptipsUpdaterBuilder<'ViewModel, 'Chip, 'ChipViewModel
 
 module MaptipsUpdaterBuilder =
     /// ビルダーからMaptipsUpdaterクラスを作成する。
-    let build builder =
-        let actorsUpdater =
-            new MaptipsUpdater<_, _, _>(
-                builder.initChip
-                , builder.selectChip
-            )
-
-        actorsUpdater
+    let inline build builder =
+        new MaptipsUpdater<_, _, _>(
+            builder.initChip
+            , builder.selectChip
+        )
