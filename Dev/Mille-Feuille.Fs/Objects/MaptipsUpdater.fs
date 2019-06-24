@@ -35,7 +35,7 @@ type MaptipsUpdater<'ViewModel, 'Chip, 'ChipViewModel
             and  set(value) = iUpdater.EnabledPooling <- value
 
     interface IObserver<'ViewModel> with
-        member this.UpdateFromNotify(input) =
+        member this.Update(input) =
             if this.IsUpdated then
                 updater.Update(selecter input)
 

@@ -37,7 +37,7 @@ type ActorsUpdater<'ViewModel, 'Actor, 'ActorViewModel
 
     
     interface IObserver<'ViewModel> with
-        member this.UpdateFromNotify(input) =
+        member this.Update(input) =
             if this.IsUpdated then
                 updater.Update(selecter input)
 
