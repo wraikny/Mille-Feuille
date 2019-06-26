@@ -102,7 +102,7 @@ module Counter =
     type CounterPort(messenger) =
         inherit Port<Core.Msg, ViewMsg>(messenger)
 
-        override this.OnUpdate(msg) =
+        override this.OnPopMsg(msg) =
             msg |> function
             | Print s -> printfn "Executed in mainthread: %s" s
 
