@@ -3,6 +3,7 @@
 open wraikny.MilleFeuille.Core
 
 /// アニメーションコントローラで保持するノードを作成するビルダー。
+[<Struct>]
 type NodeBuilder<'Obj, 'State> =
     {
         animation : AnimationBuilder<'Obj>
@@ -27,6 +28,7 @@ module NodeBuilder =
 
 
 /// アニメーションコントローラクラスを作成するビルダー。
+[<Struct>]
 type AnimationControllerBuilder<'Owner, 'State
     when 'State : comparison
     and  'State : not struct
@@ -39,10 +41,10 @@ type AnimationControllerBuilder<'Owner, 'State
 
 module AnimationControllerBuilder =
     /// アニメーションコントローラを作成するビルダーを作る。
-    let init name = { name = name; nodes = Map.empty }
+    let inline init name = { name = name; nodes = Map.empty }
 
     /// コントローラにアニメーションノードを追加する。
-    let addNode (state, node) builder =
+    let inline addNode (state, node) builder =
         { builder with
             nodes =
                 builder.nodes
@@ -51,7 +53,7 @@ module AnimationControllerBuilder =
 
 
     /// ビルダーを元にコントローラにアニメーションノードを追加する。
-    let addNodeBuilder (state, node) builder =
+    let inline addNodeBuilder (state, node) builder =
         builder
         |> addNode (state, NodeBuilder.build node)
 

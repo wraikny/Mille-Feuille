@@ -1,7 +1,7 @@
 ﻿module wraikny.MilleFeuille.Fs.Sound
 
 
-let createSoundSource path isDecompessed =
+let inline createSoundSource path isDecompessed =
     try
         asd.Engine.Sound.CreateSoundSource(path, isDecompessed)
         |> Result.Ok
@@ -10,7 +10,7 @@ let createSoundSource path isDecompessed =
         Result.Error <| e.ToString()
 
 
-let play source =
+let inline play source =
     try
         asd.Engine.Sound.Play source
         |> Result.Ok

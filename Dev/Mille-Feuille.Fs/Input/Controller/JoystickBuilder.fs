@@ -5,13 +5,14 @@ open System.Linq
 
 open wraikny.MilleFeuille.Core.Input.Controller
 
-
+[<Struct>]
 type JoystickInput<'T> =
-    | Button of index : int
-    | Axis of index : int * dir : AxisDirection
+    | Button of buttonIndex : int
+    | Axis of axisIndex : int * dir : AxisDirection
 
 
 /// ジョイスティックコントローラクラスを作成するビルダー。
+[<Struct>]
 type JoystickBuilder<'T, 'U
     when 'T : comparison
     and  'U : comparison
@@ -25,7 +26,7 @@ type JoystickBuilder<'T, 'U
 
 module JoystickBuilder =
     /// ジョイスティックコントローラクラスを作成するビルダーを作る。
-    let init(index) =
+    let inline init(index) =
         {
             index = index
             binding = Map.empty
@@ -33,7 +34,7 @@ module JoystickBuilder =
         }
 
     /// ジョイスティック入力に操作を対応付ける。
-    let bindInput control input (builder : JoystickBuilder<_, _>) =
+    let inline bindInput control input (builder : JoystickBuilder<_, _>) =
         { builder with
             binding =
                 builder.binding
@@ -41,19 +42,19 @@ module JoystickBuilder =
         }
 
     /// ボタン入力に操作を対応付ける。
-    let bindButton control index (builder) =
+    let inline bindButton control index (builder) =
         builder
         |> bindInput control (Button index)
 
 
     /// スティック入力に操作を対応付ける。
-    let bindAxis control input builder =
+    let inline bindAxis control input builder =
         builder
         |> bindInput control (Axis input)
 
 
     /// スティックのインデックスに操作を対応付ける。
-    let bindAxisTilt control index builder =
+    let inline bindAxisTilt control index builder =
         { builder with
             axisTiltBinding =
                 builder.axisTiltBinding
@@ -62,20 +63,19 @@ module JoystickBuilder =
 
 
     /// リストをもとにジョイスティック入力に操作を対応付ける。
-    let rec bindInputs bindings builder =
-        bindings |> function
-        | [] -> builder
-        | (c, i)::xs ->
-            builder
-            |> bindInput c i
-            |> bindInputs xs
+    let bindInputs (bindings : #seq<_>) builder =
+        let mutable m = builder.binding
+        for (k, v) in bindings do
+            m <- m |> Map.add k v
+
+        { builder with binding = m }
 
 
     /// リストをもとにジョイスティックのボタン入力に操作を対応付ける。
     let bindButtonsList bindings builder =
         let bindings =
             bindings
-            |> List.map(fun (c, i) -> (c, Button i))
+            |> List.map(fun (c, i) -> c, Button i)
 
         builder
         |> bindInputs bindings
@@ -85,20 +85,19 @@ module JoystickBuilder =
     let bindAxesList bindings builder =
         let bindings =
             bindings
-            |> List.map(fun (c, i) -> (c, Axis i))
+            |> List.map(fun (c, i) -> c, Axis i)
 
         builder
         |> bindInputs bindings
 
 
     /// リストをもとにスティックのインデックスに操作を対応付ける。
-    let rec bindAxesTiltList bindings builder =
-        bindings |> function
-        | [] -> builder
-        | (c, i)::xs ->
-            builder
-            |> bindAxisTilt c i
-            |> bindAxesTiltList xs
+    let bindAxesTiltList bindings builder =
+        let mutable m = builder.axisTiltBinding
+        for (k, v) in bindings do
+            m <- m |> Map.add k v
+
+        { builder with axisTiltBinding = m }
 
 
     /// ビルダーからジョイスティックコントローラクラスを作成する。

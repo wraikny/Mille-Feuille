@@ -200,72 +200,73 @@ module Tree =
     ]
 
 
-let open' f =
+let inline open' f =
     asd.Engine.OpenTool()
     f()
     asd.Engine.CloseTool()
 
 
 module private Helper =
-    let window label f =
+    let inline window label f =
         if asd.Engine.Tool.Begin(label) then
             f()
             asd.Engine.Tool.End()
 
-    let fullscreen label offset f =
+    let inline fullscreen label offset f =
         if asd.Engine.Tool.BeginFullscreen(label, offset) then
             f()
             asd.Engine.Tool.End()
 
-    let menuBar f =
+    let inline menuBar f =
         if asd.Engine.Tool.BeginMenuBar() then
             f()
             asd.Engine.Tool.EndMenuBar()
 
-    let mainMenuBar f =
+    let inline mainMenuBar f =
         if asd.Engine.Tool.BeginMainMenuBar() then
             f()
             asd.Engine.Tool.EndMainMenuBar()
 
 
-    let menu label f =
+    let inline menu label f =
         if asd.Engine.Tool.BeginMenu(label) then
             f()
             asd.Engine.Tool.EndMenu()
 
 
-    let menuItem label shortcut selected f =
+    let inline menuItem label shortcut selected f =
         if asd.Engine.Tool.MenuItem(label, shortcut, [|selected|]) then
             f()
 
-    let combo label preview f =
+    let inline combo label preview f =
         if asd.Engine.Tool.BeginCombo(label, preview) then
             f()
             asd.Engine.Tool.EndCombo()
 
 
 open wraikny.Tart.Core
+open wraikny.Tart.Helper.Utils
 
 module internal Render =
-    let eventRender x (sender : IMsgSender<'Msg>) =
+    let eventRender x (sender : IMsgQueue<'Msg>) =
         x |> function
         | Nothing -> ()
-        | Msg msg -> sender.PushMsg(msg)
+        | Msg msg -> sender.Enqueue(msg)
         | OpenDialog (filter, path, msg) ->
             asd.Engine.Tool.OpenDialog(filter, path)
             |> msg
-            |> sender.PushMsg
+            |> sender.Enqueue
         | SaveDialog (filter, path, msg) ->
             asd.Engine.Tool.SaveDialog(filter, path)
             |> msg
-            |> sender.PushMsg
+            |> sender.Enqueue
 
 
-    let selectable (label, selected, msg) (sender : IMsgSender<'Msg>) =
+    let inline selectable (label, selected, msg) (sender : IMsgQueue<'Msg>) =
         if asd.Engine.Tool.Selectable(label, selected) then
-            sender.PushMsg(msg)
+            sender.Enqueue(msg)
 
-    let itemRender x (sender : IMsgSender<'Msg>) =
+    let itemRender x (sender : IMsgQueue<'Msg>) =
         x |> function
         | Empty -> ()
         | Separator -> asd.Engine.Tool.Separator()
@@ -297,13 +298,13 @@ module internal Render =
                     |> Array.map (fun x -> x * 255.0f)
                     |> Array.map byte
                 msg(new asd.Color(color.[0], color.[1], color.[2], color.[3]))
-                |> sender.PushMsg
+                |> sender.Enqueue
 
         | InputInt(label, current, msg) ->
             let i = [|current|]
             if asd.Engine.Tool.InputInt(label, i) then
                 msg i.[0]
-                |> sender.PushMsg
+                |> sender.Enqueue
 
         | InputText(label, current, bufferSize, msg) ->
             let n = current |> String.length
@@ -321,7 +322,7 @@ module internal Render =
 
                 let s = System.Text.Encoding.UTF8.GetString (s, 0, s |> Array.length)
                     
-                msg(s) |> sender.PushMsg
+                msg(s) |> sender.Enqueue
 
         | ListBox(label, current, items, msg) ->
             let itemsStr =
@@ -332,7 +333,7 @@ module internal Render =
             let current = [|current|]
             if asd.Engine.Tool.ListBox(label, current, itemsStr) then
                 msg current.[0]
-                |> sender.PushMsg
+                |> sender.Enqueue
 
         | Combo(label, current, items, msg) ->
             let preview =
@@ -345,7 +346,7 @@ module internal Render =
                     selectable(item, index = current, msg index) sender
             
 
-    let columnRender (column) (sender : IMsgSender<'Msg>) =
+    let columnRender (column) (sender : IMsgQueue<'Msg>) =
         column |> function
         | NoColumn list ->
             for i in list do
@@ -377,7 +378,7 @@ module internal Render =
                     asd.Engine.Tool.NextColumn()
 
 
-    let rec menuRender x (sender : IMsgSender<'Msg>) =
+    let rec menuRender x (sender : IMsgQueue<'Msg>) =
         x |> function
         | Menu(label, list) ->
             Helper.menu label <| fun _ ->
@@ -409,7 +410,7 @@ module internal Render =
                 eventRender event sender
 
 
-    let windowRender (x : Window<'Msg>) (window : Window) (sender : IMsgSender<'Msg>) =
+    let windowRender (x : Window<'Msg>) (window : Window) (sender : IMsgQueue<'Msg>) =
         let renderMenu() =
             x.menuBar |> function
             | None -> ()
@@ -435,7 +436,7 @@ module internal Render =
                 renderContent()
     
 
-let render (x : ViewModel<'Msg>) (sender : IMsgSender<'Msg>) =
+let render (x : ViewModel<'Msg>) (sender : IMsgQueue<'Msg>) =
     x.mainWindow |> function
     | None -> ()
     | Some(mainWindow, offset) ->

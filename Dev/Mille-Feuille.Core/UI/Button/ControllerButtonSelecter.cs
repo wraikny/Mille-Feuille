@@ -43,8 +43,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         )
         {
             controllers = new List<IController<ControllerSelect>>();
-            CursorButton = selectedButton;
-            selectedButton.Update(ButtonOperation.Enter);
+            Focus(selectedButton);
         }
 
         protected override void OnLayerUpdated()
@@ -56,7 +55,10 @@ namespace wraikny.MilleFeuille.Core.UI.Button
                 controller.Update();
             }
 
-            UpdateButtonsState();
+            if(CursorButton != null)
+            {
+                UpdateButtonsState();
+            }
         }
 
         /// <summary>
@@ -104,6 +106,18 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         }
 
         /// <summary>
+        /// ボタンにフォーカスを当てる
+        /// </summary>
+        /// <param name="next"></param>
+        public void Focus(IControllerButton next)
+        {
+            CursorButton?.Update(ButtonOperation.Exit);
+            next.Update(ButtonOperation.Enter);
+
+            CursorButton = next;
+        }
+
+        /// <summary>
         /// コントローラーの操作を元にボタンの状態を更新する。
         /// </summary>
         private void UpdateButtonsState()
@@ -144,10 +158,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
                         var next = CursorButton.GetButton(dir);
                         if (next == null) continue;
 
-                        CursorButton.Update(ButtonOperation.Exit);
-                        next.Update(ButtonOperation.Enter);
-
-                        CursorButton = next;
+                        Focus(next);
 
                         return;
                     }

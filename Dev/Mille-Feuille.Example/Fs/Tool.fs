@@ -99,10 +99,10 @@ module Counter =
                 view = view
             }
  
-    type CounterUpdater() =
-        inherit Updater<ViewMsg>()
+    type CounterPort(messenger) =
+        inherit Port<Core.Msg, ViewMsg>(messenger)
 
-        override this.OnUpdate(msg) =
+        override this.OnPopMsg(msg) =
             msg |> function
             | Print s -> printfn "Executed in mainthread: %s" s
 
@@ -111,17 +111,19 @@ module Counter =
         asd.Engine.Initialize("Counter", 800, 600, new asd.EngineOption())
         |> ignore
 
-        let updater = CounterUpdater()
 
         let messenger =
             let env =
                 Environment
                     .Initialize()
-                    .SetUpdater(updater)
 
             Messenger.createMessenger
                 env
                 Core.program
+
+        let port = CounterPort(messenger)
+
+        
                 
 
         Tool.open' <| fun _ ->
@@ -131,18 +133,18 @@ module Counter =
                 if asd.Engine.DoEvents() then
                     Tool.render view messenger
 
-                    updater.Update()
+                    port.Update()
 
                     asd.Engine.Update()
 
-                    messenger.TryViewModel |> function
+                    messenger.TryPopViewModel |> function
                     | Some newView -> loop newView
                     | None -> loop view
 
 
             messenger.StartAsync() |> ignore
             
-            messenger.TryViewModel |> function
+            messenger.TryPopViewModel |> function
             | Some view -> loop view
             | None -> ()
             
