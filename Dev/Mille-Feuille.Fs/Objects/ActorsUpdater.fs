@@ -11,7 +11,7 @@ open wraikny.MilleFeuille.Core.Object
 [<Class>]
 type ActorsUpdater<'ViewModel, 'Actor, 'ActorViewModel
     when 'Actor :> asd.Object2D
-    and 'Actor :> IUpdatee<'ActorViewModel>
+    and 'Actor :> IObserver<'ActorViewModel>
     >(name, create, selecter) as this =
     inherit Layer2DComponent<asd.Layer2D>(name)
 

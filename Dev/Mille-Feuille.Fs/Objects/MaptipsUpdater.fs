@@ -9,7 +9,7 @@ open wraikny.Tart.Core.View
 [<Class>]
 type MaptipsUpdater<'ViewModel, 'Chip, 'ChipViewModel
     when 'Chip :> asd.Chip2D
-    and  'Chip :> IUpdatee<'ChipViewModel>
+    and  'Chip :> IObserver<'ChipViewModel>
     >(create, selecter) as this =
     inherit asd.MapObject2D()
 
