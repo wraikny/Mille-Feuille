@@ -67,6 +67,15 @@ module AnimationControllerBuilder =
             |> addNodesList xs
 
 
+    let rec addNodeBuildersList list builder =
+        list |> function
+         [] -> builder
+         | x::xs ->
+            builder
+            |> addNodeBuilder x
+            |> addNodeBuildersList xs
+
+
     /// ビルダーからアニメーションコントローラクラスを作成する。
     let build builder =
         let controller =
