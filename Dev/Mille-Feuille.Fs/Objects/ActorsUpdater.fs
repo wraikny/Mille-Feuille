@@ -11,7 +11,7 @@ open wraikny.MilleFeuille.Core.Object
 [<Class>]
 type ActorsUpdater<'ViewModel, 'Actor, 'ActorViewModel
     when 'Actor :> asd.Object2D
-    and 'Actor :> IUpdatee<'ActorViewModel>
+    and 'Actor :> IObserver<'ActorViewModel>
     >(name, create, selecter) as this =
     inherit Layer2DComponent<asd.Layer2D>(name)
 
@@ -53,7 +53,7 @@ type ActorsUpdaterBuilder<'ViewModel, 'Actor, 'ActorViewModel
         selectActor : 'ViewModel -> UpdaterViewModel<'ActorViewModel>
     }
 
-
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module ActorsUpdaterBuilder =
     /// ビルダーからActorsUpdaterクラスを作成する。
     let inline build name builder =

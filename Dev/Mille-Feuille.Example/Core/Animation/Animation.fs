@@ -18,22 +18,20 @@ type AnimState =
 module TestAnims =
     let rotation easing frame (s, e) (owner : asd.Object2D) =
         seq {
-            for i in 0..frame do
+            for i in 0..frame ->
                 let x = Easing.calculate easing frame i
 
                 owner.Angle <- s + (e - s) * x
-                yield ()
         }
 
 
     let color easing frame (s, e) (owner : asd.DrawnObject2D) =
         seq {
-            for i in 0..frame do
+            for i in 0..frame ->
                 let x = Easing.calculate easing frame i
 
                 let b = (s + (e - s) * x) |> byte
                 owner.Color <- new asd.Color(b, b, b)
-                yield ()
         }
 
     let firstAnim isFinishedFirst =
@@ -165,7 +163,7 @@ type AnimScene() =
             )
 
         testObj.AddComponent(animComponent, animComponent.Name)
-        animComponent.State <- First
+        animComponent.Start(First)
 
         this.AddLayer(mainLayer)
         mainLayer.AddObject(testObj)
@@ -177,7 +175,8 @@ type AnimScene() =
                 keyboard.GetState(state) |> Option.ofNullable
                 |> function
                 | Some asd.ButtonState.Push ->
-                    animComponent.State <- state
+                    animComponent.Start(state)
+                    
                 | _ -> ()
 
             setAnimationStates Default

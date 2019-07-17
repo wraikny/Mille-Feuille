@@ -23,7 +23,7 @@ type JoystickBuilder<'T, 'U
         axisTiltBinding : Map<'U, int>
     }
 
-
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module JoystickBuilder =
     /// ジョイスティックコントローラクラスを作成するビルダーを作る。
     let inline init(index) =

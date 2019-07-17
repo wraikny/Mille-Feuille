@@ -50,6 +50,7 @@
     <None Include="..\Lib\Altseed_core.dll">
       <Link>Altseed_core.dll</Link>
     </None>
+    <Compile Include="Extension.fs" />
     <Compile Include="Math.fs" />
     <Compile Include="Geometry.fs" />
     <Compile Include="Sound.fs" />

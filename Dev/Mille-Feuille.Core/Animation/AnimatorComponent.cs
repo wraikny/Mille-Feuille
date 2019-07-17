@@ -41,11 +41,16 @@ namespace wraikny.MilleFeuille.Core.Animation
             {
                 return state;
             }
-            set
+            private set
             {
                 state = value;
                 UpdateNode(state);
             }
+        }
+
+        public void Start(TState state)
+        {
+            State = state;
         }
 
         public AnimatorComponent(

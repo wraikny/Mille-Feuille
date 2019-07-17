@@ -12,7 +12,7 @@ type KeyboardBuilder<'T when 'T : comparison> =
         binding : Map<'T, asd.Keys>
     }
 
-
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module KeyboardBuilder =
     /// キーボードコントローラクラスを作成するビルダーを作る。
     let inline init() =

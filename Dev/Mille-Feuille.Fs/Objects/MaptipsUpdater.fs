@@ -9,7 +9,7 @@ open wraikny.Tart.Core.View
 [<Class>]
 type MaptipsUpdater<'ViewModel, 'Chip, 'ChipViewModel
     when 'Chip :> asd.Chip2D
-    and  'Chip :> IUpdatee<'ChipViewModel>
+    and  'Chip :> IObserver<'ChipViewModel>
     >(create, selecter) as this =
     inherit asd.MapObject2D()
 
@@ -51,7 +51,7 @@ type MaptipsUpdaterBuilder<'ViewModel, 'Chip, 'ChipViewModel
         selectChip : 'ViewModel -> UpdaterViewModel<'ChipViewModel>
     }
 
-
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module MaptipsUpdaterBuilder =
     /// ビルダーからMaptipsUpdaterクラスを作成する。
     let inline build builder =
