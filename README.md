@@ -1,18 +1,16 @@
 # Mille-Feuille
-Mille-Feuille is a Altseed Extension Library for F#  
+Mille-Feuille is a Altseed Extension Library for F# 
 
-Building:
+## Target
+.Net Framework 4.7.2
+
+## Build
 1. Download Altseed 1.1.6 C# at https://github.com/altseed/Altseed/releases/tag/116\
 1. Then, place Rutime/*.dll and *.xml files under Dev/Lib folder
-1. Download Tart v0.0.2 at https://github.com/wraikny/Tart/releases
-1. Then, place all files under Dev/Lib folder
+1. Clone Tart v0.0.2 at https://github.com/wraikny/Tart to same directory
 1. Open Mille-Feuille.sln in Visual Studio 2019 and build.
-
-Reference:
-* [Altseed.Reactive](https://github.com/NumAniCloud/Altseed.Reactive)
-* [BaseComponent](https://github.com/gon6109/BaseComponent)
   
-Dependencies:
+## Dependencies
 * FSharp.Core 4.6.2 : MIT (c) Microsoft Corporation.
   https://github.com/dotnet/fsharp/blob/master/License.txt
 
@@ -27,3 +25,7 @@ Dependencies:
 
 ## Caution
 This software includes the work that is distributed in the [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).  
+
+## Reference
+* [Altseed.Reactive](https://github.com/NumAniCloud/Altseed.Reactive)
+* [BaseComponent](https://github.com/gon6109/BaseComponent)
