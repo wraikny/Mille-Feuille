@@ -163,7 +163,7 @@ type AnimScene() =
             )
 
         testObj.AddComponent(animComponent, animComponent.Name)
-        animComponent.State <- First
+        animComponent.Start(First)
 
         this.AddLayer(mainLayer)
         mainLayer.AddObject(testObj)
@@ -175,7 +175,8 @@ type AnimScene() =
                 keyboard.GetState(state) |> Option.ofNullable
                 |> function
                 | Some asd.ButtonState.Push ->
-                    animComponent.State <- state
+                    animComponent.Start(state)
+                    
                 | _ -> ()
 
             setAnimationStates Default
