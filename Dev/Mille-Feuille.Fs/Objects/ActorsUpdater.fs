@@ -53,7 +53,7 @@ type ActorsUpdaterBuilder<'ViewModel, 'Actor, 'ActorViewModel
         selectActor : 'ViewModel -> UpdaterViewModel<'ActorViewModel>
     }
 
-
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module ActorsUpdaterBuilder =
     /// ビルダーからActorsUpdaterクラスを作成する。
     let inline build name builder =

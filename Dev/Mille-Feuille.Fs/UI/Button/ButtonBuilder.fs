@@ -17,7 +17,7 @@ type ButtonBuilder< 'T when 'T :> asd.Object2D > =
 
 open wraikny.MilleFeuille.Core.UI.Button
 
-
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module ButtonBuilder =
     /// ボタンクラスを作成するビルダーを作る。
     let inline init() =

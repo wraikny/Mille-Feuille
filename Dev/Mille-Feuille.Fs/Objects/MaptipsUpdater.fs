@@ -51,7 +51,7 @@ type MaptipsUpdaterBuilder<'ViewModel, 'Chip, 'ChipViewModel
         selectChip : 'ViewModel -> UpdaterViewModel<'ChipViewModel>
     }
 
-
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module MaptipsUpdaterBuilder =
     /// ビルダーからMaptipsUpdaterクラスを作成する。
     let inline build builder =

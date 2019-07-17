@@ -2,7 +2,7 @@
 
 open wraikny.Tart.Helper.Math
 
-
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Vec2 =
     let inline fromVector2DF (v : asd.Vector2DF) =
         Vec2.init(v.X, v.Y)
@@ -16,6 +16,7 @@ module Vec2 =
     let inline toVector2DI (v : int Vec2) =
         new asd.Vector2DI(v.x, v.y)
 
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Vec3 =
     let inline fromVector3DF (v : asd.Vector3DF) =
         Vec3.init(v.X, v.Y, v.Z)
@@ -29,6 +30,7 @@ module Vec3 =
     let inline toColor (v : byte Vec3) =
         new asd.Color(v.x, v.y, v.z)
 
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Vec4 =
     let inline fromVector4DF (v : asd.Vector4DF) =
         Vec4.init(v.X, v.Y, v.Z, v.W)

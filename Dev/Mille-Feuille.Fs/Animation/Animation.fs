@@ -12,7 +12,7 @@ type AnimationBuilder<'Obj> =
         coroutines : ('Obj -> seq<unit>) list
     }
 
-
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module AnimationBuilder =
     /// アニメーションクラスを作成するビルダーを作る。
     let inline init name =

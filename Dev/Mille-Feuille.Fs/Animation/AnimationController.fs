@@ -10,7 +10,7 @@ type NodeBuilder<'Obj, 'State> =
         next : 'State option
     }
 
-
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module NodeBuilder =
     /// ビルダーからノードクラスを作成する。
     let build builder =
@@ -38,7 +38,7 @@ type AnimationControllerBuilder<'Owner, 'State
         nodes: Map<'State, Animation.INode<'State>>
     }
 
-
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module AnimationControllerBuilder =
     /// アニメーションコントローラを作成するビルダーを作る。
     let inline init name = { name = name; nodes = Map.empty }

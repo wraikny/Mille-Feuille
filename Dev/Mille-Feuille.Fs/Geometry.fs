@@ -5,6 +5,7 @@ open wraikny.Tart.Helper.Geometry
 
 open wraikny.MilleFeuille.Fs.Math
 
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Rect =
     let inline toRectF (r : float32 Rect2) : asd.RectF =
         new asd.RectF(
@@ -28,6 +29,7 @@ module Rect =
             Area = toRectF r
         )
 
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Sphere =
     let inline toCircleShape (c : float32 Sphere2) : asd.CircleShape =
         new asd.CircleShape(
@@ -42,6 +44,7 @@ module Sphere =
             , Radius = c.radius
         )
 
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Line =
     let inline toLineShape thickness (l : float32 Line2) : asd.LineShape =
         new asd.LineShape(
