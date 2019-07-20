@@ -43,6 +43,16 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         }
 
         /// <summary>
+        /// ボタンを削除する。
+        /// </summary>
+        /// <param name="button"></param>
+        /// <returns></returns>
+        public bool RemoveButton(IMouseButton button)
+        {
+            return buttons.Remove(button);
+        }
+
+        /// <summary>
         /// マウスの操作を元にボタンの状態を更新する。
         /// </summary>
         private void UpdateButtonsState()
