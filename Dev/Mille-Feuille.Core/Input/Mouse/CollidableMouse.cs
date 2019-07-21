@@ -9,7 +9,7 @@ namespace wraikny.MilleFeuille.Core.Input.Mouse
     /// <summary>
     /// 衝突判定を持ったマウスを扱うクラス。
     /// </summary>
-    public class CollidableMouse : asd.GeometryObject2D
+    public sealed class CollidableMouse : asd.GeometryObject2D
     {
         private readonly asd.CircleCollider collider;
 
@@ -72,8 +72,7 @@ namespace wraikny.MilleFeuille.Core.Input.Mouse
         public IEnumerable<asd.Collision2DInfo> GetCollisionInfo()
         {
             return
-                InsideArea()
-                ?
+                InsideArea() ?
                     Collisions2DInfo
                     .Where(x => x.TheirsCollider.OwnerObject.AbsoluteBeingDrawn)
                     .Where(x => x.SelfCollider.OwnerObject.Equals(this))

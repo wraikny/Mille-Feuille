@@ -75,7 +75,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
     /// <summary>
     /// コントローラー操作可能なボタン機能を提供するコンポーネント。
     /// </summary>
-    public class ControllerButtonComponent<T> : ButtonComponent<T>, IControllerButton
+    public sealed class ControllerButtonComponent<T> : ButtonComponent<T>, IControllerButton
         where T : asd.Object2D
     {
         private readonly Dictionary<ButtonDirection, IControllerButton> connectedButtons;
@@ -109,6 +109,11 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         /// <returns></returns>
         public IControllerButton SetButton(ButtonDirection dir, IControllerButton button)
         {
+            if (button == null)
+            {
+                throw new ArgumentNullException(nameof(button));
+            }
+
             connectedButtons[dir] = button;
             return this;
         }
@@ -126,6 +131,11 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         /// <returns></returns>
         public IControllerButton Chain(IControllerButton next, ButtonDirection dir)
         {
+            if (next == null)
+            {
+                throw new ArgumentNullException(nameof(next));
+            }
+
             this.SetButton(dir, next);
             next.SetButton(dir.Reverse(), this);
 

@@ -24,7 +24,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
     /// <summary>
     /// コントローラーボタンに対する操作を行うレイヤーコンポーネント。
     /// </summary>
-    public class ControllerButtonSelecter : asd.Layer2DComponent
+    public sealed class ControllerButtonSelecter : asd.Layer2DComponent
     {
         private readonly List<IController<ControllerSelect>> controllers;
 

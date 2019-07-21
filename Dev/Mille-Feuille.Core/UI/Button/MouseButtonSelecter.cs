@@ -10,7 +10,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
     /// <summary>
     /// コントローラーボタンに対する操作を行うレイヤーコンポーネント。
     /// </summary>
-    public class MouseButtonSelecter : asd.Layer2DComponent
+    public sealed class MouseButtonSelecter : asd.Layer2DComponent
     {
         /// <summary>
         /// マウスを取得する。

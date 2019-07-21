@@ -14,7 +14,7 @@ namespace wraikny.MilleFeuille.Core.Animation
     /// </summary>
     /// <typeparam name="TOwner"></typeparam>
     /// <typeparam name="TState"></typeparam>
-    public class AnimatorComponent<TOwner, TState> : Object2DComponent<TOwner>
+    public sealed class AnimatorComponent<TOwner, TState> : Object2DComponent<TOwner>
         where TOwner : asd.Object2D
         where TState : class
     {
@@ -23,6 +23,14 @@ namespace wraikny.MilleFeuille.Core.Animation
         private INode<TState> currentNode;
 
         private IEnumerator coroutine;
+
+        public AnimatorComponent(string name, AnimationController<TState> controller)
+            : base(name)
+        {
+            Controller = controller ?? throw new ArgumentNullException(nameof(controller));
+            currentNode = null;
+            coroutine = null;
+        }
 
         private void UpdateNode(TState state)
         {
@@ -51,17 +59,6 @@ namespace wraikny.MilleFeuille.Core.Animation
         public void Start(TState state)
         {
             State = state;
-        }
-
-        public AnimatorComponent(
-            string name
-            , AnimationController<TState> controller
-        )
-            : base(name)
-        {
-            Controller = controller;
-            currentNode = null;
-            coroutine = null;
         }
 
         protected override void OnUpdate()

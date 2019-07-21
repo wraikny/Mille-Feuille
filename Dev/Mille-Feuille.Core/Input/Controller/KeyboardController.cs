@@ -10,7 +10,7 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
     /// キーボードの入力と操作を対応付けるためのクラス。
     /// </summary>
     /// <typeparam name="TControl"></typeparam>
-    public class KeyboardController<TControl> : IController<TControl>
+    public sealed class KeyboardController<TControl> : IController<TControl>
     {
         private readonly Dictionary<TControl, asd.Keys> binding;
 

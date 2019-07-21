@@ -17,7 +17,7 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
     /// </summary>
     /// <typeparam name="TControl"></typeparam>
     /// <typeparam name="TTiltControl"></typeparam>
-    public class JoystickController<TControl, TTiltControl> : IController<TControl>
+    public sealed class JoystickController<TControl, TTiltControl> : IController<TControl>
     {
         private interface IJoystickInput
         {

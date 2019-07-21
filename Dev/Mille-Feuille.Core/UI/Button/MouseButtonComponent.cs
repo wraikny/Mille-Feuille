@@ -16,7 +16,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         void Update(asd.CollisionType collision, asd.ButtonState state);
     }
 
-    public class MouseButtonComponent<T> : ButtonComponent<T>, IMouseButton
+    public sealed class MouseButtonComponent<T> : ButtonComponent<T>, IMouseButton
         where T : asd.Object2D
     {
         public asd.Object2D Button { get; private set; }
