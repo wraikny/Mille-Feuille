@@ -247,6 +247,8 @@ module private Helper =
 open wraikny.Tart.Core
 open wraikny.Tart.Helper.Utils
 
+open FSharpPlus
+
 module internal Render =
     let eventRender x (sender : IMsgQueue<'Msg>) =
         x |> function
@@ -311,23 +313,23 @@ module internal Render =
             let bufferSize = bufferSize |> Option.defaultValue(n + 256)
             let s : sbyte [] =
                 Array.append
-                    (current |> Seq.map sbyte |> Seq.toArray)
+                    (current |> Seq.map sbyte |> toArray)
                     [|for _ in 1..bufferSize-n -> 0y|]
 
             if asd.Engine.Tool.InputText(label, s, bufferSize) then
                 let s =
                     s
                     |> Array.takeWhile(fun x -> x <> 0y)
-                    |> Array.map byte
+                    |>> byte
 
-                let s = System.Text.Encoding.UTF8.GetString (s, 0, s |> Array.length)
+                let s = System.Text.Encoding.UTF8.GetString (s, 0, s |> length)
                     
                 msg(s) |> sender.Enqueue
 
         | ListBox(label, current, items, msg) ->
             let itemsStr =
                 items
-                |> List.map(fun s -> s.Replace(";", ":"))
+                |>> fun s -> s.Replace(";", ":")
                 |> String.concat ";"
 
             let current = [|current|]
@@ -338,7 +340,7 @@ module internal Render =
         | Combo(label, current, items, msg) ->
             let preview =
                 items
-                |> List.tryItem current
+                |> tryItem current
                 |> Option.defaultValue ""
 
             Helper.combo label preview <| fun _ ->
@@ -354,7 +356,7 @@ module internal Render =
         | Column list ->
             let currentIndex = asd.Engine.Tool.ColumnIndex
 
-            let columnSize = list |> List.length
+            let columnSize = length list
 
             let render (w, il) =
                 w |> function
@@ -387,21 +389,21 @@ module internal Render =
         | MenuItem(label, shortcut, selected, event) ->
             let shortcutStr =
                 shortcut
-                |> Option.map(fun x ->
-                    x |> List.map(fun y -> y.ToString())
+                |>> fun x ->
+                    x |>> fun y -> y.ToString()
                     |> String.concat "+"
-                )
                 |> Option.defaultValue("")
 
             shortcut |> function
             | None -> ()
             | Some keys ->
                 let pushed =
-                    keys |> List.map(
+                    keys
+                    |>>(
                         asd.Engine.Keyboard.GetKeyState
                         >> (=) asd.ButtonState.Push
                     )
-                    |> List.fold (||) false
+                    |> fold (||) false
 
                 if pushed then
                     eventRender event sender
