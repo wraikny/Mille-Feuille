@@ -80,8 +80,7 @@ module AnimationControllerBuilder =
 
     /// ビルダーからアニメーションコントローラクラスを作成する。
     let build builder =
-        let controller =
-            new Animation.AnimationController<'State>(builder.name)
+        let controller = Animation.AnimationController<'State>(builder.name)
 
         let nodes =
             builder.nodes

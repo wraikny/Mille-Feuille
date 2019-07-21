@@ -51,4 +51,4 @@ module AnimationBuilder =
                     }
                     coroutine.GetEnumerator() :> IEnumerator
 
-        new Animation<_>(builder.name, System.Func<_, _> generator)
+        Animation<_>(builder.name, System.Func<_, _> generator)
