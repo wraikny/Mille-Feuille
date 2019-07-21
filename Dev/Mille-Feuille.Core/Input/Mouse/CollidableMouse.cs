@@ -82,7 +82,7 @@ namespace wraikny.MilleFeuille.Core.Input.Mouse
         }
 
         /// <summary>
-        /// マウスの位置を元にレイヤー上での位置を計算する。
+        /// マウスの位置を元にレイヤー上での位置を計算する。 
         /// </summary>
         private void CalcPositionFromMouse()
         {

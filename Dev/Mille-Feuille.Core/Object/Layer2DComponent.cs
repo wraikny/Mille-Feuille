@@ -17,22 +17,22 @@ namespace wraikny.MilleFeuille.Core.Object
         }
 
         /// <summary>
-        /// このコンポーネントを持つレイヤーがシーンに登録されたときのイベント。
+        /// このコンポーネントを持つレイヤーがシーンに登録されたときに実行されるイベント。
         /// </summary>
         public event Action<T> OnAddedEvent = delegate { };
 
         /// <summary>
-        /// このコンポーネントを持つレイヤーがシーンから登録解除されたときの直前のイベント。
+        /// このコンポーネントを持つレイヤーがシーンから登録解除される直前に実行されるイベント。
         /// </summary>
         public event Action<T> OnRemovedEvent = delegate { };
 
         /// <summary>
-        /// このコンポーネントを持つレイヤーが更新される直前のイベント。
+        /// このコンポーネントを持つレイヤーが更新される直前に実行されるイベント。
         /// </summary>
         public event Action<T> OnUpdatingEvent = delegate { };
 
         /// <summary>
-        /// このコンポーネントを持つレイヤーが更新される直後のイベント。
+        /// このコンポーネントを持つレイヤーが更新される直後に実行されるイベント。
         /// </summary>
         public event Action<T> OnUpdatedEvent = delegate { };
 
