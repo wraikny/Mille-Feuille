@@ -291,15 +291,13 @@ module internal Render =
         | ColorEdit4(label, current, msg) ->
             let color : float32 [] =
                 [|current.R; current.G; current.B; current.A|]
-                |> Array.map float32
-                |> Array.map (fun x -> x / 255.0f)
+                |>> (float32 >> flip (/) 255.0f)
 
             if asd.Engine.Tool.ColorEdit4(label, color) then
                 let color =
                     color
-                    |> Array.map (fun x -> x * 255.0f)
-                    |> Array.map byte
-                msg(new asd.Color(color.[0], color.[1], color.[2], color.[3]))
+                    |>> ( ( * ) 255.0f >> byte )
+                msg(asd.Color(color.[0], color.[1], color.[2], color.[3]))
                 |> sender.Enqueue
 
         | InputInt(label, current, msg) ->
@@ -312,14 +310,14 @@ module internal Render =
             let n = current |> String.length
             let bufferSize = bufferSize |> Option.defaultValue(n + 256)
             let s : sbyte [] =
-                Array.append
+                (<|>)
                     (current |> Seq.map sbyte |> toArray)
                     [|for _ in 1..bufferSize-n -> 0y|]
 
             if asd.Engine.Tool.InputText(label, s, bufferSize) then
                 let s =
                     s
-                    |> Array.takeWhile(fun x -> x <> 0y)
+                    |> Array.takeWhile ((<>) 0y)
                     |>> byte
 
                 let s = System.Text.Encoding.UTF8.GetString (s, 0, s |> length)

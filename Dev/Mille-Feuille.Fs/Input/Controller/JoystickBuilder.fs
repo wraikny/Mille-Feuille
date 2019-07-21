@@ -75,7 +75,7 @@ module JoystickBuilder =
     let bindButtonsList bindings builder =
         let bindings =
             bindings
-            |>> fun (c, i) -> c, Button i
+            |> List.map(fun (c, i) -> c, Button i)
 
         builder
         |> bindInputs bindings
@@ -85,7 +85,7 @@ module JoystickBuilder =
     let bindAxesList bindings builder =
         let bindings =
             bindings
-            |>> fun (c, i) -> c, Axis i
+            |> List.map(fun (c, i) -> c, Axis i)
 
         builder
         |> bindInputs bindings
