@@ -2,6 +2,8 @@
 
 open wraikny.MilleFeuille.Core
 
+open FSharpPlus
+
 /// アニメーションコントローラで保持するノードを作成するビルダー。
 [<Struct>]
 type NodeBuilder<'Obj, 'State> =
@@ -84,9 +86,8 @@ module AnimationControllerBuilder =
         let nodes =
             builder.nodes
             |> Map.toSeq
-            |> Seq.map(fun (s, n) ->
+            |>> fun (s, n) ->
                 struct (s, n)
-            )
 
         controller.AddAnimations(nodes)
 
