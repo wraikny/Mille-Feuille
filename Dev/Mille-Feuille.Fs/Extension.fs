@@ -28,6 +28,13 @@ type asd.DrawnObject2D with
             asd.ChildDrawingMode.DrawingPriority
         )
 
+type asd.Font with
+    member inline this.HorizontalSize(text) =
+        this.CalcTextureSize(text, asd.WritingDirection.Horizontal)
+
+    member inline this.VerticalSize(text) =
+        this.CalcTextureSize(text, asd.WritingDirection.Vertical)
+
 open wraikny.Tart.Helper.Math
 
 type asd.Vector2DF with

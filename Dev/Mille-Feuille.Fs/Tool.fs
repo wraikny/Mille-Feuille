@@ -317,7 +317,7 @@ module internal Render =
             if asd.Engine.Tool.InputText(label, s, bufferSize) then
                 let s =
                     s
-                    |> Array.takeWhile ((<>) 0y)
+                    |> takeWhile ((<>) 0y)
                     |>> byte
 
                 let s = System.Text.Encoding.UTF8.GetString (s, 0, s |> length)
