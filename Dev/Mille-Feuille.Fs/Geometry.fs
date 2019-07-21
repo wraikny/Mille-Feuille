@@ -8,13 +8,13 @@ open wraikny.MilleFeuille.Fs.Math
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Rect =
     let inline toRectF (r : float32 Rect2) : asd.RectF =
-        new asd.RectF(
+        asd.RectF(
             r.position |> Vec2.toVector2DF
             , r.size |> Vec2.toVector2DF
         )
 
     let inline toRectI (r : int Rect2) : asd.RectI =
-        new asd.RectI(
+        asd.RectI(
             r.position |> Vec2.toVector2DI
             , r.size |> Vec2.toVector2DI
         )
