@@ -39,23 +39,23 @@ open wraikny.Tart.Helper.Math
 
 type asd.Vector2DF with
     member inline v.ToVec2() =
-        Vec2.init(v.X, v.Y)
+        Vec2.init v.X v.Y
 
 type asd.Vector2DI with
     member inline v.ToVec2() =
-        Vec2.init(v.X, v.Y)
+        Vec2.init v.X v.Y
 
 type asd.Vector3DF with
     member inline v.ToVec3() =
-        Vec3.init(v.X, v.Y, v.Z)
+        Vec3.init v.X v.Y v.Z
 
 type asd.Vector4DF with
     member inline v.ToVec4() =
-        Vec4.init(v.X, v.Y, v.Z, v.W)
+        Vec4.init v.X v.Y v.Z v.W
 
 type asd.Color with
     member inline v.ToVec4() =
-        Vec4.init(v.R, v.G, v.B, v.A)
+        Vec4.init v.R v.G v.B v.A
 
 open wraikny.Tart.Helper.Geometry
 
