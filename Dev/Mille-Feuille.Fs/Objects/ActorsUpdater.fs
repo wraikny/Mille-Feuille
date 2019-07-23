@@ -1,32 +1,39 @@
 ﻿namespace wraikny.MilleFeuille.Fs.Objects
 
-
+open System
 open wraikny.Tart.Helper.Utils
 open wraikny.Tart.Core.View
 
 open wraikny.MilleFeuille.Core.Object
 
+type ActorsUpdaterArg<'ViewModel, 'Actor, 'ActorViewModel
+    when 'Actor :> asd.Object2D
+    > =
+    {
+        create : unit -> 'Actor
+        onError : exn -> unit
+        onCompleted : unit -> unit
+    }
+
 
 /// 追加削除の発生するasd.Object2Dの更新管理を行うクラス。
 [<Class>]
-type ActorsUpdater<'ViewModel, 'Actor, 'ActorViewModel
+type ActorsUpdater<'Actor, 'ActorViewModel
     when 'Actor :> asd.Object2D
-    and 'Actor :> IObserver<'ActorViewModel>
-    >(name, create, selecter) as this =
+    and 'Actor :> IUpdatee<'ActorViewModel>
+    >(name, arg : ActorsUpdaterArg<_, _, _>) as this =
     inherit Layer2DComponent<asd.Layer2D>(name)
 
-    let selecter = selecter
-
-    let updater = new ObjectsUpdater<'ViewModel, 'Actor, 'ActorViewModel>({
-        create = create
+    let updater = new ObjectsUpdater<'Actor, 'ActorViewModel>({
+        create = arg.create
         add = fun actor -> this.Owner.AddObject(actor) |> ignore
         remove = fun actor -> this.Owner.RemoveObject(actor) |> ignore
         dispose = fun actor -> actor.Dispose()
     })
 
-    let iUpdater = updater :> IObjectsUpdater
+    let iUpdater = updater :> IUpdater<_>
 
-    interface IObjectsUpdater with
+    interface IUpdater<'ActorViewModel> with
         member this.EnabledUpdating
             with get() = iUpdater.EnabledUpdating
             and  set(value) = iUpdater.EnabledUpdating <- value
@@ -36,29 +43,11 @@ type ActorsUpdater<'ViewModel, 'Actor, 'ActorViewModel
             and  set(value) = iUpdater.EnabledPooling <- value
 
     
-    interface IObserver<'ViewModel> with
-        member this.Update(input) =
+    interface IObserver<UpdaterViewModel<'ActorViewModel>> with
+        member this.OnNext(input) =
             if this.IsUpdated then
-                updater.Update(selecter input)
+                updater.Update(input)
 
+        member this.OnError(e) = arg.onError(e)
 
-
-/// ActorsUpdaterクラスを作成するビルダー。
-[<Struct>]
-type ActorsUpdaterBuilder<'ViewModel, 'Actor, 'ActorViewModel
-    when 'Actor :> asd.Object2D
-    > =
-    {
-        initActor : unit -> 'Actor
-        selectActor : 'ViewModel -> UpdaterViewModel<'ActorViewModel>
-    }
-
-[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-module ActorsUpdaterBuilder =
-    /// ビルダーからActorsUpdaterクラスを作成する。
-    let inline build name builder =
-        new ActorsUpdater<_, _, _>(
-            name
-            , builder.initActor
-            , builder.selectActor
-        )
+        member this.OnCompleted() = arg.onCompleted()
