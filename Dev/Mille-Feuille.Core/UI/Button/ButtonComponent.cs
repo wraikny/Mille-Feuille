@@ -29,30 +29,22 @@ namespace wraikny.MilleFeuille.Core.UI.Button
     }
 
     /// <summary>
-    /// ボタン機能を提供するコンポーネントの基底クラス。
+    /// ボタン機能を提供するコンポーネントのクラス。
     /// </summary>
-    public abstract class ButtonComponentBase : Object.Object2DComponent<asd.Object2D>
+    public class ButtonComponent<T> : Object.Object2DComponent<asd.Object2D>
+        where T : asd.Object2D
     {
         /// <summary>
         /// ボタンの状態を取得または設定する。
         /// </summary>
         public ButtonState State { get; set; }
 
-        public ButtonComponentBase(string name)
+
+        public ButtonComponent(string name)
             : base(name)
         {
             State = ButtonState.Default;
         }
-
-
-        internal abstract void CallDefault();
-        internal abstract void CallHover();
-        internal abstract void CallHold();
-
-        internal abstract void CallOnEntered();
-        internal abstract void CallOnPushed();
-        internal abstract void CallOnReleased();
-        internal abstract void CallOnExited();
 
         protected override void OnUpdate()
         {
@@ -61,13 +53,13 @@ namespace wraikny.MilleFeuille.Core.UI.Button
             switch (State)
             {
                 case ButtonState.Default:
-                    CallDefault();
+                    DefaultEvent((T)Owner);
                     break;
                 case ButtonState.Hover:
-                    CallHover();
+                    HoverEvent((T)Owner);
                     break;
                 case ButtonState.Hold:
-                    CallHold();
+                    HoldEvent((T)Owner);
                     break;
             }
         }
@@ -81,79 +73,58 @@ namespace wraikny.MilleFeuille.Core.UI.Button
             switch (op)
             {
                 case ButtonOperation.Enter:
-                    CallOnEntered();
+                    OnEnteredEvent((T)Owner);
                     State = ButtonState.Hover;
                     break;
                 case ButtonOperation.Push:
-                    CallOnPushed();
+                    OnPushedEvent((T)Owner);
                     State = ButtonState.Hold;
                     break;
                 case ButtonOperation.Release:
-                    CallOnReleased();
+                    OnReleasedEvent((T)Owner);
                     State = ButtonState.Hover;
                     break;
                 case ButtonOperation.Exit:
-                    CallOnExited();
+                    OnExitedEvent((T)Owner);
                     State = ButtonState.Default;
                     break;
             }
-        }
-    }
-
-    /// <summary>
-    /// ボタン機能を提供するコンポーネントのクラス。
-    /// </summary>
-    public class ButtonComponent<T> : ButtonComponentBase
-        where T : asd.Object2D
-    {
-
-        public ButtonComponent(string name)
-            : base(name)
-        {
-
         }
 
         /// <summary>
         /// 選択ボタンが押されていない時に毎フレーム呼び出されるイベント。
         /// </summary>
         public event Action<T> DefaultEvent = delegate { };
-        internal override void CallDefault() => DefaultEvent((T)Owner);
-
-        /// <summary>
-        /// フォーカスが入った時に呼び出されるイベント。
-        /// </summary>
-        public event Action<T> OnEnteredEvent = delegate { };
-        internal override void CallOnEntered() => OnEnteredEvent((T)Owner);
-
 
         /// <summary>
         /// ホバー時に毎フレーム呼び出されるイベント。
         /// </summary>
         public event Action<T> HoverEvent = delegate { };
-        internal override void CallHover() => HoverEvent((T)Owner);
-
-        /// <summary>
-        /// 選択ボタンが押された時に呼び出されるイベント。
-        /// </summary>
-        public event Action<T> OnPushedEvent = delegate { };
-        internal override void CallOnPushed() => OnPushedEvent((T)Owner);
 
         /// <summary>
         /// 選択ボタンがホールド時に毎フレーム呼び出されるイベント。
         /// </summary>
         public event Action<T> HoldEvent = delegate { };
-        internal override void CallHold() => HoldEvent((T)Owner);
+
+
+        /// <summary>
+        /// フォーカスが入った時に呼び出されるイベント。
+        /// </summary>
+        public event Action<T> OnEnteredEvent = delegate { };
+
+        /// <summary>
+        /// 選択ボタンが押された時に呼び出されるイベント。
+        /// </summary>
+        public event Action<T> OnPushedEvent = delegate { };
 
         /// <summary>
         /// 選択ボタンが離された時に呼び出されるイベント。
         /// </summary>
         public event Action<T> OnReleasedEvent = delegate { };
-        internal override void CallOnReleased() => OnReleasedEvent((T)Owner);
 
         /// <summary>
         /// フォーカスが外れた時に呼び出されるイベント。
         /// </summary>
         public event Action<T> OnExitedEvent = delegate { };
-        internal override void CallOnExited() => OnExitedEvent((T)Owner);
     }
 }
