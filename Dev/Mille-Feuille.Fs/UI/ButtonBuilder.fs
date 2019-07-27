@@ -15,6 +15,13 @@ type ButtonBuilder< 'T when 'T :> asd.Object2D > =
     }
 
 
+type ButtonColor = {
+    defaultColor : asd.Color
+    hoverColor : asd.Color
+    holdColor : asd.Color
+}
+
+
 open wraikny.MilleFeuille.Core.UI
 
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
@@ -121,12 +128,12 @@ module ButtonBuilder =
         >> addOnReleasedEvent hoverAction
         >> addOnPushedEvent holdAction
 
-    let inline addColorEvent defaultColor hoverColor holdColor (target : asd.DrawnObject2D) =
+    let inline addColorEvent color (target : asd.DrawnObject2D) =
         
         let inline colorEvent col =
             fun _ -> target.Color <- col
 
         addOnChangedToStateEvents
-            (colorEvent defaultColor)
-            (colorEvent hoverColor)
-            (colorEvent holdColor)
+            (colorEvent color.defaultColor)
+            (colorEvent color.hoverColor)
+            (colorEvent color.holdColor)
