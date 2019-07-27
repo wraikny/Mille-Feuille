@@ -37,13 +37,13 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         /// <summary>
         /// ボタンの状態を取得または設定する。
         /// </summary>
-        public ButtonState State { get; set; }
+        public ButtonState State { get; private set; } = ButtonState.Default;
 
 
         public ButtonComponent(string name)
             : base(name)
         {
-            State = ButtonState.Default;
+            
         }
 
         protected override void OnUpdate()
@@ -88,6 +88,8 @@ namespace wraikny.MilleFeuille.Core.UI.Button
                     OnExitedEvent((T)Owner);
                     State = ButtonState.Default;
                     break;
+                default:
+                    throw new ArgumentException();
             }
         }
 
@@ -126,5 +128,19 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         /// フォーカスが外れた時に呼び出されるイベント。
         /// </summary>
         public event Action<T> OnExitedEvent = delegate { };
+
+        /// <summary>
+        /// 状態遷移時に実行されるイベントをまとめて登録する。
+        /// </summary>
+        public void AddOnStateChangedEvents(
+            Action<T> defaultAction,
+            Action<T> hoverAction,
+            Action<T> holdAction)
+        {
+            OnExitedEvent += defaultAction;
+            OnEnteredEvent += hoverAction;
+            OnReleasedEvent += hoverAction;
+            OnPushedEvent += holdAction;
+        }
     }
 }

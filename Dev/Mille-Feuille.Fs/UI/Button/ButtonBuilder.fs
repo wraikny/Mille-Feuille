@@ -115,7 +115,7 @@ module ButtonBuilder =
 
         button
 
-    let addOnChangedToStateEvent defaultF hoverF holdF builder =
+    let addOnChangedToStateEvents defaultAction hoverAction holdAction builder =
         let mutable state = None
         
         let inline changeState s f =
@@ -123,23 +123,18 @@ module ButtonBuilder =
             if state <> a then f(); state <- a
 
         builder
-        |> addDefaultEvent(fun _ ->
-            changeState ButtonState.Default defaultF
-        )
-        |> addHoverEvent(fun _ ->
-            changeState ButtonState.Hover hoverF
-        )
-        |> addHoldEvent(fun _ ->
-            changeState ButtonState.Hold holdF
-        )
+        |> addOnExitedEvent defaultAction
+        |> addOnEnteredEvent hoverAction
+        |> addOnReleasedEvent hoverAction
+        |> addOnPushedEvent holdAction
 
     let addColorEvent defaultColor hoverColor holdColor (target : asd.DrawnObject2D) builder =
         
         let inline colorEvent col =
-            fun () -> target.Color <- col
+            fun _ -> target.Color <- col
 
         builder
-        |> addOnChangedToStateEvent
+        |> addOnChangedToStateEvents
             (colorEvent defaultColor)
             (colorEvent hoverColor)
             (colorEvent holdColor)
