@@ -26,8 +26,20 @@ type ActorsUpdater<'Actor, 'ActorViewModel
 
     let updater = new ObjectsUpdater<'Actor, 'ActorViewModel>({
         create = arg.create
-        add = fun actor -> this.Owner.AddObject(actor) |> ignore
-        remove = fun actor -> this.Owner.RemoveObject(actor) |> ignore
+        add = fun actor ->
+            if actor.Layer = null then
+                this.Owner.AddObject(actor)
+
+            actor.IsUpdated <- true
+            actor.IsDrawn <- true
+        remove = fun actor ->
+            actor.IsUpdated <- false
+            actor.IsDrawn <- false
+
+        // add = this.Owner.AddObject
+        // bellow code raises NullReferenceException in asd.ENgine.Update
+        // remove = this.Owner.RemoveObject
+
         dispose = fun actor -> actor.Dispose()
     })
 
