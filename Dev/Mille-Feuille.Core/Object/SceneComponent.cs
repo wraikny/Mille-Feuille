@@ -16,6 +16,11 @@ namespace wraikny.MilleFeuille.Core
             Name = name;
         }
 
+        public void Attach(T owner)
+        {
+            owner.AddComponent(this, Name);
+        }
+
         /// <summary>
         /// このコンポーネントを持つシーンがエンジンに登録されたときに実行されるイベント。
         /// </summary>
@@ -61,58 +66,61 @@ namespace wraikny.MilleFeuille.Core
         /// </summary>
         public event Action<T> OnDisposedEvent = delegate { };
 
+        private void InvokeAction(Action<T> action)
+        {
+            if (Owner is T obj)
+            {
+                action.Invoke(obj);
+            }
+            else
+            {
+                throw new InvalidCastException();
+            }
+        }
+
         protected override void OnSceneRegistered()
         {
-            base.OnSceneRegistered();
-            OnRegisteredEvent((T)Owner);
+            InvokeAction(OnRegisteredEvent);
         }
 
         protected override void OnSceneUnregistered()
         {
-            base.OnSceneUnregistered();
-            OnUnRegisteredEvent((T)Owner);
+            InvokeAction(OnUnRegisteredEvent);
         }
 
         protected override void OnStartSceneUpdating()
         {
-            base.OnStartSceneUpdating();
-            OnStartUpdatingEvent((T)Owner);
+            InvokeAction(OnStartUpdatingEvent);
         }
 
         protected override void OnStopSceneUpdating()
         {
-            base.OnStopSceneUpdating();
-            OnStopUpdatingEvent((T)Owner);
+            InvokeAction(OnStopUpdatingEvent);
         }
 
         protected override void OnUpdating()
         {
-            base.OnUpdating();
-            OnUpdatingEvent((T)Owner);
+            InvokeAction(OnUpdatingEvent);
         }
 
         protected override void OnUpdated()
         {
-            base.OnUpdated();
-            OnUpdatedEvent((T)Owner);
+            InvokeAction(OnUpdatedEvent);
         }
 
         protected override void OnSceneTransitionBegin()
         {
-            base.OnSceneTransitionBegin();
-            OnTransitionBeginEvent((T)Owner);
+            InvokeAction(OnTransitionBeginEvent);
         }
 
         protected override void OnSceneTransitionFinished()
         {
-            base.OnSceneTransitionFinished();
-            OnTransitionFinishedEvent((T)Owner);
+            InvokeAction(OnTransitionFinishedEvent);
         }
 
         protected override void OnSceneDisposed()
         {
-            base.OnSceneDisposed();
-            OnDisposedEvent((T)Owner);
+            InvokeAction(OnDisposedEvent);
         }
     }
 }

@@ -16,6 +16,11 @@ namespace wraikny.MilleFeuille.Core
             Name = name;
         }
 
+        public void Attatch(T owner)
+        {
+            owner.AddComponent(this, Name);
+        }
+
         /// <summary>
         /// このコンポーネントを持つレイヤーがシーンに登録されたときに実行されるイベント。
         /// </summary>
@@ -36,28 +41,35 @@ namespace wraikny.MilleFeuille.Core
         /// </summary>
         public event Action<T> OnUpdatedEvent = delegate { };
 
+        private void InvokeAction(Action<T> action)
+        {
+            if (Owner is T obj)
+            {
+                action.Invoke(obj);
+            }
+            else
+            {
+                throw new InvalidCastException();
+            }
+        }
+
         protected override void OnLayerAdded()
         {
-            base.OnLayerAdded();
-            OnAddedEvent((T)Owner);
+            InvokeAction(OnAddedEvent);
         }
         protected override void OnLayerRemoved()
         {
-            base.OnLayerRemoved();
-            OnRemovedEvent((T)Owner);
+            InvokeAction(OnRemovedEvent);
         }
 
         protected override void OnUpdating()
         {
-            base.OnUpdating();
-            OnUpdatingEvent((T)Owner);
+            InvokeAction(OnUpdatingEvent);
         }
 
         protected override void OnLayerUpdated()
         {
-            base.OnLayerUpdated();
-
-            OnUpdatedEvent((T)Owner);
+            InvokeAction(OnUpdatedEvent);
         }
     }
 }

@@ -69,13 +69,14 @@ namespace wraikny.MilleFeuille.Core.Input
         /// マウスに登録された当たり判定が衝突した情報を取得する。
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<asd.Collision2DInfo> GetCollisionInfo()
+        public List<asd.Collision2DInfo> GetCollisionInfo()
         {
             return
                 InsideArea() ?
                     Collisions2DInfo
                     .Where(x => x.TheirsCollider.OwnerObject.AbsoluteBeingDrawn)
                     .Where(x => x.SelfCollider.OwnerObject.Equals(this))
+                    .ToList()
                 :
                     new List<asd.Collision2DInfo>()
             ;

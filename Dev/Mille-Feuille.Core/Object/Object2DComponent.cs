@@ -16,6 +16,11 @@ namespace wraikny.MilleFeuille.Core
             Name = name;
         }
 
+        public void Attach(T owner)
+        {
+            owner.AddComponent(this, Name);
+        }
+
         /// <summary>
         /// このコンポーネントを持つオブジェクトがレイヤーに登録されたときに実行されるイベント。
         /// </summary>
@@ -36,28 +41,36 @@ namespace wraikny.MilleFeuille.Core
         /// </summary>
         public event Action<T> OnDisposedEvent = delegate { };
 
+        private void InvokeAction(Action<T> action)
+        {
+            if (Owner is T obj)
+            {
+                action.Invoke(obj);
+            }
+            else
+            {
+                throw new InvalidCastException();
+            }
+        }
+
         protected override void OnObjectAdded()
         {
-            base.OnObjectAdded();
-            OnAddedEvent((T)Owner);
+            InvokeAction(OnAddedEvent);
         }
 
         protected override void OnObjectRemoved()
         {
-            base.OnObjectRemoved();
-            OnRemovedEvent((T)Owner);
+            InvokeAction(OnRemovedEvent);
         }
 
         protected override void OnUpdate()
         {
-            base.OnUpdate();
-            OnUpdateEvent((T)Owner);
+            InvokeAction(OnUpdateEvent);
         }
 
         protected override void OnObjectDisposed()
         {
-            base.OnObjectDisposed();
-            OnDisposedEvent((T)Owner);
+            InvokeAction(OnDisposedEvent);
         }
     }
 }
