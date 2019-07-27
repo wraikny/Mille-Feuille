@@ -4,7 +4,7 @@ open System
 open wraikny.Tart.Helper.Utils
 open wraikny.Tart.Core.View
 
-open wraikny.MilleFeuille.Core.Object
+open wraikny.MilleFeuille.Core
 
 type ActorsUpdaterArg<'ViewModel, 'Actor, 'ActorViewModel
     when 'Actor :> asd.Object2D

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace wraikny.MilleFeuille.Core.Input.Controller
+namespace wraikny.MilleFeuille.Core.Input
 {
     public enum AxisDirection
     {

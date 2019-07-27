@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using wraikny.MilleFeuille.Core;
 
-namespace wraikny.MilleFeuille.Core.UI.Button
+namespace wraikny.MilleFeuille.Core.UI
 {
     /// <summary>
     /// ボタンの状態を表す列挙体。
@@ -31,7 +31,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
     /// <summary>
     /// ボタン機能を提供するコンポーネントのクラス。
     /// </summary>
-    public class ButtonComponent<T> : Object.Object2DComponent<asd.Object2D>
+    public class ButtonComponent<T> : Object2DComponent<asd.Object2D>
         where T : asd.Object2D
     {
         /// <summary>

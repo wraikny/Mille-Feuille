@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using wraikny.MilleFeuille.Core.Input.Mouse;
+using wraikny.MilleFeuille.Core.Input;
 
-namespace wraikny.MilleFeuille.Core.UI.Button
+namespace wraikny.MilleFeuille.Core.UI
 {
     /// <summary>
     /// コントローラーボタンに対する操作を行うレイヤーコンポーネント。

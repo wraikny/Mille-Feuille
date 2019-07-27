@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace wraikny.MilleFeuille.Core.Animation
+namespace wraikny.MilleFeuille.Core
 {
-    public interface INode<TState>
+    public interface IAnimationNode<TState>
         where TState : class
     {
         IEnumerator Generate(object owner);
@@ -20,7 +20,7 @@ namespace wraikny.MilleFeuille.Core.Animation
     /// <typeparam name="TObj"></typeparam>
     /// <typeparam name="TState"></typeparam>
     [Serializable]
-    public class Node<TObj, TState> : INode<TState>
+    public sealed class AnimationNode<TObj, TState> : IAnimationNode<TState>
         where TState : class
         where TObj : class
     {
@@ -42,7 +42,7 @@ namespace wraikny.MilleFeuille.Core.Animation
             return Animation.Generate(owner);
         }
 
-        public Node(Animation<TObj> anim)
+        public AnimationNode(Animation<TObj> anim)
         {
             Animation = anim;
             NextState = null;
@@ -56,7 +56,7 @@ namespace wraikny.MilleFeuille.Core.Animation
     /// <typeparam name="TObj"></typeparam>
     /// <typeparam name="TState"></typeparam>
     [Serializable]
-    public class AnimationController<TState>
+    public sealed class AnimationController<TState>
         where TState : class
     {
         public string Name { get; set; }
@@ -64,21 +64,21 @@ namespace wraikny.MilleFeuille.Core.Animation
         /// <summary>
         /// アニメーションを保持するノードをアニメーションステートと紐つけて格納する辞書を取得する。
         /// </summary>
-        public Dictionary<TState, INode<TState>> Nodes { get; }
+        public Dictionary<TState, IAnimationNode<TState>> Nodes { get; }
 
         public AnimationController(
             string name
         )
         {
             Name = name;
-            Nodes = new Dictionary<TState, INode<TState>>();
+            Nodes = new Dictionary<TState, IAnimationNode<TState>>();
         }
 
         /// <summary>
         /// タプルのIEnumerableからアニメーションノードを追加するメソッド。
         /// </summary>
         /// <param name="pairs"></param>
-        public void AddAnimations(IEnumerable<(TState, INode<TState>)> pairs)
+        public void AddAnimations(IEnumerable<(TState, IAnimationNode<TState>)> pairs)
         {
             foreach(var (state, node) in pairs)
             {
@@ -89,7 +89,7 @@ namespace wraikny.MilleFeuille.Core.Animation
         /// <summary>
         /// アニメーションノードを追加するメソッド。
         /// </summary>
-        public AnimationController<TState> AddAnimation(TState state, INode<TState> node)
+        public AnimationController<TState> AddAnimation(TState state, IAnimationNode<TState> node)
         {
             Nodes[state] = node;
             return this;
@@ -98,7 +98,7 @@ namespace wraikny.MilleFeuille.Core.Animation
         /// <summary>
         /// ステートを元にアニメーションノードを取得するメソッド。
         /// </summary>
-        public INode<TState> GetNode(TState state)
+        public IAnimationNode<TState> GetNode(TState state)
         {
             if (state == null) return null;
 

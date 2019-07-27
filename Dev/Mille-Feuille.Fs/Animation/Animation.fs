@@ -1,8 +1,8 @@
-﻿namespace wraikny.MilleFeuille.Fs.Animation
+﻿namespace wraikny.MilleFeuille.Fs
 
 open System.Collections
 
-open wraikny.MilleFeuille.Core.Animation
+open wraikny.MilleFeuille.Core
 
 open FSharpPlus
 

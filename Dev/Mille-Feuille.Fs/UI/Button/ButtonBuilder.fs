@@ -1,4 +1,4 @@
-﻿namespace wraikny.MilleFeuille.Fs.UI.Button
+﻿namespace wraikny.MilleFeuille.Fs.UI
 
 
 /// ボタンクラスを作成するビルダー。
@@ -15,7 +15,7 @@ type ButtonBuilder< 'T when 'T :> asd.Object2D > =
     }
 
 
-open wraikny.MilleFeuille.Core.UI.Button
+open wraikny.MilleFeuille.Core.UI
 
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module ButtonBuilder =
@@ -115,26 +115,18 @@ module ButtonBuilder =
 
         button
 
-    let addOnChangedToStateEvents defaultAction hoverAction holdAction builder =
-        let mutable state = None
-        
-        let inline changeState s f =
-            let a = Some s
-            if state <> a then f(); state <- a
+    let inline addOnChangedToStateEvents defaultAction hoverAction holdAction =
+        addOnExitedEvent defaultAction
+        >> addOnEnteredEvent hoverAction
+        >> addOnReleasedEvent hoverAction
+        >> addOnPushedEvent holdAction
 
-        builder
-        |> addOnExitedEvent defaultAction
-        |> addOnEnteredEvent hoverAction
-        |> addOnReleasedEvent hoverAction
-        |> addOnPushedEvent holdAction
-
-    let addColorEvent defaultColor hoverColor holdColor (target : asd.DrawnObject2D) builder =
+    let inline addColorEvent defaultColor hoverColor holdColor (target : asd.DrawnObject2D) =
         
         let inline colorEvent col =
             fun _ -> target.Color <- col
 
-        builder
-        |> addOnChangedToStateEvents
+        addOnChangedToStateEvents
             (colorEvent defaultColor)
             (colorEvent hoverColor)
             (colorEvent holdColor)

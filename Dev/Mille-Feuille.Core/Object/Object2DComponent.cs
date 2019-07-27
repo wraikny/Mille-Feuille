@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace wraikny.MilleFeuille.Core.Object
+namespace wraikny.MilleFeuille.Core
 {
     public class Object2DComponent<T> : asd.Object2DComponent
         where T : asd.Object2D

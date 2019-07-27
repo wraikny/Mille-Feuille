@@ -5,9 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using wraikny.MilleFeuille.Core.Object;
-
-namespace wraikny.MilleFeuille.Core.Animation
+namespace wraikny.MilleFeuille.Core
 {
     /// <summary>
     /// アニメーションをオブジェクトに適用するコンポーネント。
@@ -20,7 +18,7 @@ namespace wraikny.MilleFeuille.Core.Animation
     {
         public AnimationController<TState> Controller { get; }
 
-        private INode<TState> currentNode;
+        private IAnimationNode<TState> currentNode;
 
         private IEnumerator coroutine;
 
