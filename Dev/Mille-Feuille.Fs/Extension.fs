@@ -1,39 +1,39 @@
 ﻿module wraikny.MilleFeuille.Fs.Extension
 
-type asd.DrawnObject2D with
-    member inline this.AddDrawnChildWithAll(o) =
-        this.AddDrawnChild(
-            o,
-            asd.ChildManagementMode.RegistrationToLayer |||
-            asd.ChildManagementMode.Disposal |||
-            asd.ChildManagementMode.IsUpdated |||
-            asd.ChildManagementMode.IsDrawn,
+//type asd.DrawnObject2D with
+//    member inline this.AddDrawnChildWithAll(o) =
+//        this.AddDrawnChild(
+//            o,
+//            asd.ChildManagementMode.RegistrationToLayer |||
+//            asd.ChildManagementMode.Disposal |||
+//            asd.ChildManagementMode.IsUpdated |||
+//            asd.ChildManagementMode.IsDrawn,
 
-            asd.ChildTransformingMode.All,
+//            asd.ChildTransformingMode.All,
 
-            asd.ChildDrawingMode.Color |||
-            asd.ChildDrawingMode.DrawingPriority
-        )
+//            asd.ChildDrawingMode.Color |||
+//            asd.ChildDrawingMode.DrawingPriority
+//        )
 
-    member inline this.AddDrawnChildWithoutColor(o) =
-        this.AddDrawnChild(
-            o,
-            asd.ChildManagementMode.RegistrationToLayer |||
-            asd.ChildManagementMode.Disposal |||
-            asd.ChildManagementMode.IsUpdated |||
-            asd.ChildManagementMode.IsDrawn,
+//    member inline this.AddDrawnChildWithoutColor(o) =
+//        this.AddDrawnChild(
+//            o,
+//            asd.ChildManagementMode.RegistrationToLayer |||
+//            asd.ChildManagementMode.Disposal |||
+//            asd.ChildManagementMode.IsUpdated |||
+//            asd.ChildManagementMode.IsDrawn,
 
-            asd.ChildTransformingMode.All,
+//            asd.ChildTransformingMode.All,
 
-            asd.ChildDrawingMode.DrawingPriority
-        )
+//            asd.ChildDrawingMode.DrawingPriority
+//        )
 
-type asd.Font with
-    member inline this.HorizontalSize(text) =
-        this.CalcTextureSize(text, asd.WritingDirection.Horizontal)
+//type asd.Font with
+//    member inline this.HorizontalSize(text) =
+//        this.CalcTextureSize(text, asd.WritingDirection.Horizontal)
 
-    member inline this.VerticalSize(text) =
-        this.CalcTextureSize(text, asd.WritingDirection.Vertical)
+//    member inline this.VerticalSize(text) =
+//        this.CalcTextureSize(text, asd.WritingDirection.Vertical)
 
 open wraikny.Tart.Helper.Math
 
