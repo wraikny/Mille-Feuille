@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 using wraikny.MilleFeuille.Core.Input;
 
-namespace wraikny.MilleFeuille.Core.Input.Config
+namespace wraikny.MilleFeuille.Core.Input
 {
     public interface IJoystickInputConfig
     {

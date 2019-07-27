@@ -1,11 +1,11 @@
-﻿module wraikny.MilleFeuille.ExampleFs.Core.Animation
+﻿module wraikny.MilleFeuille.ExampleFs.Animation
 
 open wraikny.Tart.Helper
 open wraikny.Tart.Helper.Math
 
-open wraikny.MilleFeuille.Core.Object
-open wraikny.MilleFeuille.Fs.Animation
-open wraikny.MilleFeuille.Fs.Input.Controller
+open wraikny.MilleFeuille.Core
+open wraikny.MilleFeuille.Fs
+open wraikny.MilleFeuille.Fs.Input
 
 
 type AnimState =

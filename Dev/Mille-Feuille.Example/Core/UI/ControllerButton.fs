@@ -1,13 +1,14 @@
-﻿module wraikny.MilleFeuille.ExampleFs.Core.UI.ControllerButton
+﻿module wraikny.MilleFeuille.ExampleFs.UI.ControllerButton
 
 open System.Linq
 open wraikny.MilleFeuille.Core
+open wraikny.MilleFeuille
 open wraikny.MilleFeuille.Core.UI
-open wraikny.MilleFeuille.Fs.Input.Controller
-open wraikny.MilleFeuille.Fs.UI.Button
+open wraikny.MilleFeuille.Fs.Input
+open wraikny.MilleFeuille.Fs.UI
 
 type Scene() =
-    inherit Object.Scene()
+    inherit Core.Scene()
 
     let uiLayer = new asd.Layer2D()
 
@@ -79,10 +80,10 @@ type Scene() =
         (createButtonObj  100.0f -100.0f).AddComponent(btnCmp4, btnCmp4.Name)
 
         btnCmp1
-            .Chain(btnCmp2, Button.ButtonDirection.Down)
-            .Chain(btnCmp3, Button.ButtonDirection.Right)
-            .Chain(btnCmp4, Button.ButtonDirection.Up)
-            .Chain(btnCmp1, Button.ButtonDirection.Left)
+            .Chain(btnCmp2, ButtonDirection.Down)
+            .Chain(btnCmp3, ButtonDirection.Right)
+            .Chain(btnCmp4, ButtonDirection.Up)
+            .Chain(btnCmp1, ButtonDirection.Left)
             |> ignore
 
         uiLayer.AddObject(btnCmp1.Owner)
@@ -90,18 +91,18 @@ type Scene() =
         uiLayer.AddObject(btnCmp3.Owner)
         uiLayer.AddObject(btnCmp4.Owner)
 
-        let selecter = new Button.ControllerButtonSelecter(btnCmp1)
+        let selecter = new ControllerButtonSelecter(btnCmp1)
 
         let keyboard =
             KeyboardBuilder.init()
             |> KeyboardBuilder.bindKeysList
                 [
-                    Button.ControllerSelect.Up    , asd.Keys.Up
-                    Button.ControllerSelect.Down  , asd.Keys.Down
-                    Button.ControllerSelect.Right , asd.Keys.Right
-                    Button.ControllerSelect.Left  , asd.Keys.Left
-                    Button.ControllerSelect.Select, asd.Keys.Space
-                    Button.ControllerSelect.Cancel, asd.Keys.Escape
+                    ControllerSelect.Up    , asd.Keys.Up
+                    ControllerSelect.Down  , asd.Keys.Down
+                    ControllerSelect.Right , asd.Keys.Right
+                    ControllerSelect.Left  , asd.Keys.Left
+                    ControllerSelect.Select, asd.Keys.Space
+                    ControllerSelect.Cancel, asd.Keys.Escape
                 ]
             |> KeyboardBuilder.build
 

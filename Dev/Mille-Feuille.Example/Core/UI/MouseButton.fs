@@ -1,10 +1,11 @@
 ﻿module wraikny.MilleFeuille.ExampleFs.Core.UI.MouseButton
 
+open wraikny.MilleFeuille
 open wraikny.MilleFeuille.Core
-open wraikny.MilleFeuille.Fs.UI.Button
+open wraikny.MilleFeuille.Fs.UI
 
 type Scene() =
-    inherit Object.Scene()
+    inherit Core.Scene()
 
     let uiLayer = new asd.Layer2D()
 
@@ -24,7 +25,7 @@ type Scene() =
                     new asd.Color(0uy, 100uy, 150uy)
             )
 
-        let mouse = new Input.Mouse.CollidableMouse(10.0f)
+        let mouse = new Input.CollidableMouse(10.0f)
         mouse.ColliderVisible <- true
         uiLayer.AddObject(mouse)
 
@@ -83,7 +84,7 @@ type Scene() =
 
         uiLayer.AddObject(buttonObj)
 
-        let selecter = new UI.Button.MouseButtonSelecter(mouse)
+        let selecter = new UI.MouseButtonSelecter(mouse)
         selecter.AddButton(btn0) |> ignore
 
         uiLayer.AddComponent(selecter, "MouseButtonSelecter")

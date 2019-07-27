@@ -7,7 +7,7 @@ module Program =
         
         //let scene = new Core.UI.MouseButton.Scene()
         //let scene = new Core.UI.ControllerButton.Scene()
-        let scene = new Core.Animation.AnimScene()
+        let scene = new Animation.AnimScene()
 
         asd.Engine.ChangeScene(scene)
     
