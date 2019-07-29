@@ -86,14 +86,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Tart\Dev\Tart.Core\Tart.Core.fsproj">
+    <ProjectReference Include="..\..\..\Tart\src\Tart.Core\Tart.Core.fsproj">
       <Name>Tart.Core</Name>
-      <Project>{8c6e9ecf-5f33-47a3-ae3f-b9a77bd4f544}</Project>
+      <Project>{ec51e5ee-5c47-4826-9168-2abcc4fdd8a0}</Project>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Tart\Dev\Tart.Helper\Tart.Helper.fsproj">
+    <ProjectReference Include="..\..\..\Tart\src\Tart.Helper\Tart.Helper.fsproj">
       <Name>Tart.Helper</Name>
-      <Project>{bf0abcce-5659-43b8-a783-6dd55180aacc}</Project>
+      <Project>{6662bd75-c14d-4b3c-89f5-7dc70c4d9f17}</Project>
       <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\Mille-Feuille.Core\Mille-Feuille.Core.csproj">
