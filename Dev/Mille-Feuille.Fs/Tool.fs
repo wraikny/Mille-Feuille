@@ -250,7 +250,7 @@ open wraikny.Tart.Helper.Utils
 open FSharpPlus
 
 module internal Render =
-    let eventRender x (sender : IMsgQueue<'Msg>) =
+    let eventRender x (sender : IEnqueue<'Msg>) =
         x |> function
         | Nothing -> ()
         | Msg msg -> sender.Enqueue(msg)
@@ -264,11 +264,11 @@ module internal Render =
             |> sender.Enqueue
 
 
-    let inline selectable (label, selected, msg) (sender : IMsgQueue<'Msg>) =
+    let inline selectable (label, selected, msg) (sender : IEnqueue<'Msg>) =
         if asd.Engine.Tool.Selectable(label, selected) then
             sender.Enqueue(msg)
 
-    let itemRender x (sender : IMsgQueue<'Msg>) =
+    let itemRender x (sender : IEnqueue<'Msg>) =
         x |> function
         | Empty -> ()
         | Separator -> asd.Engine.Tool.Separator()
@@ -346,7 +346,7 @@ module internal Render =
                     selectable(item, index = current, msg index) sender
             
 
-    let columnRender (column) (sender : IMsgQueue<'Msg>) =
+    let columnRender (column) (sender : IEnqueue<'Msg>) =
         column |> function
         | NoColumn list ->
             for i in list do
@@ -378,7 +378,7 @@ module internal Render =
                     asd.Engine.Tool.NextColumn()
 
 
-    let rec menuRender x (sender : IMsgQueue<'Msg>) =
+    let rec menuRender x (sender : IEnqueue<'Msg>) =
         x |> function
         | Menu(label, list) ->
             Helper.menu label <| fun _ ->
@@ -410,7 +410,7 @@ module internal Render =
                 eventRender event sender
 
 
-    let windowRender (x : Window<'Msg>) (window : Window) (sender : IMsgQueue<'Msg>) =
+    let windowRender (x : Window<'Msg>) (window : Window) (sender : IEnqueue<'Msg>) =
         let renderMenu() =
             x.menuBar |> function
             | None -> ()
@@ -436,7 +436,7 @@ module internal Render =
                 renderContent()
     
 
-let render (x : ViewModel<'Msg>) (sender : IMsgQueue<'Msg>) =
+let render (x : ViewModel<'Msg>) (sender : IEnqueue<'Msg>) =
     x.mainWindow |> function
     | None -> ()
     | Some(mainWindow, offset) ->

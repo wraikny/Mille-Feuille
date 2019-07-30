@@ -98,13 +98,6 @@ module Counter =
                 update = update
                 view = view
             }
- 
-    type CounterPort(messenger) =
-        inherit Port<Core.Msg, ViewMsg>(messenger)
-
-        override this.OnPopMsg(msg) =
-            msg |> function
-            | Print s -> printfn "Executed in mainthread: %s" s
 
 
     let main () =
@@ -113,40 +106,28 @@ module Counter =
 
 
         let messenger =
-            let env =
-                Environment
-                    .Initialize()
+            let env = Environment .Initialize()
 
-            Messenger.createMessenger
-                env
-                Core.program
+            Messenger.createMessenger env Core.program
 
-        let port = CounterPort(messenger)
+        messenger.ViewModel
+            .Subscribe(fun x -> Tool.render x messenger) |> ignore
 
-        
-                
+        messenger.ViewMsg.Subscribe(fun x ->
+            x |> function
+            | Print s -> printfn "Executed in mainthread: %s" s
+        ) |> ignore
+
 
         Tool.open' <| fun _ ->
+            messenger.StartAsync() |> ignore
+
             asd.Engine.TargetFPS <- 20
 
-            let rec loop view =
-                if asd.Engine.DoEvents() then
-                    Tool.render view messenger
 
-                    port.Update()
-
-                    asd.Engine.Update()
-
-                    messenger.TryPopViewModel |> function
-                    | Some newView -> loop newView
-                    | None -> loop view
-
-
-            messenger.StartAsync() |> ignore
-            
-            messenger.TryPopViewModel |> function
-            | Some view -> loop view
-            | None -> ()
+            while asd.Engine.DoEvents() do
+                messenger.NotifyView()
+                asd.Engine.Update()
             
             messenger.Stop()
 
