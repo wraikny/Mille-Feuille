@@ -56,6 +56,7 @@ type ActorsUpdater<'Actor, 'ActorViewModel
         with get() = updater.UpdatingOption
         and set(x) = updater.UpdatingOption <- x
 
+    member __.Remove(id) = updater.Remove(id)
     
     interface IObserver<UpdaterViewModel<'ActorViewModel>> with
         member this.OnNext(input) =
