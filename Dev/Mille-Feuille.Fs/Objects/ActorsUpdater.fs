@@ -21,43 +21,45 @@ type ActorsUpdaterArg<'ViewModel, 'Actor, 'ActorViewModel
 type ActorsUpdater<'Actor, 'ActorViewModel
     when 'Actor :> asd.Object2D
     and 'Actor :> IUpdatee<'ActorViewModel>
-    >(name, arg : ActorsUpdaterArg<_, _, _>) as this =
-    inherit Layer2DComponent<asd.Layer2D>(name)
+    >(layer : asd.Layer2D, enebleObjectsRemoving, arg : ActorsUpdaterArg<_, _, _>) =
 
     let updater = new ObjectsUpdater<'Actor, 'ActorViewModel>({
         create = arg.create
-        add = fun actor ->
-            if actor.Layer = null then
-                this.Owner.AddObject(actor)
+        add =
+            if enebleObjectsRemoving then
+                layer.AddObject
+            else
+                fun actor ->
+                if actor.Layer = null then
+                    layer.AddObject(actor)
 
-            actor.IsUpdated <- true
-            actor.IsDrawn <- true
-        remove = fun actor ->
-            actor.IsUpdated <- false
-            actor.IsDrawn <- false
+                actor.IsUpdated <- true
+                actor.IsDrawn <- true
+        remove =
+            if enebleObjectsRemoving then
+                layer.RemoveObject
+            else
+                fun actor ->
+                    actor.IsUpdated <- false
+                    actor.IsDrawn <- false
 
         // add = this.Owner.AddObject
-        // bellow code raises NullReferenceException in asd.ENgine.Update
+        // bellow code raises NullReferenceException in asd.Engine.Update
         // remove = this.Owner.RemoveObject
 
         dispose = fun actor -> actor.Dispose()
     })
 
-    let iUpdater = updater :> IUpdater<_>
+    new(layer, arg) = new ActorsUpdater<_, _>(layer, false, arg)
 
-    interface IUpdater<'ActorViewModel> with
-        member this.EnabledUpdating
-            with get() = iUpdater.EnabledUpdating
-            and  set(value) = iUpdater.EnabledUpdating <- value
-
-        member this.EnabledPooling
-            with get() = iUpdater.EnabledPooling
-            and  set(value) = iUpdater.EnabledPooling <- value
+    member __.UpdatingOption
+        with get() = updater.UpdatingOption
+        and set(x) = updater.UpdatingOption <- x
 
     
     interface IObserver<UpdaterViewModel<'ActorViewModel>> with
         member this.OnNext(input) =
-            if this.IsUpdated then
+            if layer.IsUpdated then
                 updater.Update(input)
 
         member this.OnError(e) = arg.onError(e)

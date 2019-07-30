@@ -30,17 +30,9 @@ type MaptipsUpdater<'Chip, 'ChipViewModel
         dispose = fun chip -> chip.Dispose()
     })
 
-    let iUpdater = updater :> IUpdater<_>
-
-
-    interface IUpdater<'ChipViewModel> with
-        member this.EnabledUpdating
-            with get() = iUpdater.EnabledUpdating
-            and  set(value) = iUpdater.EnabledUpdating <- value
-
-        member this.EnabledPooling
-            with get() = iUpdater.EnabledPooling
-            and  set(value) = iUpdater.EnabledPooling <- value
+    member __.UpdatingOption
+        with get() = updater.UpdatingOption
+        and set(x) = updater.UpdatingOption <- x
 
     interface IObserver<UpdaterViewModel<'ChipViewModel>> with
         member this.OnNext(input) =
