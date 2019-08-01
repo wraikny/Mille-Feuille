@@ -13,10 +13,10 @@ namespace wraikny.MilleFeuille.Core
         /// </summary>
         public bool IsSceneChanging { get; private set; } = false;
 
-        /// <summary>
-        /// このシーンが一時停止しているかどうかを取得する。
-        /// </summary>
-        public bool IsPaused { get; private set; }
+        ///// <summary>
+        ///// このシーンが一時停止しているかどうかを取得する。
+        ///// </summary>
+        //public bool IsPaused { get; private set; }
 
         ///// <summary>
         ///// 一時停止時に更新を行うレイヤーのリストを取得する。
@@ -30,7 +30,7 @@ namespace wraikny.MilleFeuille.Core
 
         public Scene()
         {
-            IsPaused = false;
+            //IsPaused = false;
             //PauseLayers = new List<asd.Layer>();
             //PausedLayers = new List<asd.Layer>();
         }

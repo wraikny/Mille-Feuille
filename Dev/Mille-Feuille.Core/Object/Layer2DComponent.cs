@@ -16,7 +16,7 @@ namespace wraikny.MilleFeuille.Core
             Name = name;
         }
 
-        public void Attatch(T owner)
+        public void Attach(T owner)
         {
             owner.AddComponent(this, Name);
         }
