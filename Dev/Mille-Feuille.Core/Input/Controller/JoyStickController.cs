@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace wraikny.MilleFeuille.Core.Input.Controller
+namespace wraikny.MilleFeuille.Core.Input
 {
     public enum AxisDirection
     {
@@ -17,7 +17,7 @@ namespace wraikny.MilleFeuille.Core.Input.Controller
     /// </summary>
     /// <typeparam name="TControl"></typeparam>
     /// <typeparam name="TTiltControl"></typeparam>
-    public class JoystickController<TControl, TTiltControl> : IController<TControl>
+    public sealed class JoystickController<TControl, TTiltControl> : IController<TControl>
     {
         private interface IJoystickInput
         {

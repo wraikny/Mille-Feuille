@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using wraikny.MilleFeuille.Core.Input.Controller;
+using wraikny.MilleFeuille.Core.Input;
 
-namespace wraikny.MilleFeuille.Core.UI.Button
+namespace wraikny.MilleFeuille.Core.UI
 {
     /// <summary>
     /// コントローラー操作可能なボタンに対する操作を表す列挙体。
@@ -24,7 +24,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
     /// <summary>
     /// コントローラーボタンに対する操作を行うレイヤーコンポーネント。
     /// </summary>
-    public class ControllerButtonSelecter : asd.Layer2DComponent
+    public sealed class ControllerButtonSelecter : asd.Layer2DComponent
     {
         private readonly List<IController<ControllerSelect>> controllers;
 

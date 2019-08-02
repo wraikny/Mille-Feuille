@@ -27,6 +27,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <DocumentationFile>bin\$(Configuration)\$(AssemblyName).XML</DocumentationFile>
     <Prefer32Bit>true</Prefer32Bit>
+    <NoWarn>3186;</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>pdbonly</DebugType>
@@ -38,6 +39,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <DocumentationFile>bin\$(Configuration)\$(AssemblyName).XML</DocumentationFile>
     <Prefer32Bit>true</Prefer32Bit>
+    <NoWarn>3186;</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
@@ -71,6 +73,9 @@
     <Reference Include="FSharp.Core">
       <HintPath>..\packages\FSharp.Core.4.6.2\lib\net45\FSharp.Core.dll</HintPath>
     </Reference>
+    <Reference Include="FSharpPlus">
+      <HintPath>..\packages\FSharpPlus.1.0.0\lib\net45\FSharpPlus.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -89,6 +94,16 @@
     <ProjectReference Include="..\..\..\Tart\Dev\Tart.Helper\Tart.Helper.fsproj">
       <Name>Tart.Helper</Name>
       <Project>{bf0abcce-5659-43b8-a783-6dd55180aacc}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tart\src\Tart.Core\Tart.Core.fsproj">
+      <Name>Tart.Core</Name>
+      <Project>{5b48ce88-9dc9-4fbb-8c04-2366e8ddb6a9}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tart\src\Tart.Helper\Tart.Helper.fsproj">
+      <Name>Tart.Helper</Name>
+      <Project>{3857d493-5fc1-410e-9c38-89331b017e5b}</Project>
       <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\Mille-Feuille.Core\Mille-Feuille.Core.csproj">

@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace wraikny.MilleFeuille.Core.Input.Controller
+namespace wraikny.MilleFeuille.Core.Input
 {
     /// <summary>
     /// キーボードの入力と操作を対応付けるためのクラス。
     /// </summary>
     /// <typeparam name="TControl"></typeparam>
-    public class KeyboardController<TControl> : IController<TControl>
+    public sealed class KeyboardController<TControl> : IController<TControl>
     {
         private readonly Dictionary<TControl, asd.Keys> binding;
 

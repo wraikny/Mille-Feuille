@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace wraikny.MilleFeuille.Core.Object
+namespace wraikny.MilleFeuille.Core
 {
     public class Object2DComponent<T> : asd.Object2DComponent
         where T : asd.Object2D
@@ -16,48 +16,61 @@ namespace wraikny.MilleFeuille.Core.Object
             Name = name;
         }
 
+        public void Attach(T owner)
+        {
+            owner.AddComponent(this, Name);
+        }
+
         /// <summary>
-        /// このコンポーネントを持つオブジェクトがレイヤーに登録されたときのイベント。
+        /// このコンポーネントを持つオブジェクトがレイヤーに登録されたときに実行されるイベント。
         /// </summary>
         public event Action<T> OnAddedEvent = delegate { };
 
         /// <summary>
-        /// このコンポーネントを持つオブジェクトからレイヤーに登録解除されたときのイベント。
+        /// このコンポーネントを持つオブジェクトからレイヤーに登録解除されたときに実行されるイベント。
         /// </summary>
         public event Action<T> OnRemovedEvent = delegate { };
 
         /// <summary>
-        /// このコンポーネントを持つオブジェクトが更新されるときのイベント。
+        /// このコンポーネントを持つオブジェクトが更新されるときに実行されるイベント。
         /// </summary>
         public event Action<T> OnUpdateEvent = delegate { };
 
         /// <summary>
-        /// このコンポーネントを持つオブジェクトが破棄されたときのイベント。
+        /// このコンポーネントを持つオブジェクトが破棄されたときに実行されるイベント。
         /// </summary>
         public event Action<T> OnDisposedEvent = delegate { };
 
+        private void InvokeAction(Action<T> action)
+        {
+            if (Owner is T obj)
+            {
+                action.Invoke(obj);
+            }
+            else
+            {
+                throw new InvalidCastException();
+            }
+        }
+
         protected override void OnObjectAdded()
         {
-            base.OnObjectAdded();
-            OnAddedEvent((T)Owner);
+            InvokeAction(OnAddedEvent);
         }
 
         protected override void OnObjectRemoved()
         {
-            base.OnObjectRemoved();
-            OnRemovedEvent((T)Owner);
+            InvokeAction(OnRemovedEvent);
         }
 
         protected override void OnUpdate()
         {
-            base.OnUpdate();
-            OnUpdateEvent((T)Owner);
+            InvokeAction(OnUpdateEvent);
         }
 
         protected override void OnObjectDisposed()
         {
-            base.OnObjectDisposed();
-            OnDisposedEvent((T)Owner);
+            InvokeAction(OnDisposedEvent);
         }
     }
 }

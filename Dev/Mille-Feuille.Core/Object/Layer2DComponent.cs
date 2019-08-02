@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace wraikny.MilleFeuille.Core.Object
+namespace wraikny.MilleFeuille.Core
 {
     public class Layer2DComponent<T> : asd.Layer2DComponent
         where T : asd.Layer2D
@@ -16,48 +16,60 @@ namespace wraikny.MilleFeuille.Core.Object
             Name = name;
         }
 
+        public void Attach(T owner)
+        {
+            owner.AddComponent(this, Name);
+        }
+
         /// <summary>
-        /// このコンポーネントを持つレイヤーがシーンに登録されたときのイベント。
+        /// このコンポーネントを持つレイヤーがシーンに登録されたときに実行されるイベント。
         /// </summary>
         public event Action<T> OnAddedEvent = delegate { };
 
         /// <summary>
-        /// このコンポーネントを持つレイヤーがシーンから登録解除されたときの直前のイベント。
+        /// このコンポーネントを持つレイヤーがシーンから登録解除される直前に実行されるイベント。
         /// </summary>
         public event Action<T> OnRemovedEvent = delegate { };
 
         /// <summary>
-        /// このコンポーネントを持つレイヤーが更新される直前のイベント。
+        /// このコンポーネントを持つレイヤーが更新される直前に実行されるイベント。
         /// </summary>
         public event Action<T> OnUpdatingEvent = delegate { };
 
         /// <summary>
-        /// このコンポーネントを持つレイヤーが更新される直後のイベント。
+        /// このコンポーネントを持つレイヤーが更新される直後に実行されるイベント。
         /// </summary>
         public event Action<T> OnUpdatedEvent = delegate { };
 
+        private void InvokeAction(Action<T> action)
+        {
+            if (Owner is T obj)
+            {
+                action.Invoke(obj);
+            }
+            else
+            {
+                throw new InvalidCastException();
+            }
+        }
+
         protected override void OnLayerAdded()
         {
-            base.OnLayerAdded();
-            OnAddedEvent((T)Owner);
+            InvokeAction(OnAddedEvent);
         }
         protected override void OnLayerRemoved()
         {
-            base.OnLayerRemoved();
-            OnRemovedEvent((T)Owner);
+            InvokeAction(OnRemovedEvent);
         }
 
         protected override void OnUpdating()
         {
-            base.OnUpdating();
-            OnUpdatingEvent((T)Owner);
+            InvokeAction(OnUpdatingEvent);
         }
 
         protected override void OnLayerUpdated()
         {
-            base.OnLayerUpdated();
-
-            OnUpdatedEvent((T)Owner);
+            InvokeAction(OnUpdatedEvent);
         }
     }
 }

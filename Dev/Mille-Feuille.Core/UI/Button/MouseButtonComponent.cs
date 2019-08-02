@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace wraikny.MilleFeuille.Core.UI.Button
+namespace wraikny.MilleFeuille.Core.UI
 {
     /// <summary>
     /// 親クラスによらずマウス操作可能なボタンを表すインターフェース。
@@ -16,7 +16,7 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         void Update(asd.CollisionType collision, asd.ButtonState state);
     }
 
-    public class MouseButtonComponent<T> : ButtonComponent<T>, IMouseButton
+    public sealed class MouseButtonComponent<T> : ButtonComponent<T>, IMouseButton
         where T : asd.Object2D
     {
         public asd.Object2D Button { get; private set; }

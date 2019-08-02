@@ -1,64 +1,68 @@
 ﻿namespace wraikny.MilleFeuille.Fs.Objects
 
-
+open System
 open wraikny.Tart.Helper.Utils
 open wraikny.Tart.Core.View
 
-open wraikny.MilleFeuille.Core.Object
+open wraikny.MilleFeuille.Core
+
+type ActorsUpdaterArg<'ViewModel, 'Actor, 'ActorViewModel
+    when 'Actor :> asd.Object2D
+    > =
+    {
+        create : unit -> 'Actor
+        onError : exn -> unit
+        onCompleted : unit -> unit
+    }
 
 
 /// 追加削除の発生するasd.Object2Dの更新管理を行うクラス。
 [<Class>]
-type ActorsUpdater<'ViewModel, 'Actor, 'ActorViewModel
+type ActorsUpdater<'Actor, 'ActorViewModel
     when 'Actor :> asd.Object2D
-    and 'Actor :> IObserver<'ActorViewModel>
-    >(name, create, selecter) as this =
-    inherit Layer2DComponent<asd.Layer2D>(name)
+    and 'Actor :> IUpdatee<'ActorViewModel>
+    >(layer : asd.Layer2D, enebleObjectsRemoving, arg : ActorsUpdaterArg<_, _, _>) =
 
-    let selecter = selecter
+    let updater = new ObjectsUpdater<'Actor, 'ActorViewModel>({
+        create = arg.create
+        add =
+            if enebleObjectsRemoving then
+                layer.AddObject
+            else
+                fun actor ->
+                if actor.Layer = null then
+                    layer.AddObject(actor)
 
-    let updater = new ObjectsUpdater<'ViewModel, 'Actor, 'ActorViewModel>({
-        create = create
-        add = fun actor -> this.Owner.AddObject(actor) |> ignore
-        remove = fun actor -> this.Owner.RemoveObject(actor) |> ignore
+                actor.IsUpdated <- true
+                actor.IsDrawn <- true
+        remove =
+            if enebleObjectsRemoving then
+                layer.RemoveObject
+            else
+                fun actor ->
+                    actor.IsUpdated <- false
+                    actor.IsDrawn <- false
+
+        // add = this.Owner.AddObject
+        // bellow code raises NullReferenceException in asd.Engine.Update
+        // remove = this.Owner.RemoveObject
+
         dispose = fun actor -> actor.Dispose()
     })
 
-    let iUpdater = updater :> IObjectsUpdater
+    new(layer, arg) = new ActorsUpdater<_, _>(layer, false, arg)
 
-    interface IObjectsUpdater with
-        member this.EnabledUpdating
-            with get() = iUpdater.EnabledUpdating
-            and  set(value) = iUpdater.EnabledUpdating <- value
+    member __.UpdatingOption
+        with get() = updater.UpdatingOption
+        and set(x) = updater.UpdatingOption <- x
 
-        member this.EnabledPooling
-            with get() = iUpdater.EnabledPooling
-            and  set(value) = iUpdater.EnabledPooling <- value
-
+    member __.Remove(id) = updater.Remove(id)
     
-    interface IObserver<'ViewModel> with
-        member this.Update(input) =
-            if this.IsUpdated then
-                updater.Update(selecter input)
+    interface IObserver<UpdaterViewModel<'ActorViewModel>> with
+        member this.OnNext(input) =
+            if layer.IsUpdated then
+                updater.Update(input)
 
+        member this.OnError(e) = arg.onError(e)
 
-
-/// ActorsUpdaterクラスを作成するビルダー。
-[<Struct>]
-type ActorsUpdaterBuilder<'ViewModel, 'Actor, 'ActorViewModel
-    when 'Actor :> asd.Object2D
-    > =
-    {
-        initActor : unit -> 'Actor
-        selectActor : 'ViewModel -> UpdaterViewModel<'ActorViewModel>
-    }
-
-[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-module ActorsUpdaterBuilder =
-    /// ビルダーからActorsUpdaterクラスを作成する。
-    let inline build name builder =
-        new ActorsUpdater<_, _, _>(
-            name
-            , builder.initActor
-            , builder.selectActor
-        )
+        member this.OnCompleted() = arg.onCompleted()

@@ -1,8 +1,10 @@
-﻿namespace wraikny.MilleFeuille.Fs.Animation
+﻿namespace wraikny.MilleFeuille.Fs
 
 open System.Collections
 
-open wraikny.MilleFeuille.Core.Animation
+open wraikny.MilleFeuille.Core
+
+open FSharpPlus
 
 /// アニメーションクラスを作成するビルダー。
 [<Struct>]
@@ -30,7 +32,7 @@ module AnimationBuilder =
     /// リストを元にアニメーションにコルーチンを追加する。
     let inline addCoroutines coroutines builder =
         { builder with
-            coroutines = (List.rev coroutines) @ builder.coroutines
+            coroutines = (rev coroutines) @ builder.coroutines
         }
 
     /// ビルダーからアニメーションクラスを作成する。
@@ -38,15 +40,15 @@ module AnimationBuilder =
         let generator =
             builder.coroutines |> function
             | [] ->
-                fun _ -> (Seq.empty).GetEnumerator() :> IEnumerator
+                fun _ -> Seq.empty.GetEnumerator() :> IEnumerator
             | coroutine::[] ->
                 fun owner -> (coroutine owner).GetEnumerator() :> IEnumerator
             | coroutines ->
                 fun owner ->
                     let coroutine = seq {
-                        for c in (List.rev coroutines) do
+                        for c in (rev coroutines) do
                             yield! (c owner)
                     }
                     coroutine.GetEnumerator() :> IEnumerator
 
-        new Animation<_>(builder.name, System.Func<_, _> generator)
+        Animation<_>(builder.name, System.Func<_, _> generator)

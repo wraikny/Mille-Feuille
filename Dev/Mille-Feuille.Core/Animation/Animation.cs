@@ -5,14 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace wraikny.MilleFeuille.Core.Animation
+namespace wraikny.MilleFeuille.Core
 {
     /// <summary>
     /// コルーチンを生成する関数を保持するクラス。
     /// </summary>
     /// <typeparam name="TObj"></typeparam>
     [Serializable]
-    public class Animation<TObj>
+    public sealed class Animation<TObj>
         where TObj : class
     {
         public string Name { get; private set; }

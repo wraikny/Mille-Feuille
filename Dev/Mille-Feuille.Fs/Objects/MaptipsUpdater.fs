@@ -1,61 +1,44 @@
 ﻿namespace wraikny.MilleFeuille.Fs.Objects
 
-
+open System
 open wraikny.Tart.Helper.Utils
 open wraikny.Tart.Core.View
 
 
+type MaptipsUpdaterArg<'ViewModel, 'Chip, 'ChipViewModel
+    when 'Chip :> asd.Chip2D
+    > =
+    {
+        create : unit -> 'Chip
+        onError : exn -> unit
+        onCompleted : unit -> unit
+    }
+
+
 /// 追加削除の発生するマップチップの更新管理を行うクラス。
 [<Class>]
-type MaptipsUpdater<'ViewModel, 'Chip, 'ChipViewModel
+type MaptipsUpdater<'Chip, 'ChipViewModel
     when 'Chip :> asd.Chip2D
-    and  'Chip :> IObserver<'ChipViewModel>
-    >(create, selecter) as this =
+    and  'Chip :> IUpdatee<'ChipViewModel>
+    >(arg : MaptipsUpdaterArg<_, _, _>) as this =
     inherit asd.MapObject2D()
 
-    let selecter = selecter
-
-    let updater = new ObjectsUpdater<'ViewModel, 'Chip, 'ChipViewModel>({
-        create = create
+    let updater = new ObjectsUpdater<'Chip, 'ChipViewModel>({
+        create = arg.create
         add = fun chip -> this.AddChip(chip) |> ignore
         remove = fun chip -> this.RemoveChip(chip) |> ignore
         dispose = fun chip -> chip.Dispose()
     })
 
-    let iUpdater = updater :> IObjectsUpdater
+    member __.UpdatingOption
+        with get() = updater.UpdatingOption
+        and set(x) = updater.UpdatingOption <- x
 
-
-    interface IObjectsUpdater with
-        member this.EnabledUpdating
-            with get() = iUpdater.EnabledUpdating
-            and  set(value) = iUpdater.EnabledUpdating <- value
-
-        member this.EnabledPooling
-            with get() = iUpdater.EnabledPooling
-            and  set(value) = iUpdater.EnabledPooling <- value
-
-    interface IObserver<'ViewModel> with
-        member this.Update(input) =
+    interface IObserver<UpdaterViewModel<'ChipViewModel>> with
+        member this.OnNext(input) =
             if this.IsUpdated then
-                updater.Update(selecter input)
+                updater.Update(input)
 
+        member __.OnError(e) = arg.onError(e)
 
-
-/// MaptipsUpdaterクラスを作成するビルダー。
-[<Struct>]
-type MaptipsUpdaterBuilder<'ViewModel, 'Chip, 'ChipViewModel
-    when 'Chip :> asd.Chip2D
-    > =
-    {
-        initChip : unit -> 'Chip
-        selectChip : 'ViewModel -> UpdaterViewModel<'ChipViewModel>
-    }
-
-[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-module MaptipsUpdaterBuilder =
-    /// ビルダーからMaptipsUpdaterクラスを作成する。
-    let inline build builder =
-        new MaptipsUpdater<_, _, _>(
-            builder.initChip
-            , builder.selectChip
-        )
+        member __.OnCompleted() = arg.onCompleted()

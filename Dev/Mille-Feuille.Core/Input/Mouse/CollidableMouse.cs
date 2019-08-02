@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace wraikny.MilleFeuille.Core.Input.Mouse
+namespace wraikny.MilleFeuille.Core.Input
 {
     /// <summary>
     /// 衝突判定を持ったマウスを扱うクラス。
     /// </summary>
-    public class CollidableMouse : asd.GeometryObject2D
+    public sealed class CollidableMouse : asd.GeometryObject2D
     {
         private readonly asd.CircleCollider collider;
 
@@ -69,21 +69,21 @@ namespace wraikny.MilleFeuille.Core.Input.Mouse
         /// マウスに登録された当たり判定が衝突した情報を取得する。
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<asd.Collision2DInfo> GetCollisionInfo()
+        public List<asd.Collision2DInfo> GetCollisionInfo()
         {
             return
-                InsideArea()
-                ?
+                InsideArea() ?
                     Collisions2DInfo
                     .Where(x => x.TheirsCollider.OwnerObject.AbsoluteBeingDrawn)
                     .Where(x => x.SelfCollider.OwnerObject.Equals(this))
+                    .ToList()
                 :
                     new List<asd.Collision2DInfo>()
             ;
         }
 
         /// <summary>
-        /// マウスの位置を元にレイヤー上での位置を計算する。
+        /// マウスの位置を元にレイヤー上での位置を計算する。 
         /// </summary>
         private void CalcPositionFromMouse()
         {

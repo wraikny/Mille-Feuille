@@ -54,6 +54,7 @@
     <Compile Include="Input\Controller\JoyStickController.cs" />
     <Compile Include="Input\Controller\KeyboardController.cs" />
     <Compile Include="Input\Mouse\CollidableMouse.cs" />
+    <Compile Include="Object\Extension.cs" />
     <Compile Include="Object\Layer2DComponent.cs" />
     <Compile Include="Object\Object2DComponent.cs" />
     <Compile Include="Object\Scene.cs" />

@@ -25,6 +25,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
     <DocumentationFile>bin\$(Configuration)\$(AssemblyName).XML</DocumentationFile>
+    <NoWarn>3186;</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>pdbonly</DebugType>
@@ -34,6 +35,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
     <DocumentationFile>bin\$(Configuration)\$(AssemblyName).XML</DocumentationFile>
+    <NoWarn>3186;</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
@@ -60,9 +62,10 @@
     <Compile Include="Animation\AnimationController.fs" />
     <Compile Include="Input\Controller\KeyboardBuilder.fs" />
     <Compile Include="Input\Controller\JoystickBuilder.fs" />
-    <Compile Include="UI\Button\ButtonBuilder.fs" />
+    <Compile Include="UI\ButtonBuilder.fs" />
     <Compile Include="Objects\ActorsUpdater.fs" />
     <Compile Include="Objects\MaptipsUpdater.fs" />
+    <Compile Include="Component\Coroutine.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Altseed">
@@ -70,6 +73,9 @@
     </Reference>
     <Reference Include="FSharp.Core">
       <HintPath>..\packages\FSharp.Core.4.6.2\lib\net45\FSharp.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="FSharpPlus">
+      <HintPath>..\packages\FSharpPlus.1.0.0\lib\net45\FSharpPlus.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="System" />
@@ -81,14 +87,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Tart\Dev\Tart.Core\Tart.Core.fsproj">
+    <ProjectReference Include="..\..\..\Tart\src\Tart.Core\Tart.Core.fsproj">
       <Name>Tart.Core</Name>
-      <Project>{8c6e9ecf-5f33-47a3-ae3f-b9a77bd4f544}</Project>
+      <Project>{ec51e5ee-5c47-4826-9168-2abcc4fdd8a0}</Project>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Tart\Dev\Tart.Helper\Tart.Helper.fsproj">
+    <ProjectReference Include="..\..\..\Tart\src\Tart.Helper\Tart.Helper.fsproj">
       <Name>Tart.Helper</Name>
-      <Project>{bf0abcce-5659-43b8-a783-6dd55180aacc}</Project>
+      <Project>{6662bd75-c14d-4b3c-89f5-7dc70c4d9f17}</Project>
       <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\Mille-Feuille.Core\Mille-Feuille.Core.csproj">

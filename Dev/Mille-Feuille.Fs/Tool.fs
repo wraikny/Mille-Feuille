@@ -247,8 +247,10 @@ module private Helper =
 open wraikny.Tart.Core
 open wraikny.Tart.Helper.Utils
 
+open FSharpPlus
+
 module internal Render =
-    let eventRender x (sender : IMsgQueue<'Msg>) =
+    let eventRender x (sender : IEnqueue<'Msg>) =
         x |> function
         | Nothing -> ()
         | Msg msg -> sender.Enqueue(msg)
@@ -262,11 +264,11 @@ module internal Render =
             |> sender.Enqueue
 
 
-    let inline selectable (label, selected, msg) (sender : IMsgQueue<'Msg>) =
+    let inline selectable (label, selected, msg) (sender : IEnqueue<'Msg>) =
         if asd.Engine.Tool.Selectable(label, selected) then
             sender.Enqueue(msg)
 
-    let itemRender x (sender : IMsgQueue<'Msg>) =
+    let itemRender x (sender : IEnqueue<'Msg>) =
         x |> function
         | Empty -> ()
         | Separator -> asd.Engine.Tool.Separator()
@@ -289,15 +291,13 @@ module internal Render =
         | ColorEdit4(label, current, msg) ->
             let color : float32 [] =
                 [|current.R; current.G; current.B; current.A|]
-                |> Array.map float32
-                |> Array.map (fun x -> x / 255.0f)
+                |>> (float32 >> flip (/) 255.0f)
 
             if asd.Engine.Tool.ColorEdit4(label, color) then
                 let color =
                     color
-                    |> Array.map (fun x -> x * 255.0f)
-                    |> Array.map byte
-                msg(new asd.Color(color.[0], color.[1], color.[2], color.[3]))
+                    |>> ( ( * ) 255.0f >> byte )
+                msg(asd.Color(color.[0], color.[1], color.[2], color.[3]))
                 |> sender.Enqueue
 
         | InputInt(label, current, msg) ->
@@ -310,24 +310,24 @@ module internal Render =
             let n = current |> String.length
             let bufferSize = bufferSize |> Option.defaultValue(n + 256)
             let s : sbyte [] =
-                Array.append
-                    (current |> Seq.map sbyte |> Seq.toArray)
+                (<|>)
+                    (current |> Seq.map sbyte |> toArray)
                     [|for _ in 1..bufferSize-n -> 0y|]
 
             if asd.Engine.Tool.InputText(label, s, bufferSize) then
-                let s =
+                let s : _ [] =
                     s
-                    |> Array.takeWhile(fun x -> x <> 0y)
-                    |> Array.map byte
+                    |> Array.takeWhile ((<>) 0y)
+                    |>> byte
 
-                let s = System.Text.Encoding.UTF8.GetString (s, 0, s |> Array.length)
+                let s = System.Text.Encoding.UTF8.GetString (s, 0, s |> length)
                     
                 msg(s) |> sender.Enqueue
 
         | ListBox(label, current, items, msg) ->
             let itemsStr =
                 items
-                |> List.map(fun s -> s.Replace(";", ":"))
+                |>> fun s -> s.Replace(";", ":")
                 |> String.concat ";"
 
             let current = [|current|]
@@ -338,7 +338,7 @@ module internal Render =
         | Combo(label, current, items, msg) ->
             let preview =
                 items
-                |> List.tryItem current
+                |> tryItem current
                 |> Option.defaultValue ""
 
             Helper.combo label preview <| fun _ ->
@@ -346,7 +346,7 @@ module internal Render =
                     selectable(item, index = current, msg index) sender
             
 
-    let columnRender (column) (sender : IMsgQueue<'Msg>) =
+    let columnRender (column) (sender : IEnqueue<'Msg>) =
         column |> function
         | NoColumn list ->
             for i in list do
@@ -354,7 +354,7 @@ module internal Render =
         | Column list ->
             let currentIndex = asd.Engine.Tool.ColumnIndex
 
-            let columnSize = list |> List.length
+            let columnSize = length list
 
             let render (w, il) =
                 w |> function
@@ -378,7 +378,7 @@ module internal Render =
                     asd.Engine.Tool.NextColumn()
 
 
-    let rec menuRender x (sender : IMsgQueue<'Msg>) =
+    let rec menuRender x (sender : IEnqueue<'Msg>) =
         x |> function
         | Menu(label, list) ->
             Helper.menu label <| fun _ ->
@@ -387,21 +387,21 @@ module internal Render =
         | MenuItem(label, shortcut, selected, event) ->
             let shortcutStr =
                 shortcut
-                |> Option.map(fun x ->
-                    x |> List.map(fun y -> y.ToString())
+                |>> fun x ->
+                    x |>> fun y -> y.ToString()
                     |> String.concat "+"
-                )
                 |> Option.defaultValue("")
 
             shortcut |> function
             | None -> ()
             | Some keys ->
                 let pushed =
-                    keys |> List.map(
+                    keys
+                    |>>(
                         asd.Engine.Keyboard.GetKeyState
                         >> (=) asd.ButtonState.Push
                     )
-                    |> List.fold (||) false
+                    |> fold (||) false
 
                 if pushed then
                     eventRender event sender
@@ -410,7 +410,7 @@ module internal Render =
                 eventRender event sender
 
 
-    let windowRender (x : Window<'Msg>) (window : Window) (sender : IMsgQueue<'Msg>) =
+    let windowRender (x : Window<'Msg>) (window : Window) (sender : IEnqueue<'Msg>) =
         let renderMenu() =
             x.menuBar |> function
             | None -> ()
@@ -436,7 +436,7 @@ module internal Render =
                 renderContent()
     
 
-let render (x : ViewModel<'Msg>) (sender : IMsgQueue<'Msg>) =
+let render (x : ViewModel<'Msg>) (sender : IEnqueue<'Msg>) =
     x.mainWindow |> function
     | None -> ()
     | Some(mainWindow, offset) ->

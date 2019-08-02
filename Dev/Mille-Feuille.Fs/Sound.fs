@@ -7,7 +7,7 @@ let inline createSoundSource path isDecompessed =
         |> Result.Ok
     with
     | e ->
-        Result.Error <| e.ToString()
+        Result.Error e
 
 
 let inline play source =
@@ -16,4 +16,4 @@ let inline play source =
         |> Result.Ok
     with
     | e ->
-        e.ToString() |> Result.Error
+        Result.Error e

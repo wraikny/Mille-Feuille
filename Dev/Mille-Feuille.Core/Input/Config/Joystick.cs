@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 using wraikny.MilleFeuille.Core.Input;
 
-namespace wraikny.MilleFeuille.Core.Input.Config
+namespace wraikny.MilleFeuille.Core.Input
 {
     public interface IJoystickInputConfig
     {
@@ -36,9 +36,9 @@ namespace wraikny.MilleFeuille.Core.Input.Config
     public class AxisInputConfig : IJoystickInputConfig
     {
         public int Index { get; }
-        public Controller.AxisDirection Direction { get; }
+        public AxisDirection Direction { get; }
 
-        public AxisInputConfig(int index, Controller.AxisDirection direction)
+        public AxisInputConfig(int index, AxisDirection direction)
         {
             Index = index;
             Direction = direction;
@@ -83,7 +83,7 @@ namespace wraikny.MilleFeuille.Core.Input.Config
         /// <param name="abstractKey"></param>
         /// <param name="axisIndex"></param>
         /// <param name="direction"></param>
-        public void BindAxis(TControl abstractKey, int axisIndex, Controller.AxisDirection direction)
+        public void BindAxis(TControl abstractKey, int axisIndex, AxisDirection direction)
         {
             binding[abstractKey] = new AxisInputConfig(axisIndex, direction);
         }
@@ -103,9 +103,9 @@ namespace wraikny.MilleFeuille.Core.Input.Config
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public Controller.JoystickController<TControl, TTiltControl> CreateController(int index)
+        public JoystickController<TControl, TTiltControl> CreateController(int index)
         {
-            var controller = new Controller.JoystickController<TControl, TTiltControl>(index);
+            var controller = new JoystickController<TControl, TTiltControl>(index);
 
             foreach(var item in binding)
             {

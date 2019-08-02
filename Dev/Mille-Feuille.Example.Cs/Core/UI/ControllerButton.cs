@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using wraikny.MilleFeuille.Core.Object;
+using wraikny.MilleFeuille.Core;
 using wraikny.MilleFeuille.Core.UI;
-using wraikny.MilleFeuille.Core.UI.Button;
-using wraikny.MilleFeuille.Core.Input.Controller;
+using wraikny.MilleFeuille.Core.Input;
 
 
 namespace wraikny.MilleFeuille.ExampleCs.Core.UI

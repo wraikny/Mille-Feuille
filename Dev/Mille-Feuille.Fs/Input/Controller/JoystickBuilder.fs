@@ -1,9 +1,9 @@
-﻿namespace wraikny.MilleFeuille.Fs.Input.Controller
+﻿namespace wraikny.MilleFeuille.Fs.Input
 
 open System.Collections.Generic
 open System.Linq
 
-open wraikny.MilleFeuille.Core.Input.Controller
+open wraikny.MilleFeuille.Core.Input
 
 [<Struct>]
 type JoystickInput<'T> =

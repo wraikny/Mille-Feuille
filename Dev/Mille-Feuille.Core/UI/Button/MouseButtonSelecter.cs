@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using wraikny.MilleFeuille.Core.Input.Mouse;
+using wraikny.MilleFeuille.Core.Input;
 
-namespace wraikny.MilleFeuille.Core.UI.Button
+namespace wraikny.MilleFeuille.Core.UI
 {
     /// <summary>
     /// コントローラーボタンに対する操作を行うレイヤーコンポーネント。
     /// </summary>
-    public class MouseButtonSelecter : asd.Layer2DComponent
+    public sealed class MouseButtonSelecter : asd.Layer2DComponent
     {
         /// <summary>
         /// マウスを取得する。
@@ -40,6 +40,16 @@ namespace wraikny.MilleFeuille.Core.UI.Button
         {
             buttons.Add(button);
             return this;
+        }
+
+        /// <summary>
+        /// ボタンを削除する。
+        /// </summary>
+        /// <param name="button"></param>
+        /// <returns></returns>
+        public bool RemoveButton(IMouseButton button)
+        {
+            return buttons.Remove(button);
         }
 
         /// <summary>

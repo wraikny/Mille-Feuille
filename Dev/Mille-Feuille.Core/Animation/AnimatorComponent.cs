@@ -5,24 +5,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using wraikny.MilleFeuille.Core.Object;
-
-namespace wraikny.MilleFeuille.Core.Animation
+namespace wraikny.MilleFeuille.Core
 {
     /// <summary>
     /// アニメーションをオブジェクトに適用するコンポーネント。
     /// </summary>
     /// <typeparam name="TOwner"></typeparam>
     /// <typeparam name="TState"></typeparam>
-    public class AnimatorComponent<TOwner, TState> : Object2DComponent<TOwner>
+    public sealed class AnimatorComponent<TOwner, TState> : Object2DComponent<TOwner>
         where TOwner : asd.Object2D
         where TState : class
     {
         public AnimationController<TState> Controller { get; }
 
-        private INode<TState> currentNode;
+        private IAnimationNode<TState> currentNode;
 
         private IEnumerator coroutine;
+
+        public AnimatorComponent(string name, AnimationController<TState> controller)
+            : base(name)
+        {
+            Controller = controller ?? throw new ArgumentNullException(nameof(controller));
+            currentNode = null;
+            coroutine = null;
+        }
 
         private void UpdateNode(TState state)
         {
@@ -51,17 +57,6 @@ namespace wraikny.MilleFeuille.Core.Animation
         public void Start(TState state)
         {
             State = state;
-        }
-
-        public AnimatorComponent(
-            string name
-            , AnimationController<TState> controller
-        )
-            : base(name)
-        {
-            Controller = controller;
-            currentNode = null;
-            coroutine = null;
         }
 
         protected override void OnUpdate()

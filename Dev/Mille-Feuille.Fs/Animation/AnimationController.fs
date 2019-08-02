@@ -1,6 +1,8 @@
-﻿namespace wraikny.MilleFeuille.Fs.Animation
+﻿namespace wraikny.MilleFeuille.Fs
 
 open wraikny.MilleFeuille.Core
+
+open FSharpPlus
 
 /// アニメーションコントローラで保持するノードを作成するビルダー。
 [<Struct>]
@@ -18,12 +20,12 @@ module NodeBuilder =
             builder.animation
             |> AnimationBuilder.build
 
-        let node = new Animation.Node<'Obj, 'State>(anim)
+        let node = new AnimationNode<'Obj, 'State>(anim)
         builder.next |> function
         | None -> ()
         | Some next -> node.NextState <- next
 
-        node :> Animation.INode<'State>
+        node :> IAnimationNode<'State>
 
 
 
@@ -35,7 +37,7 @@ type AnimationControllerBuilder<'Owner, 'State
     > =
     {
         name : string
-        nodes: Map<'State, Animation.INode<'State>>
+        nodes: Map<'State, IAnimationNode<'State>>
     }
 
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
@@ -78,15 +80,13 @@ module AnimationControllerBuilder =
 
     /// ビルダーからアニメーションコントローラクラスを作成する。
     let build builder =
-        let controller =
-            new Animation.AnimationController<'State>(builder.name)
+        let controller = AnimationController<'State>(builder.name)
 
         let nodes =
             builder.nodes
             |> Map.toSeq
-            |> Seq.map(fun (s, n) ->
+            |>> fun (s, n) ->
                 struct (s, n)
-            )
 
         controller.AddAnimations(nodes)
 
@@ -99,6 +99,6 @@ module AnimationControllerBuilder =
             |> build
 
         let component' =
-            new Animation.AnimatorComponent<'Owner, 'State>(name, controller)
+            new AnimatorComponent<'Owner, 'State>(name, controller)
 
         component'
