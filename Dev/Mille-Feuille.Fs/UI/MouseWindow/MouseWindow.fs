@@ -311,8 +311,9 @@ type MouseWindow(setting : WindowSetting, mouse : UI.MouseButtonSelecter) as thi
     member __.UIContents
         with get() = uiContents
         and set(value) =
-            uiContents <- value
-            this.ReRendering()
+            if seq value <> seq uiContents then
+                uiContents <- value
+                this.ReRendering()
 
     member __.ReRendering() = renderingItemsAreUpdated <- true
 
