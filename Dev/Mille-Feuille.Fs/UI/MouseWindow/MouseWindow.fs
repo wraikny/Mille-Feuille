@@ -17,7 +17,7 @@ type Item =
     | Text of string
     | TextWith of string * asd.Font
     | Button of string * (unit -> unit)
-    | InputField of int * placeholder:string * (string -> unit)
+    | InputField of int * placeholder:string * current:string option * (string -> unit)
     | Rect of thickness:float32 * wRate:float32
 
 
@@ -378,7 +378,7 @@ type MouseWindow(setting : WindowSetting, mouse : UI.MouseButtonSelecter) as thi
                             | WindowSetting.ButtonSize.AutoFit (margin, _) ->
                                 textSize + margin * 2.0f
                         yield size
-                    | InputField (length, _, _) ->
+                    | InputField (length, _, _, _) ->
                         let size = this.WindowSetting.inputFieldSize |> function
                             | WindowSetting.InputFieldSize.Fixed size -> size
                             | WindowSetting.InputFieldSize.AutoFit (margin, _) ->
@@ -473,9 +473,9 @@ type MouseWindow(setting : WindowSetting, mouse : UI.MouseButtonSelecter) as thi
                 renderedObjects.Add(WindowSetting.ButtonObj (o, size))
                 mouse.AddButton(o.Button) |> ignore
 
-            | InputField(maxLen, placeholder, f) ->
+            | InputField(maxLen, placeholder, current, f) ->
                 let setting = this.WindowSetting
-                let o = new MouseInputField(setting.inputFont, setting.inputColor, setting.inputFocusColor, placeholder, maxLen)
+                let o = new MouseInputField(setting.inputFont, setting.inputColor, setting.inputFocusColor, maxLen, placeholder, current)
                 addItem(o)
 
                 o.OnInputEvent.Add f

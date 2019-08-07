@@ -7,7 +7,7 @@ open wraikny.MilleFeuille.Fs.UI
 
 open FSharpPlus
 
-type MouseInputField(font, buttonColor, focusColor, placeholder, maxLength) =
+type MouseInputField(font, buttonColor, focusColor, maxLength, placeholder, defaultText) =
     inherit asd.GeometryObject2D()
 
     let mosuePush = asd.Engine.Mouse.GetButtonInputState >> (=) asd.ButtonState.Push
@@ -18,16 +18,33 @@ type MouseInputField(font, buttonColor, focusColor, placeholder, maxLength) =
 
     let keysStack  = Stack<string>()
 
+
     let button = new MouseButton(font, buttonColor, Text = placeholder)
+    do
+        defaultText
+        |> Option.iter(fun xs ->
+            xs |> String.iter( string >> keysStack.Push)
+            button.Text <- xs
+        )
 
     let setButtonColor col =
         button.DefaultColor <- col.defaultColor
         button.HoverColor <- col.hoverColor
         button.HoldColor <- col.holdColor
 
+    let onInputEvent = new Event<string>()
+
+    let triggerOnInputEvent() =
+        let text =
+            seq {for k in keysStack -> k }
+            |> Seq.rev
+            |> String.concat ""
+        onInputEvent.Trigger(text)
+
     let unfocus() =
         isFocused <- false
         setButtonColor(buttonColor)
+        triggerOnInputEvent()
         if keysStack.Count = 0 then
             button.Text <- placeholder
 
@@ -46,8 +63,6 @@ type MouseInputField(font, buttonColor, focusColor, placeholder, maxLength) =
 
         base.AddDrawnChildWithoutColor(button)
 
-    let onInputEvent = new Event<string>()
-
     let setText() =
         let text =
             seq {for k in keysStack -> k }
@@ -55,7 +70,6 @@ type MouseInputField(font, buttonColor, focusColor, placeholder, maxLength) =
             |> String.concat ""
 
         button.Text <- text
-        onInputEvent.Trigger(text)
 
     let aToZKeys = seq [int asd.Keys.A .. int asd.Keys.Z]
     let numKeys = seq [int asd.Keys.Num0 .. int asd.Keys.Num9]
