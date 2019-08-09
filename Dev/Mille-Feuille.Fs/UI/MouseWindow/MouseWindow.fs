@@ -296,6 +296,8 @@ type MouseWindow(setting : WindowSetting, mouse : UI.MouseButtonSelecter) as thi
         with get() : asd.Vector2DF = currentSize
         //and set(v) = currentSize <- v
 
+    member __.IsToggleAnimating with get() = isToggleAnimating
+
     member __.IsToggleOn with get() = isToggleOn
 
     member __.Toggle(toggle : bool, ?callback) =
