@@ -24,6 +24,12 @@ namespace wraikny.MilleFeuille.Core.UI
             buttons = new List<IMouseButton>();
         }
 
+        public MouseButtonSelecter(float radius)
+                : this(new CollidableMouse(radius))
+        {
+            
+        }
+
         protected override void OnLayerUpdated()
         {
             base.OnLayerUpdated();

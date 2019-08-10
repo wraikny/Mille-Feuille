@@ -25,14 +25,22 @@ type MaptipsUpdater<'Chip, 'ChipViewModel
 
     let updater = new ObjectsUpdater<'Chip, 'ChipViewModel>({
         create = arg.create
-        add = fun chip -> this.AddChip(chip) |> ignore
-        remove = fun chip -> this.RemoveChip(chip) |> ignore
-        dispose = fun chip -> chip.Dispose()
+        add = this.AddChip >> ignore
+        remove =
+            this.RemoveChip >> ignore
+        dispose = fun chip ->
+            this.RemoveChip(chip)|> ignore
+            chip.Dispose()
+            ()
     })
 
     member __.UpdatingOption
         with get() = updater.UpdatingOption
-        and set(x) = updater.UpdatingOption <- x
+        and set(x) =
+            if x = UpdatingOption.UpdatingWithPooling then
+                raise <| System.ArgumentException "UpdatingWithPooling is not supported in this class"
+
+            updater.UpdatingOption <- x
 
     interface IObserver<UpdaterViewModel<'ChipViewModel>> with
         member this.OnNext(input) =
