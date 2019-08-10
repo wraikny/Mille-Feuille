@@ -95,6 +95,8 @@ type WindowSetting = {
     buttonFont : asd.Font
     inputFont : asd.Font
 
+    textMargin : asd.Vector2DF
+
     itemMargin : float32
     itemAlignment : WindowSetting.Alignment
 
@@ -120,6 +122,8 @@ with
             itemAlignment = WindowSetting.Center
 
             itemMargin = 10.0f
+            textMargin = asd.Vector2DF(5.0f, 5.0f)
+
             openEasing = Easing.OutExpo
             closeEasing = Easing.InExpo
             animationFrame = 15u
@@ -408,9 +412,9 @@ type MouseWindow(setting : WindowSetting, mouse : UI.MouseButtonSelecter) as thi
                 for x in this.UIContents do
                     match x with
                     | Text(text) ->
-                        yield textFont.HorizontalSize(text).To2DF()
+                        yield textFont.HorizontalSize(text).To2DF() + (setting.textMargin * 2.0f)
                     | TextWith(text, font) ->
-                        yield font.HorizontalSize(text).To2DF()
+                        yield font.HorizontalSize(text).To2DF() + (setting.textMargin * 2.0f)
                     | _ -> ()
             }
             |> calcVecMax
