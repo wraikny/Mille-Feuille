@@ -6,6 +6,7 @@ open wraikny.Tart.Helper.Math
 open wraikny.MilleFeuille.Core
 open wraikny.MilleFeuille.Fs.UI
 open wraikny.MilleFeuille.Fs
+open wraikny.MilleFeuille.Fs.Math
 
 //open Bellturrim.View
 
@@ -31,47 +32,19 @@ module WindowSetting =
 
     type Alignment = Right of float32 | Left of float32 | Center
 
-    type WindowSize = FixWidth of float32 | Auto | Fixed of asd.Vector2DF
-
-    [<Struct>]
-    type XY = X | Y
-    [<Struct>]
-    type Direction = Left | Right | Up | Down
+    type WindowSize = FixWidth of float32 | Auto | Fixed of asd.Vector2DF * isCenterd:bool
 
     type ToggleDirection =
-        | CenterSpread
-        | Center of XY
-        | From of Direction
-        | LeftUp | RightUp | LeftDown  | RightDown
+        | X
+        | Y
+        | XY
 
     with
-        member dir.ToVec() =
-            (dir |> function
-            | CenterSpread
-            | Center _  -> asd.Vector2DF(0.5f, 0.5f)
-
-            | From Left  -> asd.Vector2DF(0.0f, 0.5f)
-            | From Right -> asd.Vector2DF(1.0f, 0.5f)
-                         
-            | From Up    -> asd.Vector2DF(0.5f, 0.0f)
-            | From Down  -> asd.Vector2DF(0.5f, 1.0f)
-                         
-            | LeftUp     -> asd.Vector2DF(0.0f, 0.0f)
-            | RightUp    -> asd.Vector2DF(1.0f, 0.0f)
-            | LeftDown   -> asd.Vector2DF(0.0f, 1.0f)
-            | RightDown  -> asd.Vector2DF(1.0f, 1.0f)
-            )
-            |> ( * ) -1.0f
-
         member dir.RateFun =
-            let dirRate d = d |> function
-                | X -> fun a -> asd.Vector2DF(a, 1.0f)
-                | Y -> fun a -> asd.Vector2DF(1.0f, a)
             dir |> function
-            | Center dir -> dirRate dir
-            | From dir  -> dirRate(dir |> function | Right | Left -> X | Up | Down -> Y)
-            | _ -> fun a -> asd.Vector2DF(a, a)
-                
+            | X -> fun a -> asd.Vector2DF(a, 1.0f)
+            | Y -> fun a -> asd.Vector2DF(1.0f, a)
+            | XY -> fun a -> asd.Vector2DF(a, a)
 
 
     type ButtonSize =
@@ -101,9 +74,12 @@ module WindowSetting =
     let gray_hv = asd.Color(50, 50, 50, 255)
     let gray_hd = asd.Color(10, 10, 10, 255)
 
+
 type WindowSetting = {
     windowSize : WindowSetting.WindowSize
     toggleDirection : WindowSetting.ToggleDirection
+    centerPositionRate : float32 Vec2
+    togglePositionRate : float32 Vec2
 
     frameColor : asd.Color
 
@@ -135,7 +111,10 @@ with
         }
         {
             windowSize = WindowSetting.Auto
-            toggleDirection = WindowSetting.LeftUp
+            toggleDirection = WindowSetting.XY
+            centerPositionRate = zero
+            togglePositionRate = zero
+
             buttonSize = WindowSetting.ButtonSize.AutoFit(asd.Vector2DF(5.0f, 5.0f), 0.8f)
             inputFieldSize = WindowSetting.InputFieldSize.AutoFit(asd.Vector2DF(5.0f, 5.0f), 0.8f)
             itemAlignment = WindowSetting.Center
@@ -154,6 +133,14 @@ with
             inputColor = buttonColor
             inputFocusColor = buttonColor
         }
+
+
+type IToggleWindow =
+    abstract Toggle : bool -> unit
+    abstract Toggle : bool * (unit -> unit) -> unit
+    abstract IsToggleOn : bool with get
+    abstract IsToggleAnimating : bool with get
+    //abstract ClearItems : unit -> unit
 
 
 
@@ -185,24 +172,29 @@ type MouseWindow(setting : WindowSetting, mouse : UI.MouseButtonSelecter) as thi
             |> AnimationBuilder.addCoroutine(fun _ -> seq {
 
                 isToggleAnimating <- true
+                let setting = this.WindowSetting
 
-                let frame = int this.WindowSetting.animationFrame
-                let f = Easing.calculate this.WindowSetting.openEasing frame
+                let frame = int setting.animationFrame
+                let f = Easing.calculate setting.openEasing frame
                 yield()
 
                 // Waiting UIContens Updated
                 yield! waitContents
 
-                let size = this.CurrentSize
-                let dir = this.WindowSetting.toggleDirection
-                let dirvec = dir.ToVec()
-                let dirRate = dir.RateFun
+                let size0 = this.CurrentSize
+                let dirRate = setting.toggleDirection.RateFun
+
+                let centerPosRate = Vec2.toVector2DF setting.centerPositionRate
+                let togglePosRate = Vec2.toVector2DF setting.togglePositionRate
+                let togglePos0 = size0 * (togglePosRate - centerPosRate)
+
                 yield! seq {
                     for i in 1..frame ->
                         let a = f i
-                        let size : asd.Vector2DF = size * dirRate a
+                        let size : asd.Vector2DF = size0 * dirRate a
                         frameRect.DrawingArea <- asd.RectF(asd.Vector2DF(), size)
-                        frameObj.Position <- size * dirvec
+                        let togglePosA = size * (togglePosRate - centerPosRate)
+                        frameObj.Position <- -size * centerPosRate + (togglePos0 - togglePosA)
                 }
                 
                 itemParent.IsUpdated <- true
@@ -218,26 +210,33 @@ type MouseWindow(setting : WindowSetting, mouse : UI.MouseButtonSelecter) as thi
             |> AnimationBuilder.addCoroutine(fun _ -> seq {
 
                 isToggleAnimating <- true
+                let setting = this.WindowSetting
 
                 itemParent.IsUpdated <- false
                 itemParent.IsDrawn <- false
 
-                let frame = int this.WindowSetting.animationFrame
-                let f = Easing.calculate this.WindowSetting.closeEasing frame
+                let frame = int setting.animationFrame
+                let f = Easing.calculate setting.closeEasing frame
                 yield()
 
                 // Waiting UIContens Updated
                 yield! waitContents
-                let size = this.CurrentSize
-                let dir = this.WindowSetting.toggleDirection
-                let dirvec = dir.ToVec()
-                let dirRate = dir.RateFun
+                let size0 = this.CurrentSize
+
+                let dirRate = setting.toggleDirection.RateFun
+
+                let centerPosRate = Vec2.toVector2DF setting.centerPositionRate
+                let togglePosRate = Vec2.toVector2DF setting.togglePositionRate
+                let togglePos0 = size0 * (togglePosRate - centerPosRate)
+
                 yield! seq {
                     for i in 1..frame ->
                         let a = 1.0f - (f i)
-                        let size : asd.Vector2DF = size * dirRate a
+                        let size : asd.Vector2DF = size0 * dirRate a
                         frameRect.DrawingArea <- asd.RectF(asd.Vector2DF(), size)
-                        frameObj.Position <- size * dirvec
+                        
+                        let togglePosA = size * (togglePosRate - centerPosRate)
+                        frameObj.Position <- -size * centerPosRate + (togglePos0 - togglePosA)
                 }
 
                 isToggleOn <- false
@@ -287,6 +286,18 @@ type MouseWindow(setting : WindowSetting, mouse : UI.MouseButtonSelecter) as thi
     do
         toggleAnimComponent.Attach(this)
         renderingAnimComponent.Attach(this)
+
+
+    interface IToggleWindow with
+        member this.Toggle(x) = this.Toggle(x)
+        member this.Toggle(x, callback) = this.Toggle(x, callback)
+        member this.IsToggleOn with get() = this.IsToggleOn
+        member this.IsToggleAnimating with get() = this.IsToggleAnimating
+        //member this.UIContents
+        //    with get() = this.UIContents
+        //    and set(x) = this.UIContents <- x
+        //member this.ClearItems() = this.ClearItems()
+
 
     member __.Mouse
         with get() = mouse
@@ -417,7 +428,7 @@ type MouseWindow(setting : WindowSetting, mouse : UI.MouseButtonSelecter) as thi
                     | WindowSetting.Center -> 0.0f
                 maxWidth.Force() + i * 2.0f
             | WindowSetting.WindowSize.FixWidth x -> x
-            | WindowSetting.WindowSize.Fixed v-> v.X
+            | WindowSetting.WindowSize.Fixed (v,  _) -> v.X
 
         itemParent.Position <-
             let x = 
@@ -515,13 +526,17 @@ type MouseWindow(setting : WindowSetting, mouse : UI.MouseButtonSelecter) as thi
             | Space h ->
                 posY <- posY + h
 
+        let itemsSize = asd.Vector2DF(currentWidth, posY)
+
         setting.windowSize |> function
-        | WindowSetting.Fixed v ->
+        | WindowSetting.Fixed (v, isCenterd) ->
             currentSize <- v
+            if isCenterd then
+                itemParent.Position <- asd.Vector2DF(itemParent.Position.X, (v.Y - itemsSize.Y) * 0.5f )
         | _ ->
-            let height = posY + this.WindowSetting.itemMargin
-            currentSize <- asd.Vector2DF(currentWidth, height)
+            currentSize <- itemsSize
 
             if isToggleOn then
                 frameRect.DrawingArea <- asd.RectF(asd.Vector2DF(), currentSize)
-                frameObj.Position <- currentSize * this.WindowSetting.toggleDirection.ToVec()
+                //frameObj.Position <- currentSize * this.WindowSetting.toggleDirection.ToVec()
+                frameObj.Position <- -currentSize * Vec2.toVector2DF this.WindowSetting.centerPositionRate
