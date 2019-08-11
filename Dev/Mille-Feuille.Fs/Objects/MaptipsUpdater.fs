@@ -16,7 +16,7 @@ type MaptipsUpdaterArg<'ViewModel, 'Chip, 'ChipViewModel
 
 
 /// 追加削除の発生するマップチップの更新管理を行うクラス。
-[<Class>]
+[<Class; Sealed>]
 type MaptipsUpdater<'Chip, 'ChipViewModel
     when 'Chip :> asd.Chip2D
     and  'Chip :> IUpdatee<'ChipViewModel>

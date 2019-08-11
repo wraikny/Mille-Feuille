@@ -17,7 +17,7 @@ type ActorsUpdaterArg<'ViewModel, 'Actor, 'ActorViewModel
 
 
 /// 追加削除の発生するasd.Object2Dの更新管理を行うクラス。
-[<Class>]
+[<Class; Sealed>]
 type ActorsUpdater<'Actor, 'ActorViewModel
     when 'Actor :> asd.Object2D
     and 'Actor :> IUpdatee<'ActorViewModel>
