@@ -125,7 +125,7 @@ module Tree =
     let column = function
         | [] ->
             NoColumn []
-        | (w, l)::[] ->
+        | (_, l)::[] ->
             NoColumn l
         | xs ->
             Column xs
@@ -368,7 +368,7 @@ module internal Render =
 
             list |> function
             | [] -> ()
-            | x::xs ->
+            | _ ->
                 asd.Engine.Tool.Columns(columnSize)
 
                 // render x
