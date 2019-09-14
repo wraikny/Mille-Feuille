@@ -20,6 +20,7 @@ type Item =
     | Button of string * (unit -> unit)
     | InputField of int * placeholder:string * current:string option * (string -> unit)
     | Rect of thickness:float32 * wRate:float32
+    | RectWith of thickness:float32 * wRate:float32 * asd.Color
 
 
 module WindowSetting =
@@ -464,6 +465,17 @@ type MouseWindow(setting : WindowSetting, mouse : UI.MouseButtonSelecter) as thi
 
             renderedObjects.Add(WindowSetting.TextObj (o, size))
 
+        let inline createRect(thickness, wRate, color) =
+            let size = asd.Vector2DF(currentWidth * wRate, thickness)
+            let rect = new asd.RectangleShape(DrawingArea = asd.RectF(asd.Vector2DF(), size))
+            let o = new asd.GeometryObject2D(Shape = rect, Color = color)
+
+            addItem(o)
+
+            o |> setPosition size
+
+            renderedObjects.Add(WindowSetting.RectObj (o, size))
+
         for item in this.UIContents do
             item |> function
             | Button (text, f) ->
@@ -517,15 +529,10 @@ type MouseWindow(setting : WindowSetting, mouse : UI.MouseButtonSelecter) as thi
                 createText(text, textFont)
 
             | Rect(thickness, wRate) ->
-                let size = asd.Vector2DF(currentWidth * wRate, thickness)
-                let rect = new asd.RectangleShape(DrawingArea = asd.RectF(asd.Vector2DF(), size))
-                let o = new asd.GeometryObject2D(Shape = rect, Color = this.WindowSetting.rectColor)
+                createRect(thickness, wRate, this.WindowSetting.rectColor)
 
-                addItem(o)
-
-                o |> setPosition size
-
-                renderedObjects.Add(WindowSetting.RectObj (o, size))
+            | RectWith(thickness, wRate, color) ->
+                createRect(thickness, wRate, color)
 
             | Space h ->
                 posY <- posY + h
