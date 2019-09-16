@@ -80,7 +80,7 @@ namespace wraikny.MilleFeuille
 
     public static class Layer2DComponentExt
     {
-        private const string componentName = "__MilleFeuilleLayer2DComponent4Ext";
+        private const string componentName = "__MilleFeuilleLayer2DComponentExt";
 
         private static Layer2DComponent<asd.Layer2D> GetLayer2DComponent(this asd.Layer2D obj)
         {
@@ -152,29 +152,29 @@ namespace wraikny.MilleFeuille
         /// <summary>
         /// サブコルーチンを現在のスタックに追加する。
         /// </summary>
-        /// <param name="subcoroutine"></param>
+        /// <param name="coroutine"></param>
         /// <exception cref="InvalidOperationException.InvalidOperationException">
         /// Thrown when called outside of current coroutines updating.
         /// </exception>
         /// <exception cref="ArgumentNullException"></exception>
         /// /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
-        public static void StartSubCoroutine(this asd.Layer2D obj, IEnumerator subcoroutine)
+        public static void StackCoroutine(this asd.Layer2D obj, IEnumerator coroutine)
         {
-            obj.GetLayer2DComponent().Coroutine.StartSubCoroutine(subcoroutine);
+            obj.GetLayer2DComponent().Coroutine.StackCoroutine(coroutine);
         }
 
         /// <summary>
         /// サブコルーチンを現在のスタックに追加する。
         /// </summary>
-        /// <param name="subcoroutine"></param>
+        /// <param name="coroutine"></param>
         /// <exception cref="InvalidOperationException.InvalidOperationException">
         /// Thrown when called outside of current coroutines updating.
         /// </exception>
         /// <exception cref="ArgumentNullException"></exception>
         /// /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
-        public static void StartSubCoroutine(this asd.Layer2D obj, Func<IEnumerator> subcoroutine)
+        public static void StackCoroutine(this asd.Layer2D obj, Func<IEnumerator> coroutine)
         {
-            obj.StartSubCoroutine(subcoroutine.Invoke());
+            obj.GetLayer2DComponent().Coroutine.StackCoroutine(coroutine.Invoke());
         }
     }
 }

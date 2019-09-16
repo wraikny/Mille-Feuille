@@ -10,7 +10,7 @@ namespace wraikny.MilleFeuille
     public interface ICoroutineManager
     {
         void AddCoroutine(IEnumerator coroutine);
-        void StartSubCoroutine(IEnumerator subcoroutine);
+        void StackCoroutine(IEnumerator subcoroutine);
     }
     public sealed class CoroutineManager : ICoroutineManager
     {
@@ -77,7 +77,7 @@ namespace wraikny.MilleFeuille
         /// </exception>
         /// <exception cref="ArgumentNullException"></exception>
         /// /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
-        public void StartSubCoroutine(IEnumerator subcoroutine)
+        public void StackCoroutine(IEnumerator subcoroutine)
         {
             if (subcoroutine == null) throw new ArgumentNullException();
 

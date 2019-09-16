@@ -1,6 +1,10 @@
 ﻿[<AutoOpen>]
 module wraikny.MilleFeuille.Extension
 
+open wraikny.Tart.Helper.Math
+open wraikny.Tart.Helper.Geometry
+
+
 type asd.Font with
     member inline this.HorizontalSize(text) =
         this.CalcTextureSize(text, asd.WritingDirection.Horizontal)
@@ -8,7 +12,6 @@ type asd.Font with
     member inline this.VerticalSize(text) =
         this.CalcTextureSize(text, asd.WritingDirection.Vertical)
 
-open wraikny.Tart.Helper.Math
 
 type asd.Vector2DF with
     member inline v.ToVec2() =
@@ -30,7 +33,6 @@ type asd.Color with
     member inline v.ToVec4() =
         Vec4.init v.R v.G v.B v.A
 
-open wraikny.Tart.Helper.Geometry
 
 type asd.RectF with
     member inline r.ToRect2() =

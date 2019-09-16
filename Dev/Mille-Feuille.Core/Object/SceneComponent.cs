@@ -131,7 +131,7 @@ namespace wraikny.MilleFeuille
 
     public static class SceneComponentExt
     {
-        private const string componentName = "__MilleFeuilleSceneComponent4Ext";
+        private const string componentName = "__MilleFeuilleSceneComponentExt";
 
         private static SceneComponent<asd.Scene> GetSceneComponent(this asd.Scene obj)
         {
@@ -243,29 +243,29 @@ namespace wraikny.MilleFeuille
         /// <summary>
         /// サブコルーチンを現在のスタックに追加する。
         /// </summary>
-        /// <param name="subcoroutine"></param>
+        /// <param name="coroutine"></param>
         /// <exception cref="InvalidOperationException.InvalidOperationException">
         /// Thrown when called outside of current coroutines updating.
         /// </exception>
         /// <exception cref="ArgumentNullException"></exception>
         /// /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
-        public static void StartSubCoroutine(this asd.Scene obj, IEnumerator subcoroutine)
+        public static void StackCoroutine(this asd.Scene obj, IEnumerator coroutine)
         {
-            obj.GetSceneComponent().Coroutine.StartSubCoroutine(subcoroutine);
+            obj.GetSceneComponent().Coroutine.StackCoroutine(coroutine);
         }
 
         /// <summary>
         /// サブコルーチンを現在のスタックに追加する。
         /// </summary>
-        /// <param name="subcoroutine"></param>
+        /// <param name="coroutine"></param>
         /// <exception cref="InvalidOperationException.InvalidOperationException">
         /// Thrown when called outside of current coroutines updating.
         /// </exception>
         /// <exception cref="ArgumentNullException"></exception>
         /// /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
-        public static void StartSubCoroutine(this asd.Scene obj, Func<IEnumerator> subcoroutine)
+        public static void StackCoroutine(this asd.Scene obj, Func<IEnumerator> coroutine)
         {
-            obj.StartSubCoroutine(subcoroutine.Invoke());
+            obj.GetSceneComponent().Coroutine.StackCoroutine(coroutine.Invoke());
         }
     }
 }
