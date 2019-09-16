@@ -29,4 +29,32 @@ namespace wraikny.MilleFeuille.Core.Input
         /// </summary>
         void Update();
     }
+
+    public static class IControllerExt
+    {
+        public static bool StateIs<T>(this IController<T> controller, T key, asd.ButtonState state)
+        {
+            return (controller.GetState(key) == state);
+        }
+
+        public static bool IsFree<T>(this IController<T> controller, T key)
+        {
+            return controller.StateIs(key, asd.ButtonState.Free);
+        }
+
+        public static bool IsPush<T>(this IController<T> controller, T key)
+        {
+            return controller.StateIs(key, asd.ButtonState.Push);
+        }
+
+        public static bool IsHold<T>(this IController<T> controller, T key)
+        {
+            return controller.StateIs(key, asd.ButtonState.Hold);
+        }
+
+        public static bool IsRelease<T>(this IController<T> controller, T key)
+        {
+            return controller.StateIs(key, asd.ButtonState.Release);
+        }
+    }
 }
