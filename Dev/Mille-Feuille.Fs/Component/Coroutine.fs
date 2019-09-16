@@ -1,8 +1,7 @@
 ﻿[<AutoOpen>]
-module wraikny.MilleFeuille.Fs.Component.Coroutine
+module wraikny.MilleFeuille.Component.Coroutine
 
-open wraikny.MilleFeuille.Core
-open wraikny.MilleFeuille.Fs.Extension
+open wraikny.MilleFeuille
 
 
 type asd.Object2D with

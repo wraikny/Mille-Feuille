@@ -1,4 +1,4 @@
-﻿namespace wraikny.MilleFeuille.Fs.Objects
+﻿namespace wraikny.MilleFeuille.Objects
 
 open System
 open wraikny.Tart.Helper.Utils

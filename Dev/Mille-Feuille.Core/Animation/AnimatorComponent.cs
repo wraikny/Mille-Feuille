@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace wraikny.MilleFeuille.Core
+namespace wraikny.MilleFeuille
 {
     /// <summary>
     /// アニメーションをオブジェクトに適用するコンポーネント。

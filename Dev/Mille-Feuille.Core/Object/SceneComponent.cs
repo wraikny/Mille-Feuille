@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace wraikny.MilleFeuille.Core
+namespace wraikny.MilleFeuille
 {
     public class SceneComponent<T> : asd.SceneComponent
         where T : asd.Scene

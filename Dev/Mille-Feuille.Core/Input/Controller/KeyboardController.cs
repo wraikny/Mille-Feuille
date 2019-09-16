@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace wraikny.MilleFeuille.Core.Input
+namespace wraikny.MilleFeuille.Input
 {
     /// <summary>
     /// キーボードの入力と操作を対応付けるためのクラス。

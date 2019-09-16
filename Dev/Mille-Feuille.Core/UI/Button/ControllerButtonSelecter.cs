@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using wraikny.MilleFeuille.Core.Input;
+using wraikny.MilleFeuille.Input;
 
-namespace wraikny.MilleFeuille.Core.UI
+namespace wraikny.MilleFeuille.UI
 {
     /// <summary>
     /// コントローラー操作可能なボタンに対する操作を表す列挙体。

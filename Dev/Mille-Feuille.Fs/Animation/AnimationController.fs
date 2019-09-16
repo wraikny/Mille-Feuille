@@ -1,6 +1,6 @@
-﻿namespace wraikny.MilleFeuille.Fs
+﻿namespace wraikny.MilleFeuille
 
-open wraikny.MilleFeuille.Core
+open wraikny.MilleFeuille
 
 open FSharpPlus
 

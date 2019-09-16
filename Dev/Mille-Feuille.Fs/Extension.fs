@@ -1,4 +1,5 @@
-﻿module wraikny.MilleFeuille.Fs.Extension
+﻿[<AutoOpen>]
+module wraikny.MilleFeuille.Extension
 
 //type asd.DrawnObject2D with
 //    member inline this.AddDrawnChildWithAll(o) =

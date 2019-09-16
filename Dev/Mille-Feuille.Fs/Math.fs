@@ -1,6 +1,5 @@
-﻿namespace wraikny.MilleFeuille.Fs.Math
+﻿namespace wraikny.MilleFeuille
 
-open wraikny.MilleFeuille.Fs.Extension
 open wraikny.Tart.Helper.Math
 
 

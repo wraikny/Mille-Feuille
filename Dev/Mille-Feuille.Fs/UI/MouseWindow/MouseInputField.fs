@@ -1,9 +1,9 @@
-﻿namespace wraikny.MilleFeuille.Fs.UI
+﻿namespace wraikny.MilleFeuille.UI
 
 open System.Collections.Generic
 
-open wraikny.MilleFeuille.Core
-open wraikny.MilleFeuille.Fs.UI
+open wraikny.MilleFeuille
+open wraikny.MilleFeuille.UI
 
 open FSharpPlus
 

@@ -1,12 +1,11 @@
-﻿namespace wraikny.MilleFeuille.Fs.UI
+﻿namespace wraikny.MilleFeuille.UI
 
 open System.Collections.Generic
 
 open wraikny.Tart.Helper.Math
-open wraikny.MilleFeuille.Core
-open wraikny.MilleFeuille.Fs.UI
-open wraikny.MilleFeuille.Fs
-open wraikny.MilleFeuille.Fs.Math
+open wraikny.MilleFeuille
+open wraikny.MilleFeuille.UI
+open wraikny.MilleFeuille
 
 //open Bellturrim.View
 
@@ -149,7 +148,7 @@ type IToggleWindow =
 
 
 
-type MouseWindow(setting : WindowSetting, mouse : UI.MouseButtonSelecter) as this =
+type MouseWindow(setting : WindowSetting, mouse : MouseButtonSelecter) as this =
     inherit asd.GeometryObject2D()
 
     // let defaultToggleOn = defaultArg defaultToggleOn false

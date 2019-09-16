@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" DefaultTargets="Build" 
+  xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -7,7 +8,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>f0694096-423d-4328-ab20-cef9052b2f31</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Mille_Feuille.Fs</RootNamespace>
+    <RootNamespace>MilleFeuille</RootNamespace>
     <AssemblyName>MilleFeuille.Fs</AssemblyName>
     <UseStandardResourceNames>true</UseStandardResourceNames>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -100,8 +101,8 @@
       <Project>{6662bd75-c14d-4b3c-89f5-7dc70c4d9f17}</Project>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\Mille-Feuille.Core\Mille-Feuille.Core.csproj">
-      <Name>Mille-Feuille.Core</Name>
+    <ProjectReference Include="..\Mille-Feuille.Core\Mille-Feuille.csproj">
+      <Name>Mille-Feuille</Name>
       <Project>{73984409-a0fe-476e-99f2-61be570a752f}</Project>
       <Private>True</Private>
     </ProjectReference>
