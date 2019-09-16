@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,9 @@ namespace wraikny.MilleFeuille
     public class Layer2DComponent<T> : asd.Layer2DComponent
         where T : asd.Layer2D
     {
+        private readonly CoroutineManager coroutineManager = new CoroutineManager();
+        public ICoroutineManager Coroutine => coroutineManager;
+
         public string Name { get; }
 
         public Layer2DComponent(string name)
@@ -70,6 +74,107 @@ namespace wraikny.MilleFeuille
         protected override void OnLayerUpdated()
         {
             InvokeAction(OnUpdatedEvent);
+            coroutineManager.Update();
+        }
+    }
+
+    public static class Layer2DComponentExt
+    {
+        private const string componentName = "__MilleFeuilleLayer2DComponent4Ext";
+
+        private static Layer2DComponent<asd.Layer2D> GetLayer2DComponent(this asd.Layer2D obj)
+        {
+            var component = (Layer2DComponent<asd.Layer2D>)obj.GetComponent(componentName);
+            if (component == null)
+            {
+                component = new Layer2DComponent<asd.Layer2D>(componentName);
+                component.Attach(obj);
+            }
+
+            return component;
+        }
+
+        /// <summary>
+        /// レイヤーがシーンに登録されたときに実行されるイベントを追加する。
+        /// </summary>
+        public static void AddOnAddedEvent(this asd.Layer2D obj, Action action)
+        {
+            obj.GetLayer2DComponent().OnAddedEvent += _ => action.Invoke();
+        }
+
+        /// <summary>
+        /// オブジェクトからレイヤーに登録解除されたときに実行されるイベントを追加する。
+        /// </summary>
+        public static void AddOnRemovedEvent(this asd.Layer2D obj, Action action)
+        {
+            obj.GetLayer2DComponent().OnRemovedEvent += _ => action.Invoke();
+        }
+
+        /// <summary>
+        /// レイヤーが更新される直前に実行されるイベントを追加する。
+        /// </summary>
+        public static void AddOnUpdatingEvent(this asd.Layer2D obj, Action action)
+        {
+            obj.GetLayer2DComponent().OnUpdatingEvent += _ => action.Invoke();
+        }
+
+        /// <summary>
+        /// レイヤーが更新される直後に実行されるイベントを追加する。
+        /// </summary>
+        public static void AddOnUpdateEvent(this asd.Layer2D obj, Action action)
+        {
+            obj.GetLayer2DComponent().OnUpdatedEvent += _ => action.Invoke();
+        }
+
+        /// <summary>
+        /// 新しいコルーチンを追加する。
+        /// </summary>
+        /// <param name="coroutine"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
+        public static void AddCoroutine(this asd.Layer2D obj, IEnumerator coroutine)
+
+        {
+            obj.GetLayer2DComponent().Coroutine.AddCoroutine(coroutine);
+        }
+
+        /// <summary>
+        /// 新しいコルーチンを追加する。
+        /// </summary>
+        /// <param name="coroutine"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
+        public static void AddCoroutine(this asd.Layer2D obj, Func<IEnumerator> coroutine)
+        {
+            obj.AddCoroutine(coroutine.Invoke());
+        }
+
+        /// <summary>
+        /// サブコルーチンを現在のスタックに追加する。
+        /// </summary>
+        /// <param name="subcoroutine"></param>
+        /// <exception cref="InvalidOperationException.InvalidOperationException">
+        /// Thrown when called outside of current coroutines updating.
+        /// </exception>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
+        public static void StartSubCoroutine(this asd.Layer2D obj, IEnumerator subcoroutine)
+        {
+            obj.GetLayer2DComponent().Coroutine.StartSubCoroutine(subcoroutine);
+        }
+
+        /// <summary>
+        /// サブコルーチンを現在のスタックに追加する。
+        /// </summary>
+        /// <param name="subcoroutine"></param>
+        /// <exception cref="InvalidOperationException.InvalidOperationException">
+        /// Thrown when called outside of current coroutines updating.
+        /// </exception>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
+        public static void StartSubCoroutine(this asd.Layer2D obj, Func<IEnumerator> subcoroutine)
+        {
+            obj.StartSubCoroutine(subcoroutine.Invoke());
         }
     }
 }

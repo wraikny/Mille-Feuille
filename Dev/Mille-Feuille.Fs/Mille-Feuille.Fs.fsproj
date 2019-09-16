@@ -69,7 +69,6 @@
     <Compile Include="UI\MouseWindow\MouseWindow.fs" />
     <Compile Include="Objects\ActorsUpdater.fs" />
     <Compile Include="Objects\MaptipsUpdater.fs" />
-    <Compile Include="Component\Coroutine.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Altseed">

@@ -1,34 +1,6 @@
 ﻿[<AutoOpen>]
 module wraikny.MilleFeuille.Extension
 
-//type asd.DrawnObject2D with
-//    member inline this.AddDrawnChildWithAll(o) =
-//        this.AddDrawnChild(
-//            o,
-//            asd.ChildManagementMode.RegistrationToLayer |||
-//            asd.ChildManagementMode.Disposal |||
-//            asd.ChildManagementMode.IsUpdated |||
-//            asd.ChildManagementMode.IsDrawn,
-
-//            asd.ChildTransformingMode.All,
-
-//            asd.ChildDrawingMode.Color |||
-//            asd.ChildDrawingMode.DrawingPriority
-//        )
-
-//    member inline this.AddDrawnChildWithoutColor(o) =
-//        this.AddDrawnChild(
-//            o,
-//            asd.ChildManagementMode.RegistrationToLayer |||
-//            asd.ChildManagementMode.Disposal |||
-//            asd.ChildManagementMode.IsUpdated |||
-//            asd.ChildManagementMode.IsDrawn,
-
-//            asd.ChildTransformingMode.All,
-
-//            asd.ChildDrawingMode.DrawingPriority
-//        )
-
 type asd.Font with
     member inline this.HorizontalSize(text) =
         this.CalcTextureSize(text, asd.WritingDirection.Horizontal)
@@ -67,3 +39,16 @@ type asd.RectF with
 type asd.RectI with
     member inline r.ToRect2() =
         Rect.init (r.Position.ToVec2()) (r.Size.ToVec2())
+
+
+type asd.Object2D with
+    member inline this.AddCoroutine(coroutine : seq<unit>) =
+        this.AddCoroutine(coroutine.GetEnumerator())
+
+type asd.Layer2D with
+    member inline this.AddCoroutine(coroutine : seq<unit>) =
+        this.AddCoroutine(coroutine.GetEnumerator())
+
+type asd.Scene with
+    member inline this.AddCoroutine(coroutine : seq<unit>) =
+        this.AddCoroutine(coroutine.GetEnumerator())

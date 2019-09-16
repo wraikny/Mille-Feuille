@@ -49,6 +49,7 @@
     <Compile Include="Animation\Animation.cs" />
     <Compile Include="Animation\AnimationController.cs" />
     <Compile Include="Animation\AnimatorComponent.cs" />
+    <Compile Include="CoroutineManager.cs" />
     <Compile Include="Input\JoystickConfig.cs" />
     <Compile Include="Input\IController.cs" />
     <Compile Include="Input\JoyStickController.cs" />

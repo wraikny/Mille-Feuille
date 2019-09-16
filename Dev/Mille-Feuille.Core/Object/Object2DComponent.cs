@@ -10,6 +10,9 @@ namespace wraikny.MilleFeuille
     public class Object2DComponent<T> : asd.Object2DComponent
         where T : asd.Object2D
     {
+        private readonly CoroutineManager coroutineManager = new CoroutineManager();
+        public ICoroutineManager Coroutine => coroutineManager;
+
         public string Name { get; }
 
         public Object2DComponent(string name)
@@ -68,84 +71,12 @@ namespace wraikny.MilleFeuille
         protected override void OnUpdate()
         {
             InvokeAction(OnUpdateEvent);
-            UpdateCoroutine();
+            coroutineManager.Update();
         }
 
         protected override void OnObjectDisposed()
         {
             InvokeAction(OnDisposedEvent);
-        }
-
-        private readonly HashSet<IEnumerator> registeredCoroutines = new HashSet<IEnumerator>();
-        private readonly List<Stack<IEnumerator>> coroutines = new List<Stack<IEnumerator>>();
-        private readonly Stack<IEnumerator> subcoroutines = new Stack<IEnumerator>();
-        private bool enableSubCoroutine = false;
-
-        /// <summary>
-        /// コルーチンを更新する
-        /// </summary>
-        private void UpdateCoroutine()
-        {
-            enableSubCoroutine = true;
-            foreach (var coroutineStack in coroutines.ToArray())
-            {
-                if (coroutineStack.Count > 0 && !(coroutineStack.Peek()?.MoveNext() ?? false))
-                {
-                    registeredCoroutines.Remove(coroutineStack.Pop());
-                }
-
-                foreach(var _ in Enumerable.Range(0, subcoroutines.Count))
-                {
-                    coroutineStack.Push(subcoroutines.Pop());
-                }
-
-                if (coroutineStack.Count == 0)
-                {
-                    coroutines.Remove(coroutineStack);
-                }
-            }
-            enableSubCoroutine = false;
-        }
-
-        /// <summary>
-        /// 新しいコルーチンを追加する。
-        /// </summary>
-        /// <param name="coroutine"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
-        public void AddCoroutine(IEnumerator coroutine)
-        {
-            if (coroutine == null) throw new ArgumentNullException();
-
-            if (registeredCoroutines.Contains(coroutine)) throw new ArgumentException("coroutine is already added");
-            
-            var stack = new Stack<IEnumerator>();
-            stack.Push(coroutine);
-            registeredCoroutines.Add(coroutine);
-            coroutines.Add(stack);
-        }
-
-        /// <summary>
-        /// サブコルーチンを現在のスタックに追加する。
-        /// </summary>
-        /// <param name="subcoroutine"></param>
-        /// <exception cref="InvalidOperationException.InvalidOperationException">
-        /// Thrown when called outside of current coroutines updating.
-        /// </exception>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
-        public void StartSubCoroutine(IEnumerator subcoroutine)
-        {
-            if (subcoroutine == null) throw new ArgumentNullException();
-
-            if (registeredCoroutines.Contains(subcoroutine)) throw new ArgumentException("coroutine is already added");
-
-            if (!enableSubCoroutine)
-            {
-                throw new InvalidOperationException("SubCorutine must be started inside of coroutine");
-            }
-
-            subcoroutines.Push(subcoroutine);
         }
     }
 
@@ -153,39 +84,46 @@ namespace wraikny.MilleFeuille
     {
         private const string componentName = "__MilleFeuilleObject2DComponent4Ext";
 
-        private static Object2DComponent<T> GetObject2DComponent<T>(this T obj)
-            where T : asd.Object2D
+        private static Object2DComponent<asd.Object2D> GetObject2DComponent(this asd.Object2D obj)
         {
-            var component = (Object2DComponent<T>)obj.GetComponent(componentName);
+            var component = (Object2DComponent<asd.Object2D>)obj.GetComponent(componentName);
             if(component == null)
             {
-                component = new Object2DComponent<T>(componentName);
+                component = new Object2DComponent<asd.Object2D>(componentName);
                 component.Attach(obj);
             }
 
             return component;
         }
 
-        public static void AddOnAddedEvent<T>(this T obj, Action action)
-            where T : asd.Object2D
+        /// <summary>
+        /// オブジェクトがレイヤーに登録されたときに実行されるイベントを追加する。
+        /// </summary>
+        public static void AddOnAddedEvent(this asd.Object2D obj, Action action)
         {
             obj.GetObject2DComponent().OnAddedEvent += _ => action.Invoke();
         }
 
-        public static void AddOnRemovedEvent<T>(this T obj, Action action)
-            where T : asd.Object2D
+        /// <summary>
+        /// オブジェクトからレイヤーに登録解除されたときに実行されるイベントを追加する。
+        /// </summary>
+        public static void AddOnRemovedEvent(this asd.Object2D obj, Action action)
         {
             obj.GetObject2DComponent().OnRemovedEvent += _ => action.Invoke();
         }
 
-        public static void AddOnUpdateEvent<T>(this T obj, Action action)
-            where T : asd.Object2D
+        /// <summary>
+        /// オブジェクトが更新されるときに実行されるイベントを追加する。
+        /// </summary>
+        public static void AddOnUpdateEvent(this asd.Object2D obj, Action action)
         {
             obj.GetObject2DComponent().OnUpdateEvent += _ => action.Invoke();
         }
 
-        public static void AddOnDisposedEvent<T>(this T obj, Action action)
-            where T : asd.Object2D
+        /// <summary>
+        /// オブジェクトが破棄されたときに実行されるイベントを追加する。
+        /// </summary>
+        public static void AddOnDisposedEvent(this asd.Object2D obj, Action action)
         {
             obj.GetObject2DComponent().OnDisposedEvent += _ => action.Invoke();
         }
@@ -196,10 +134,10 @@ namespace wraikny.MilleFeuille
         /// <param name="coroutine"></param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
-        public static void AddCoroutine<T>(this T obj, IEnumerator coroutine)
-            where T : asd.Object2D
+        public static void AddCoroutine(this asd.Object2D obj, IEnumerator coroutine)
+            
         {
-            obj.GetObject2DComponent().AddCoroutine(coroutine);
+            obj.GetObject2DComponent().Coroutine.AddCoroutine(coroutine);
         }
 
         /// <summary>
@@ -208,8 +146,7 @@ namespace wraikny.MilleFeuille
         /// <param name="coroutine"></param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
-        public static void AddCoroutine<T>(this T obj, Func<IEnumerator> coroutine)
-            where T : asd.Object2D
+        public static void AddCoroutine(this asd.Object2D obj, Func<IEnumerator> coroutine)
         {
             obj.AddCoroutine(coroutine.Invoke());
         }
@@ -223,10 +160,9 @@ namespace wraikny.MilleFeuille
         /// </exception>
         /// <exception cref="ArgumentNullException"></exception>
         /// /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
-        public static void StartSubCoroutine<T>(this T obj, IEnumerator subcoroutine)
-            where T : asd.Object2D
+        public static void StartSubCoroutine(this asd.Object2D obj, IEnumerator subcoroutine)
         {
-            obj.GetObject2DComponent().StartSubCoroutine(subcoroutine);
+            obj.GetObject2DComponent().Coroutine.StartSubCoroutine(subcoroutine);
         }
 
         /// <summary>
@@ -238,8 +174,7 @@ namespace wraikny.MilleFeuille
         /// </exception>
         /// <exception cref="ArgumentNullException"></exception>
         /// /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
-        public static void StartSubCoroutine<T>(this T obj, Func<IEnumerator> subcoroutine)
-            where T : asd.Object2D
+        public static void StartSubCoroutine(this asd.Object2D obj, Func<IEnumerator> subcoroutine)
         {
             obj.StartSubCoroutine(subcoroutine.Invoke());
         }
