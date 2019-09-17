@@ -1,12 +1,12 @@
-﻿namespace wraikny.MilleFeuille.Fs.UI
+﻿namespace wraikny.MilleFeuille.UI
 
 open System.Collections.Generic
 
+open wraikny.Tart.Helper
 open wraikny.Tart.Helper.Math
-open wraikny.MilleFeuille.Core
-open wraikny.MilleFeuille.Fs.UI
-open wraikny.MilleFeuille.Fs
-open wraikny.MilleFeuille.Fs.Math
+open wraikny.MilleFeuille
+open wraikny.MilleFeuille.UI
+open wraikny.MilleFeuille
 
 //open Bellturrim.View
 
@@ -20,6 +20,7 @@ type Item =
     | Button of string * (unit -> unit)
     | InputField of int * placeholder:string * current:string option * (string -> unit)
     | Rect of thickness:float32 * wRate:float32
+    | RectWith of thickness:float32 * wRate:float32 * asd.Color
 
 
 module WindowSetting =
@@ -148,7 +149,7 @@ type IToggleWindow =
 
 
 
-type MouseWindow(setting : WindowSetting, mouse : UI.MouseButtonSelecter) as this =
+type MouseWindow(setting : WindowSetting, mouse : MouseButtonSelecter) as this =
     inherit asd.GeometryObject2D()
 
     // let defaultToggleOn = defaultArg defaultToggleOn false
@@ -464,6 +465,17 @@ type MouseWindow(setting : WindowSetting, mouse : UI.MouseButtonSelecter) as thi
 
             renderedObjects.Add(WindowSetting.TextObj (o, size))
 
+        let inline createRect(thickness, wRate, color) =
+            let size = asd.Vector2DF(currentWidth * wRate, thickness)
+            let rect = new asd.RectangleShape(DrawingArea = asd.RectF(asd.Vector2DF(), size))
+            let o = new asd.GeometryObject2D(Shape = rect, Color = color)
+
+            addItem(o)
+
+            o |> setPosition size
+
+            renderedObjects.Add(WindowSetting.RectObj (o, size))
+
         for item in this.UIContents do
             item |> function
             | Button (text, f) ->
@@ -517,15 +529,10 @@ type MouseWindow(setting : WindowSetting, mouse : UI.MouseButtonSelecter) as thi
                 createText(text, textFont)
 
             | Rect(thickness, wRate) ->
-                let size = asd.Vector2DF(currentWidth * wRate, thickness)
-                let rect = new asd.RectangleShape(DrawingArea = asd.RectF(asd.Vector2DF(), size))
-                let o = new asd.GeometryObject2D(Shape = rect, Color = this.WindowSetting.rectColor)
+                createRect(thickness, wRate, this.WindowSetting.rectColor)
 
-                addItem(o)
-
-                o |> setPosition size
-
-                renderedObjects.Add(WindowSetting.RectObj (o, size))
+            | RectWith(thickness, wRate, color) ->
+                createRect(thickness, wRate, color)
 
             | Space h ->
                 posY <- posY + h

@@ -4,24 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace wraikny.MilleFeuille.Core.Input
+namespace wraikny.MilleFeuille.Input.Controller
 {
     /// <summary>
-    /// キーボードの入力と操作を対応付けるためのクラス。
+    /// マウスの入力と操作を対応付けるためのクラス。
     /// </summary>
     /// <typeparam name="TControl"></typeparam>
-    public sealed class KeyboardController<TControl> : IController<TControl>
+    public sealed class MouseController<TControl> : IController<TControl>
     {
-        private readonly Dictionary<TControl, asd.Keys> binding;
+        private readonly Dictionary<TControl, asd.MouseButtons> binding;
 
         /// <summary>
         /// 入力に対応付けられている操作のコレクションを取得する。
         /// </summary>
         public IEnumerable<TControl> Keys => binding.Keys;
 
-        public KeyboardController()
+        public MouseController()
         {
-            binding = new Dictionary<TControl, asd.Keys>();
+            binding = new Dictionary<TControl, asd.MouseButtons>();
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace wraikny.MilleFeuille.Core.Input
         {
             if (binding.TryGetValue(key, out var result))
             {
-                return asd.Engine.Keyboard.GetKeyState(result);
+                return asd.Engine.Mouse.GetButtonInputState(result);
             }
             else
             {
@@ -42,26 +42,26 @@ namespace wraikny.MilleFeuille.Core.Input
         }
 
         /// <summary>
-        /// キー入力に操作を対応付ける。
+        /// ボタン入力に操作を対応付ける。
         /// </summary>
         /// <param name="abstractKey"></param>
-        /// <param name="key"></param>
+        /// <param name="button"></param>
         /// <returns></returns>
-        public KeyboardController<TControl> BindKey(TControl abstractKey, asd.Keys key)
+        public MouseController<TControl> BindKey(TControl abstractKey, asd.MouseButtons button)
         {
-            binding[abstractKey] = key;
+            binding[abstractKey] = button;
             return this;
         }
 
         /// <summary>
-        /// コレクションを元にキー入力に操作を対応付ける。
+        /// コレクションを元にボタン入力に操作を対応付ける。
         /// </summary>
         /// <param name="collection"></param>
-        public void BindKeys(IReadOnlyCollection<(TControl, asd.Keys)> collection)
+        public void BindKeys(IReadOnlyCollection<(TControl, asd.MouseButtons)> collection)
         {
-            foreach (var (abstractKey, key) in collection)
+            foreach (var (abstractKey, button) in collection)
             {
-                BindKey(abstractKey, key);
+                BindKey(abstractKey, button);
             }
         }
 

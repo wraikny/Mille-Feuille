@@ -1,4 +1,4 @@
-﻿module wraikny.MilleFeuille.Fs.Sound
+﻿module wraikny.MilleFeuille.Sound
 
 
 let inline createSoundSource path isDecompessed =

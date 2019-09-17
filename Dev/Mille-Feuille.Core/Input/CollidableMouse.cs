@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace wraikny.MilleFeuille.Core.Input
+namespace wraikny.MilleFeuille.Input
 {
     /// <summary>
     /// 衝突判定を持ったマウスを扱うクラス。

@@ -1,4 +1,4 @@
-﻿namespace wraikny.MilleFeuille.Fs.UI
+﻿namespace wraikny.MilleFeuille.UI
 
 
 /// ボタンクラスを作成するビルダー。
@@ -22,7 +22,7 @@ type ButtonColor = {
 }
 
 
-open wraikny.MilleFeuille.Core.UI
+open wraikny.MilleFeuille.UI
 
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module ButtonBuilder =

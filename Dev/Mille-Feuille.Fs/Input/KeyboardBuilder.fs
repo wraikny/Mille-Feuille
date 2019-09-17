@@ -1,9 +1,9 @@
-﻿namespace wraikny.MilleFeuille.Fs.Input
+﻿namespace wraikny.MilleFeuille.Input
 
 open System.Collections.Generic
 open System.Linq
 
-open wraikny.MilleFeuille.Core.Input
+open wraikny.MilleFeuille.Input
 
 /// キーボードコントローラクラスを作成するビルダー。
 [<Struct>]

@@ -1,8 +1,8 @@
-﻿namespace wraikny.MilleFeuille.Fs.UI
+﻿namespace wraikny.MilleFeuille.UI
 
-open wraikny.MilleFeuille.Core
-open wraikny.MilleFeuille.Core.UI
-open wraikny.MilleFeuille.Fs.UI
+open wraikny.MilleFeuille
+open wraikny.MilleFeuille.UI
+open wraikny.MilleFeuille.UI
 
 type MouseButton(font, color : ButtonColor) as this =
     inherit asd.GeometryObject2D()

@@ -1,10 +1,10 @@
-﻿namespace wraikny.MilleFeuille.Fs.Objects
+﻿namespace wraikny.MilleFeuille.Objects
 
 open System
 open wraikny.Tart.Helper.Utils
-open wraikny.Tart.Core.View
+open wraikny.Tart.Core
 
-open wraikny.MilleFeuille.Core
+open wraikny.MilleFeuille
 
 type ActorsUpdaterArg<'ViewModel, 'Actor, 'ActorViewModel
     when 'Actor :> asd.Object2D

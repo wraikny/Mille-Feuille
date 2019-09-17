@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using wraikny.MilleFeuille.Core;
+using wraikny.MilleFeuille;
 
-namespace wraikny.MilleFeuille.Core.UI
+namespace wraikny.MilleFeuille.UI
 {
     /// <summary>
     /// ボタンの状態を表す列挙体。

@@ -1,4 +1,4 @@
-﻿module wraikny.MilleFeuille.Fs.Tool
+﻿module wraikny.MilleFeuille.Tool
 
 
 type Event<'Msg> =
@@ -45,7 +45,6 @@ module TreeDef =
 open TreeDef
 
 
-[<Struct>]
 type Window =
     private
     | Fullscreen of offset : int
@@ -125,7 +124,7 @@ module Tree =
     let column = function
         | [] ->
             NoColumn []
-        | (w, l)::[] ->
+        | (_, l)::[] ->
             NoColumn l
         | xs ->
             Column xs
@@ -249,26 +248,26 @@ open wraikny.Tart.Helper.Utils
 
 open FSharpPlus
 
-module internal Render =
-    let eventRender x (sender : IEnqueue<'Msg>) =
+module private Render =
+    let eventRender x (dispatch : 'Msg -> unit) =
         x |> function
         | Nothing -> ()
-        | Msg msg -> sender.Enqueue(msg)
+        | Msg msg -> dispatch(msg)
         | OpenDialog (filter, path, msg) ->
             asd.Engine.Tool.OpenDialog(filter, path)
             |> msg
-            |> sender.Enqueue
+            |> dispatch
         | SaveDialog (filter, path, msg) ->
             asd.Engine.Tool.SaveDialog(filter, path)
             |> msg
-            |> sender.Enqueue
+            |> dispatch
 
 
-    let inline selectable (label, selected, msg) (sender : IEnqueue<'Msg>) =
+    let inline selectable (label, selected, msg) (dispatch : 'Msg -> unit) =
         if asd.Engine.Tool.Selectable(label, selected) then
-            sender.Enqueue(msg)
+            dispatch(msg)
 
-    let itemRender x (sender : IEnqueue<'Msg>) =
+    let itemRender x (dispatch : 'Msg -> unit) =
         x |> function
         | Empty -> ()
         | Separator -> asd.Engine.Tool.Separator()
@@ -276,11 +275,11 @@ module internal Render =
         | Text text -> asd.Engine.Tool.Text(text)
 
         | Selectable (label, selected, msg) ->
-            selectable (label, selected, msg) sender
+            selectable (label, selected, msg) dispatch
 
         | Button(label, event) ->
             if asd.Engine.Tool.Button(label) then
-                eventRender event sender
+                eventRender event dispatch
 
         | Image(path, size) ->
             asd.Engine.Tool.Image(
@@ -298,13 +297,13 @@ module internal Render =
                     color
                     |>> ( ( * ) 255.0f >> byte )
                 msg(asd.Color(color.[0], color.[1], color.[2], color.[3]))
-                |> sender.Enqueue
+                |> dispatch
 
         | InputInt(label, current, msg) ->
             let i = [|current|]
             if asd.Engine.Tool.InputInt(label, i) then
                 msg i.[0]
-                |> sender.Enqueue
+                |> dispatch
 
         | InputText(label, current, bufferSize, msg) ->
             let n = current |> String.length
@@ -322,7 +321,7 @@ module internal Render =
 
                 let s = System.Text.Encoding.UTF8.GetString (s, 0, s |> length)
                     
-                msg(s) |> sender.Enqueue
+                msg(s) |> dispatch
 
         | ListBox(label, current, items, msg) ->
             let itemsStr =
@@ -333,7 +332,7 @@ module internal Render =
             let current = [|current|]
             if asd.Engine.Tool.ListBox(label, current, itemsStr) then
                 msg current.[0]
-                |> sender.Enqueue
+                |> dispatch
 
         | Combo(label, current, items, msg) ->
             let preview =
@@ -343,14 +342,14 @@ module internal Render =
 
             Helper.combo label preview <| fun _ ->
                 for (index, item) in items |> List.indexed do
-                    selectable(item, index = current, msg index) sender
+                    selectable(item, index = current, msg index) dispatch
             
 
-    let columnRender (column) (sender : IEnqueue<'Msg>) =
+    let columnRender (column) (dispatch : 'Msg -> unit) =
         column |> function
         | NoColumn list ->
             for i in list do
-                 itemRender i sender
+                 itemRender i dispatch
         | Column list ->
             let currentIndex = asd.Engine.Tool.ColumnIndex
 
@@ -363,12 +362,12 @@ module internal Render =
                     asd.Engine.Tool.SetColumnWidth(currentIndex, w)
 
                 for i in il do
-                    itemRender i sender
+                    itemRender i dispatch
         
 
             list |> function
             | [] -> ()
-            | x::xs ->
+            | _ ->
                 asd.Engine.Tool.Columns(columnSize)
 
                 // render x
@@ -378,11 +377,11 @@ module internal Render =
                     asd.Engine.Tool.NextColumn()
 
 
-    let rec menuRender x (sender : IEnqueue<'Msg>) =
+    let rec menuRender x (dispatch : 'Msg -> unit) =
         x |> function
         | Menu(label, list) ->
             Helper.menu label <| fun _ ->
-                for m in list do menuRender m sender
+                for m in list do menuRender m dispatch
 
         | MenuItem(label, shortcut, selected, event) ->
             let shortcutStr =
@@ -404,23 +403,23 @@ module internal Render =
                     |> fold (||) false
 
                 if pushed then
-                    eventRender event sender
+                    eventRender event dispatch
 
             Helper.menuItem label shortcutStr selected <| fun _ ->
-                eventRender event sender
+                eventRender event dispatch
 
 
-    let windowRender (x : Window<'Msg>) (window : Window) (sender : IEnqueue<'Msg>) =
+    let windowRender (x : Window<'Msg>) (window : Window) (dispatch : 'Msg -> unit) =
         let renderMenu() =
             x.menuBar |> function
             | None -> ()
             | Some menus ->
                 for m in menus do
-                    menuRender m sender
+                    menuRender m dispatch
         
         let renderContent() =
             for c in x.contents do
-                columnRender c sender
+                columnRender c dispatch
 
         window |> function
         | Fullscreen offset ->
@@ -436,11 +435,11 @@ module internal Render =
                 renderContent()
     
 
-let render (x : ViewModel<'Msg>) (sender : IEnqueue<'Msg>) =
+let render (x : ViewModel<'Msg>) (dispatch : 'Msg -> unit) =
     x.mainWindow |> function
     | None -> ()
     | Some(mainWindow, offset) ->
-        Render.windowRender mainWindow (Fullscreen offset) sender
+        Render.windowRender mainWindow (Fullscreen offset) dispatch
 
     for w in x.windows do
-        Render.windowRender w Windowed sender
+        Render.windowRender w Windowed dispatch

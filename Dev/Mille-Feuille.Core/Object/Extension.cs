@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using wraikny.MilleFeuille.Core;
+using wraikny.MilleFeuille;
 
-namespace wraikny.MilleFeuille.Core
+namespace wraikny.MilleFeuille
 {
     public static class ObjectExtension
     {
