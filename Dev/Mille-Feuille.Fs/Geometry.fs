@@ -1,7 +1,7 @@
 ﻿namespace wraikny.MilleFeuille
 
 open wraikny.Tart.Helper.Math
-open wraikny.Tart.Helper.Geometry
+
 
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Rect =
