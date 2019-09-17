@@ -45,7 +45,6 @@ module TreeDef =
 open TreeDef
 
 
-[<Struct>]
 type Window =
     private
     | Fullscreen of offset : int
@@ -249,7 +248,7 @@ open wraikny.Tart.Helper.Utils
 
 open FSharpPlus
 
-module internal Render =
+module private Render =
     let eventRender x (dispatch : 'Msg -> unit) =
         x |> function
         | Nothing -> ()

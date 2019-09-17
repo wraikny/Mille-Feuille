@@ -56,7 +56,6 @@
     </None>
     <Compile Include="Extension.fs" />
     <Compile Include="Math.fs" />
-    <Compile Include="Geometry.fs" />
     <Compile Include="Sound.fs" />
     <Compile Include="Tool.fs" />
     <Compile Include="Animation\Animation.fs" />
