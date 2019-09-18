@@ -3,9 +3,8 @@
 open wraikny.Tart.Helper
 open wraikny.Tart.Helper.Math
 
-open wraikny.MilleFeuille.Core
-open wraikny.MilleFeuille.Fs
-open wraikny.MilleFeuille.Fs.Input
+open wraikny.MilleFeuille
+open wraikny.MilleFeuille.Input
 
 
 type AnimState =

@@ -1,11 +1,10 @@
 ﻿module wraikny.MilleFeuille.ExampleFs.Core.UI.MouseButton
 
 open wraikny.MilleFeuille
-open wraikny.MilleFeuille.Core
-open wraikny.MilleFeuille.Fs.UI
+open wraikny.MilleFeuille.UI
 
 type Scene() =
-    inherit Core.Scene()
+    inherit wraikny.MilleFeuille.Scene()
 
     let uiLayer = new asd.Layer2D()
 

@@ -66,15 +66,15 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mille-Feuille.Core\Mille-Feuille.Core.csproj">
-      <Project>{73984409-a0fe-476e-99f2-61be570a752f}</Project>
-      <Name>Mille-Feuille.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="System.ValueTuple">
       <Version>4.5.0</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mille-Feuille.Core\Mille-Feuille.csproj">
+      <Project>{73984409-a0fe-476e-99f2-61be570a752f}</Project>
+      <Name>Mille-Feuille</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
