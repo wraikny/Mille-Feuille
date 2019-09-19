@@ -26,6 +26,7 @@ Mille-Feuille is a Altseed Extension Library for F#
 
 * Tart latest : Apache License 2.0 (c) wraikny 2019
   https://github.com/wraikny/Tart/blob/master/LICENSE
+  (Only Tart.Math and Tart.Helper)
 
 ## Caution
 This software includes the work that is distributed in the [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).  
