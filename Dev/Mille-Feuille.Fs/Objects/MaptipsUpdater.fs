@@ -1,8 +1,7 @@
 ﻿namespace wraikny.MilleFeuille.Objects
 
 open System
-open wraikny.Tart.Helper.Utils
-open wraikny.Tart.Core
+open wraikny.Tart.Helper
 
 
 type MaptipsUpdaterArg<'ViewModel, 'Chip, 'ChipViewModel

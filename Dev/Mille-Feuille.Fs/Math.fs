@@ -1,6 +1,6 @@
 ﻿namespace wraikny.MilleFeuille
 
-open wraikny.Tart.Helper.Math
+open wraikny.Tart.Math
 
 
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]

@@ -1,8 +1,7 @@
 ﻿[<AutoOpen>]
 module wraikny.MilleFeuille.Extension
 
-open wraikny.Tart.Helper.Math
-
+open wraikny.Tart.Math
 
 
 type asd.Font with
