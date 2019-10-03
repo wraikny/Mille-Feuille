@@ -4,8 +4,7 @@ open System.Collections.Generic
 
 open wraikny.MilleFeuille
 open wraikny.MilleFeuille.UI
-
-open FSharpPlus
+open Affogato
 
 type MouseInputField(font, buttonColor, focusColor, maxLength, placeholder, defaultText) =
     inherit asd.GeometryObject2D()
@@ -91,7 +90,7 @@ type MouseInputField(font, buttonColor, focusColor, maxLength, placeholder, defa
             (symbolKeys |> Seq.map (fun (a, _) -> a))
         ]
         |> Seq.concat
-        |>> enum<asd.Keys>
+        |> Seq.map enum<asd.Keys>
         |> Set.ofSeq
 
     let aToZKeysSet = aToZKeys |> Set.ofSeq
@@ -128,7 +127,7 @@ type MouseInputField(font, buttonColor, focusColor, maxLength, placeholder, defa
                 keysStack.Pop() |> ignore
                 setText()
 
-            if [asd.Keys.Escape; asd.Keys.Enter] |>> keyPush |> fold (||) false then
+            if [| asd.Keys.Escape; asd.Keys.Enter |] |>> keyPush |> Array.fold (||) false then
                 unfocus()
 
 

@@ -1,11 +1,9 @@
 ﻿module wraikny.MilleFeuille.ExampleFs.Animation
 
 open wraikny.Tart.Helper
-open wraikny.Tart.Helper.Math
-
 open wraikny.MilleFeuille
 open wraikny.MilleFeuille.Input
-
+open Affogato
 
 type AnimState =
     | First

@@ -4,8 +4,6 @@ open System.Collections
 
 open wraikny.MilleFeuille
 
-open FSharpPlus
-
 /// アニメーションクラスを作成するビルダー。
 [<Struct>]
 type AnimationBuilder<'Obj> =
@@ -32,7 +30,7 @@ module AnimationBuilder =
     /// リストを元にアニメーションにコルーチンを追加する。
     let inline addCoroutines coroutines builder =
         { builder with
-            coroutines = (rev coroutines) @ builder.coroutines
+            coroutines = (List.rev coroutines) @ builder.coroutines
         }
 
     /// ビルダーからアニメーションクラスを作成する。
@@ -46,7 +44,7 @@ module AnimationBuilder =
             | coroutines ->
                 fun owner ->
                     let coroutine = seq {
-                        for c in (rev coroutines) do
+                        for c in (Seq.rev coroutines) do
                             yield! (c owner)
                     }
                     coroutine.GetEnumerator() :> IEnumerator
