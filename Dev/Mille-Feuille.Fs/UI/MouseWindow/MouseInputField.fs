@@ -4,7 +4,7 @@ open System.Collections.Generic
 
 open wraikny.MilleFeuille
 open wraikny.MilleFeuille.UI
-open Affogato
+open Affogato.Helper
 
 type MouseInputField(font, buttonColor, focusColor, maxLength, placeholder, defaultText) =
     inherit asd.GeometryObject2D()

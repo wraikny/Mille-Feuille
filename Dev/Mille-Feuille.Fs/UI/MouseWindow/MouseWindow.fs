@@ -3,6 +3,7 @@
 open System.Collections.Generic
 
 open Affogato
+open Affogato.Helper
 open wraikny.MilleFeuille
 open wraikny.MilleFeuille.UI
 open wraikny.MilleFeuille

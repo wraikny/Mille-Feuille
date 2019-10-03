@@ -243,7 +243,7 @@ module private Helper =
             asd.Engine.Tool.EndCombo()
 
 
-open Affogato
+open Affogato.Helper
 
 module private Render =
     let eventRender x (dispatch : 'Msg -> unit) =
