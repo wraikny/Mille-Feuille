@@ -1,67 +1,67 @@
 ﻿namespace wraikny.MilleFeuille
 
-open wraikny.Tart.Helper.Math
+open Affogato
 
 
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-module Vec2 =
+module Vector2 =
     let inline fromVector2DF (v : asd.Vector2DF) =
-        v.ToVec2()
+        v.ToVector2()
 
     let inline fromVector2DI (v : asd.Vector2DI) =
-        v.ToVec2()
+        v.ToVector2()
 
-    let inline toVector2DF (v : float32 Vec2) =
+    let inline toVector2DF (v : float32 Vector2) =
         asd.Vector2DF(v.x, v.y)
 
-    let inline toVector2DI (v : int Vec2) =
+    let inline toVector2DI (v : int Vector2) =
         asd.Vector2DI(v.x, v.y)
 
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-module Vec3 =
+module Vector3 =
     let inline fromVector3DF (v : asd.Vector3DF) =
-        v.ToVec3()
+        v.ToVector3()
 
-    let inline toVector3DF (v : float32 Vec3) =
+    let inline toVector3DF (v : float32 Vector3) =
         asd.Vector3DF(v.x, v.y, v.z)
 
-    let inline toColor (v : byte Vec3) =
+    let inline toColor (v : byte Vector3) =
         asd.Color(v.x, v.y, v.z)
 
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-module Vec4 =
+module Vector4 =
     let inline fromVector4DF (v : asd.Vector4DF) =
-        v.ToVec4()
+        v.ToVector4()
 
     let inline fromColor (c : asd.Color) =
-        c.ToVec4()
+        c.ToVector4()
 
-    let inline toVector4DF (v : float32 Vec4) =
+    let inline toVector4DF (v : float32 Vector4) =
         asd.Vector4DF(v.x, v.y, v.z, v.w)
 
-    let inline toColor (v : byte Vec4) =
+    let inline toColor (v : byte Vector4) =
         asd.Color(v.x, v.y, v.z, v.w)
 
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Rect =
-    let inline toRectF (r : float32 Rect2) : asd.RectF =
+    let inline toRectF (r : float32 Rectangle2) : asd.RectF =
         asd.RectF(
-            r.position |> Vec2.toVector2DF
-            , r.size |> Vec2.toVector2DF
+            r.position |> Vector2.toVector2DF
+            , r.size |> Vector2.toVector2DF
         )
 
-    let inline toRectI (r : int Rect2) : asd.RectI =
+    let inline toRectI (r : int Rectangle2) : asd.RectI =
         asd.RectI(
-            r.position |> Vec2.toVector2DI
-            , r.size |> Vec2.toVector2DI
+            r.position |> Vector2.toVector2DI
+            , r.size |> Vector2.toVector2DI
         )
 
-    let inline toRectangleShape (r : float32 Rect2) : asd.RectangleShape =
+    let inline toRectangleShape (r : float32 Rectangle2) : asd.RectangleShape =
         new asd.RectangleShape(
             DrawingArea = toRectF r
         )
 
-    let inline toRectangleCollider (r : float32 Rect2) : asd.RectangleCollider =
+    let inline toRectangleCollider (r : float32 Rectangle2) : asd.RectangleCollider =
         new asd.RectangleCollider(
             Area = toRectF r
         )
@@ -70,14 +70,14 @@ module Rect =
 module Sphere =
     let inline toCircleShape (c : float32 Sphere2) : asd.CircleShape =
         new asd.CircleShape(
-            Position = Vec2.toVector2DF c.center
+            Position = Vector2.toVector2DF c.center
             , InnerDiameter = 0.0f
             , OuterDiameter = c.radius * 2.0f
         )
 
     let inline toCircleCollider (c : float32 Sphere2) : asd.CircleCollider =
         new asd.CircleCollider(
-            Center = Vec2.toVector2DF c.center
+            Center = Vector2.toVector2DF c.center
             , Radius = c.radius
         )
 
@@ -86,14 +86,14 @@ module Line =
     let inline toLineShape thickness (l : float32 Line2) : asd.LineShape =
         new asd.LineShape(
             Thickness = thickness
-            , StartingPosition = Vec2.toVector2DF l.startPoint
-            , EndingPosition = Vec2.toVector2DF l.endPoint
+            , StartingPosition = Vector2.toVector2DF l.startPoint
+            , EndingPosition = Vector2.toVector2DF l.endPoint
         )
 
     let inline toLineCollider thickness (l : float32 Line2) : asd.LineCollider =
         new asd.LineCollider(
             Thickness = thickness
-            , StartingPosition = Vec2.toVector2DF l.startPoint
-            , EndingPosition = Vec2.toVector2DF l.endPoint
+            , StartingPosition = Vector2.toVector2DF l.startPoint
+            , EndingPosition = Vector2.toVector2DF l.endPoint
         )
 

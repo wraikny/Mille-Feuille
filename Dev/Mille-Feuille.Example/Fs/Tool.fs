@@ -1,7 +1,7 @@
 ﻿namespace wraikny.MilleFeuille.ExampleFs.Fs.Tool
 
 open wraikny.Tart.Core
-open wraikny.MilleFeuille.Fs
+open wraikny.MilleFeuille
 
 
 module Counter =
@@ -10,8 +10,8 @@ module Counter =
 
     module Core =
         open wraikny.Tart.Core.Libraries
-        open wraikny.MilleFeuille.Fs.Tool
-        open wraikny.MilleFeuille.Fs.Tool.Tree
+        open wraikny.MilleFeuille.Tool
+        open wraikny.MilleFeuille.Tool.Tree
 
         type Model =
             {
@@ -46,10 +46,10 @@ module Counter =
                     tmp = t
                 }, Cmd.none
             | Clear ->
-                fst init, Cmd.viewMsg [Print "Cleared!"]
+                fst init, Cmd.ofPort(Print "Cleared!")
             | Random ->
                 let a, b = model.range
-                model, (Random.generate SetCount (Random.int a b))
+                model, (SideEffect.performWith SetCount (Random.int a b))
             | SetCount i ->
                 { model with count = i }, Cmd.none
             | SetTmp i ->
@@ -106,12 +106,12 @@ module Counter =
 
 
         let messenger =
-            let env = Environment .Initialize()
+            let env = { seed = System.Random().Next() }
 
-            Messenger.createMessenger env Core.program
+            Messenger.Create(env, Core.program)
 
         messenger.ViewModel
-            .Subscribe(fun x -> Tool.render x messenger) |> ignore
+            .Subscribe(fun x -> Tool.render x messenger.Enqueue) |> ignore
 
         messenger.ViewMsg.Subscribe(fun x ->
             x |> function

@@ -243,10 +243,7 @@ module private Helper =
             asd.Engine.Tool.EndCombo()
 
 
-open wraikny.Tart.Core
-open wraikny.Tart.Helper.Utils
-
-open FSharpPlus
+open Affogato.Helper
 
 module private Render =
     let eventRender x (dispatch : 'Msg -> unit) =
@@ -309,7 +306,7 @@ module private Render =
             let n = current |> String.length
             let bufferSize = bufferSize |> Option.defaultValue(n + 256)
             let s : sbyte [] =
-                (<|>)
+                Array.append
                     (current |> Seq.map sbyte |> toArray)
                     [|for _ in 1..bufferSize-n -> 0y|]
 
@@ -319,7 +316,7 @@ module private Render =
                     |> Array.takeWhile ((<>) 0y)
                     |>> byte
 
-                let s = System.Text.Encoding.UTF8.GetString (s, 0, s |> length)
+                let s = System.Text.Encoding.UTF8.GetString (s, 0, s.Length)
                     
                 msg(s) |> dispatch
 
@@ -337,7 +334,7 @@ module private Render =
         | Combo(label, current, items, msg) ->
             let preview =
                 items
-                |> tryItem current
+                |> List.tryItem current
                 |> Option.defaultValue ""
 
             Helper.combo label preview <| fun _ ->
@@ -353,7 +350,7 @@ module private Render =
         | Column list ->
             let currentIndex = asd.Engine.Tool.ColumnIndex
 
-            let columnSize = length list
+            let columnSize = list.Length
 
             let render (w, il) =
                 w |> function
@@ -400,7 +397,7 @@ module private Render =
                         asd.Engine.Keyboard.GetKeyState
                         >> (=) asd.ButtonState.Push
                     )
-                    |> fold (||) false
+                    |> Seq.fold (||) false
 
                 if pushed then
                     eventRender event dispatch

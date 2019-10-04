@@ -1,10 +1,7 @@
 ﻿namespace wraikny.MilleFeuille.Objects
 
 open System
-open wraikny.Tart.Helper.Utils
-open wraikny.Tart.Core
-
-open wraikny.MilleFeuille
+open wraikny.Tart.Helper
 
 type ActorsUpdaterArg<'ViewModel, 'Actor, 'ActorViewModel
     when 'Actor :> asd.Object2D
@@ -18,12 +15,13 @@ type ActorsUpdaterArg<'ViewModel, 'Actor, 'ActorViewModel
 
 /// 追加削除の発生するasd.Object2Dの更新管理を行うクラス。
 [<Class; Sealed>]
-type ActorsUpdater<'Actor, 'ActorViewModel
+type ActorsUpdater<'Key, 'Actor, 'ActorViewModel
     when 'Actor :> asd.Object2D
     and 'Actor :> IUpdatee<'ActorViewModel>
+    and  'Key : equality
     >(layer : asd.Layer2D, enebleObjectsRemoving, arg : ActorsUpdaterArg<_, _, _>) =
 
-    let updater = new ObjectsUpdater<'Actor, 'ActorViewModel>({
+    let updater = new ObjectsUpdater<'Key, 'Actor, 'ActorViewModel>({
         create = arg.create
         add =
             if enebleObjectsRemoving then
@@ -50,7 +48,7 @@ type ActorsUpdater<'Actor, 'ActorViewModel
         dispose = fun actor -> actor.Dispose()
     })
 
-    new(layer, arg) = new ActorsUpdater<_, _>(layer, false, arg)
+    new(layer, arg) = new ActorsUpdater<_, _, _>(layer, false, arg)
 
     member __.UpdatingOption
         with get() = updater.UpdatingOption
@@ -58,7 +56,7 @@ type ActorsUpdater<'Actor, 'ActorViewModel
 
     member __.Remove(id) = updater.Remove(id)
     
-    interface IObserver<UpdaterViewModel<'ActorViewModel>> with
+    interface IObserver<UpdaterViewModel<'Key, 'ActorViewModel>> with
         member this.OnNext(input) =
             if layer.IsUpdated then
                 updater.Update(input)

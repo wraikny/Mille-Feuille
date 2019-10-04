@@ -1,9 +1,8 @@
 ﻿[<AutoOpen>]
 module wraikny.MilleFeuille.Extension
 
-open wraikny.Tart.Helper.Math
-
-
+open Affogato
+open System.Collections
 
 type asd.Font with
     member inline this.HorizontalSize(text) =
@@ -14,33 +13,33 @@ type asd.Font with
 
 
 type asd.Vector2DF with
-    member inline v.ToVec2() =
-        Vec2.init v.X v.Y
+    member inline v.ToVector2() =
+        Vector2.init v.X v.Y
 
 type asd.Vector2DI with
-    member inline v.ToVec2() =
-        Vec2.init v.X v.Y
+    member inline v.ToVector2() =
+        Vector2.init v.X v.Y
 
 type asd.Vector3DF with
-    member inline v.ToVec3() =
-        Vec3.init v.X v.Y v.Z
+    member inline v.ToVector3() =
+        Vector3.init v.X v.Y v.Z
 
 type asd.Vector4DF with
-    member inline v.ToVec4() =
-        Vec4.init v.X v.Y v.Z v.W
+    member inline v.ToVector4() =
+        Vector4.init v.X v.Y v.Z v.W
 
 type asd.Color with
-    member inline v.ToVec4() =
-        Vec4.init v.R v.G v.B v.A
+    member inline v.ToVector4() =
+        Vector4.init v.R v.G v.B v.A
 
 
 type asd.RectF with
     member inline r.ToRect2() =
-        Rect.init (r.Position.ToVec2()) (r.Size.ToVec2())
+        Rectangle.init (r.Position.ToVector2()) (r.Size.ToVector2())
 
 type asd.RectI with
     member inline r.ToRect2() =
-        Rect.init (r.Position.ToVec2()) (r.Size.ToVec2())
+        Rectangle.init (r.Position.ToVector2()) (r.Size.ToVector2())
 
 
 type asd.Object2D with

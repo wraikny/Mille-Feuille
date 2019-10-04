@@ -1,14 +1,12 @@
 ﻿module wraikny.MilleFeuille.ExampleFs.UI.ControllerButton
 
 open System.Linq
-open wraikny.MilleFeuille.Core
 open wraikny.MilleFeuille
-open wraikny.MilleFeuille.Core.UI
-open wraikny.MilleFeuille.Fs.Input
-open wraikny.MilleFeuille.Fs.UI
+open wraikny.MilleFeuille.UI
+open wraikny.MilleFeuille.Input
 
 type Scene() =
-    inherit Core.Scene()
+    inherit wraikny.MilleFeuille.Scene()
 
     let uiLayer = new asd.Layer2D()
 

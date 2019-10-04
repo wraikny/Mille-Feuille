@@ -1,8 +1,7 @@
 ﻿namespace wraikny.MilleFeuille.Objects
 
 open System
-open wraikny.Tart.Helper.Utils
-open wraikny.Tart.Core
+open wraikny.Tart.Helper
 
 
 type MaptipsUpdaterArg<'ViewModel, 'Chip, 'ChipViewModel
@@ -17,13 +16,14 @@ type MaptipsUpdaterArg<'ViewModel, 'Chip, 'ChipViewModel
 
 /// 追加削除の発生するマップチップの更新管理を行うクラス。
 [<Class; Sealed>]
-type MaptipsUpdater<'Chip, 'ChipViewModel
+type MaptipsUpdater<'Key, 'Chip, 'ChipViewModel
     when 'Chip :> asd.Chip2D
     and  'Chip :> IUpdatee<'ChipViewModel>
+    and  'Key : equality
     >(arg : MaptipsUpdaterArg<_, _, _>) as this =
     inherit asd.MapObject2D()
 
-    let updater = new ObjectsUpdater<'Chip, 'ChipViewModel>({
+    let updater = new ObjectsUpdater<'Key, 'Chip, 'ChipViewModel>({
         create = arg.create
         add = this.AddChip >> ignore
         remove =
@@ -42,7 +42,7 @@ type MaptipsUpdater<'Chip, 'ChipViewModel
 
             updater.UpdatingOption <- x
 
-    interface IObserver<UpdaterViewModel<'ChipViewModel>> with
+    interface IObserver<UpdaterViewModel<'Key, 'ChipViewModel>> with
         member this.OnNext(input) =
             if this.IsUpdated then
                 updater.Update(input)
