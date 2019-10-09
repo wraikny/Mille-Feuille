@@ -10,8 +10,18 @@ namespace wraikny.MilleFeuille
     public class SceneComponent<T> : asd.SceneComponent
         where T : asd.Scene
     {
-        private readonly CoroutineManager coroutineManager = new CoroutineManager();
-        public ICoroutineManager Coroutine => coroutineManager;
+        private CoroutineManager coroutineManager;
+        public ICoroutineManager Coroutine
+        {
+            get
+            {
+                if (coroutineManager == null)
+                {
+                    coroutineManager = new CoroutineManager();
+                }
+                return coroutineManager;
+            }
+        }
 
         public string Name { get; }
 
@@ -110,7 +120,7 @@ namespace wraikny.MilleFeuille
         protected override void OnUpdated()
         {
             InvokeAction(OnUpdatedEvent);
-            coroutineManager.Update();
+            coroutineManager?.Update();
         }
 
         protected override void OnSceneTransitionBegin()

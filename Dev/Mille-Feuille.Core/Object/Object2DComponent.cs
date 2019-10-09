@@ -10,8 +10,18 @@ namespace wraikny.MilleFeuille
     public class Object2DComponent<T> : asd.Object2DComponent
         where T : asd.Object2D
     {
-        private readonly CoroutineManager coroutineManager = new CoroutineManager();
-        public ICoroutineManager Coroutine => coroutineManager;
+        private CoroutineManager coroutineManager;
+        public ICoroutineManager Coroutine
+        {
+            get
+            {
+                if(coroutineManager == null)
+                {
+                    coroutineManager = new CoroutineManager();
+                }
+                return coroutineManager;
+            }
+        }
 
         public string Name { get; }
 
@@ -71,7 +81,7 @@ namespace wraikny.MilleFeuille
         protected override void OnUpdate()
         {
             InvokeAction(OnUpdateEvent);
-            coroutineManager.Update();
+            coroutineManager?.Update();
         }
 
         protected override void OnObjectDisposed()

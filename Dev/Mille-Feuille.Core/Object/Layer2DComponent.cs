@@ -10,8 +10,18 @@ namespace wraikny.MilleFeuille
     public class Layer2DComponent<T> : asd.Layer2DComponent
         where T : asd.Layer2D
     {
-        private readonly CoroutineManager coroutineManager = new CoroutineManager();
-        public ICoroutineManager Coroutine => coroutineManager;
+        private CoroutineManager coroutineManager;
+        public ICoroutineManager Coroutine
+        {
+            get
+            {
+                if (coroutineManager == null)
+                {
+                    coroutineManager = new CoroutineManager();
+                }
+                return coroutineManager;
+            }
+        }
 
         public string Name { get; }
 
@@ -74,7 +84,7 @@ namespace wraikny.MilleFeuille
         protected override void OnLayerUpdated()
         {
             InvokeAction(OnUpdatedEvent);
-            coroutineManager.Update();
+            coroutineManager?.Update();
         }
     }
 
