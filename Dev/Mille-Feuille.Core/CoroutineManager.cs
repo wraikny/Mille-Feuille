@@ -21,7 +21,7 @@ namespace wraikny.MilleFeuille
 
         private readonly HashSet<IEnumerator> registeredCoroutines = new HashSet<IEnumerator>();
         private readonly List<Stack<IEnumerator>> coroutines = new List<Stack<IEnumerator>>();
-        private readonly Stack<IEnumerator> subcoroutines = new Stack<IEnumerator>();
+        private readonly Queue<IEnumerator> subcoroutines = new Queue<IEnumerator>();
         private bool enableSubCoroutine = false;
 
         /// <summary>
@@ -37,9 +37,9 @@ namespace wraikny.MilleFeuille
                     registeredCoroutines.Remove(coroutineStack.Pop());
                 }
 
-                foreach (var _ in Enumerable.Range(0, subcoroutines.Count))
+                while(subcoroutines.Count > 0)
                 {
-                    coroutineStack.Push(subcoroutines.Pop());
+                    coroutineStack.Push(subcoroutines.Dequeue());
                 }
 
                 if (coroutineStack.Count == 0)
@@ -59,7 +59,6 @@ namespace wraikny.MilleFeuille
         public void AddCoroutine(IEnumerator coroutine)
         {
             if (coroutine == null) throw new ArgumentNullException();
-
             if (registeredCoroutines.Contains(coroutine)) throw new ArgumentException("coroutine is already added");
 
             var stack = new Stack<IEnumerator>();
@@ -79,16 +78,17 @@ namespace wraikny.MilleFeuille
         /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
         public void StackCoroutine(IEnumerator subcoroutine)
         {
-            if (subcoroutine == null) throw new ArgumentNullException();
 
-            if (registeredCoroutines.Contains(subcoroutine)) throw new ArgumentException("coroutine is already added");
-
-            if (!enableSubCoroutine)
+            if (enableSubCoroutine)
             {
-                throw new InvalidOperationException("SubCorutine must be started inside of coroutine");
+                if (subcoroutine == null) throw new ArgumentNullException();
+                if (registeredCoroutines.Contains(subcoroutine)) throw new ArgumentException("coroutine is already added");
+                subcoroutines.Enqueue(subcoroutine);
             }
-
-            subcoroutines.Push(subcoroutine);
+            else
+            {
+                AddCoroutine(subcoroutine);
+            }
         }
     }
 }
