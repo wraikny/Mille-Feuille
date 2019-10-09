@@ -97,33 +97,41 @@ namespace wraikny.MilleFeuille
         /// <summary>
         /// レイヤーがシーンに登録されたときに実行されるイベントを追加する。
         /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void AddOnAddedEvent(this asd.Layer2D obj, Action action)
         {
-            obj.GetLayer2DComponent().OnAddedEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            obj.GetLayer2DComponent().OnAddedEvent += _ => action();
         }
 
         /// <summary>
         /// オブジェクトからレイヤーに登録解除されたときに実行されるイベントを追加する。
         /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void AddOnRemovedEvent(this asd.Layer2D obj, Action action)
         {
-            obj.GetLayer2DComponent().OnRemovedEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            obj.GetLayer2DComponent().OnRemovedEvent += _ => action();
         }
 
         /// <summary>
         /// レイヤーが更新される直前に実行されるイベントを追加する。
         /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void AddOnUpdatingEvent(this asd.Layer2D obj, Action action)
         {
-            obj.GetLayer2DComponent().OnUpdatingEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            obj.GetLayer2DComponent().OnUpdatingEvent += _ => action();
         }
 
         /// <summary>
         /// レイヤーが更新される直後に実行されるイベントを追加する。
         /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void AddOnUpdateEvent(this asd.Layer2D obj, Action action)
         {
-            obj.GetLayer2DComponent().OnUpdatedEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            obj.GetLayer2DComponent().OnUpdatedEvent += _ => action();
         }
 
         /// <summary>
@@ -132,9 +140,11 @@ namespace wraikny.MilleFeuille
         /// <param name="coroutine"></param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void AddCoroutine(this asd.Layer2D obj, IEnumerator coroutine)
 
         {
+            if (coroutine == null) throw new ArgumentNullException("coroutine");
             obj.GetLayer2DComponent().Coroutine.AddCoroutine(coroutine);
         }
 
@@ -144,9 +154,11 @@ namespace wraikny.MilleFeuille
         /// <param name="coroutine"></param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void AddCoroutine(this asd.Layer2D obj, Func<IEnumerator> coroutine)
         {
-            obj.AddCoroutine(coroutine.Invoke());
+            if (coroutine == null) throw new ArgumentNullException("coroutine");
+            obj.AddCoroutine(coroutine());
         }
 
         /// <summary>
@@ -157,9 +169,10 @@ namespace wraikny.MilleFeuille
         /// Thrown when called outside of current coroutines updating.
         /// </exception>
         /// <exception cref="ArgumentNullException"></exception>
-        /// /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
+        /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
         public static void StackCoroutine(this asd.Layer2D obj, IEnumerator coroutine)
         {
+            if (coroutine == null) throw new ArgumentNullException("coroutine");
             obj.GetLayer2DComponent().Coroutine.StackCoroutine(coroutine);
         }
 
@@ -171,10 +184,11 @@ namespace wraikny.MilleFeuille
         /// Thrown when called outside of current coroutines updating.
         /// </exception>
         /// <exception cref="ArgumentNullException"></exception>
-        /// /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
+        /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
         public static void StackCoroutine(this asd.Layer2D obj, Func<IEnumerator> coroutine)
         {
-            obj.GetLayer2DComponent().Coroutine.StackCoroutine(coroutine.Invoke());
+            if (coroutine == null) throw new ArgumentNullException("coroutine");
+            obj.GetLayer2DComponent().Coroutine.StackCoroutine(coroutine());
         }
     }
 }

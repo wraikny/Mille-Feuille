@@ -76,7 +76,7 @@ namespace wraikny.MilleFeuille
         /// Thrown when called outside of current coroutines updating.
         /// </exception>
         /// <exception cref="ArgumentNullException"></exception>
-        /// /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
+        /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
         public void StackCoroutine(IEnumerator subcoroutine)
         {
             if (subcoroutine == null) throw new ArgumentNullException();

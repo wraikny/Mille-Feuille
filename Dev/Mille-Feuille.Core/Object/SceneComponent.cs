@@ -148,73 +148,91 @@ namespace wraikny.MilleFeuille
         /// <summary>
         /// シーンがエンジンに登録されたときに実行されるイベントを追加する。
         /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void AddOnRegisteredEventEvent(this asd.Scene obj, Action action)
         {
-            obj.GetSceneComponent().OnRegisteredEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            obj.GetSceneComponent().OnRegisteredEvent += _ => action();
         }
 
         /// <summary>
         /// シーンがエンジンから登録解除されたときに実行されるイベントを追加する。
         /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void AddOnUnRegisteredEventEvent(this asd.Scene obj, Action action)
         {
-            obj.GetSceneComponent().OnUnRegisteredEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            obj.GetSceneComponent().OnUnRegisteredEvent += _ => action();
         }
 
         /// <summary>
         /// シーンの更新が始まるときに実行されるイベントを追加する。
         /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void AddOnStartUpdatingEvent(this asd.Scene obj, Action action)
         {
-            obj.GetSceneComponent().OnStartUpdatingEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            obj.GetSceneComponent().OnStartUpdatingEvent += _ => action();
         }
 
         /// <summary>
         /// シーンの更新が止まるときに実行されるイベントを追加する。
         /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void AddOnStopUpdatingEvent(this asd.Scene obj, Action action)
         {
-            obj.GetSceneComponent().OnStopUpdatingEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            obj.GetSceneComponent().OnStopUpdatingEvent += _ => action();
         }
 
         /// <summary>
         /// シーンのUpdateが始まるときに実行されるイベントを追加する。
         /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void AddOnUpdatingEvent(this asd.Scene obj, Action action)
         {
-            obj.GetSceneComponent().OnUpdatingEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            obj.GetSceneComponent().OnUpdatingEvent += _ => action();
         }
 
         /// <summary>
         /// シーンのUpdateが終わるときに実行されるイベントを追加する。
         /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void AddOnUpdateEvent(this asd.Scene obj, Action action)
         {
-            obj.GetSceneComponent().OnUpdatedEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            obj.GetSceneComponent().OnUpdatedEvent += _ => action();
         }
 
         /// <summary>
         /// シーンへの画面遷移が始まるときに実行されるイベントを追加する。
         /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void AddOnTransitionBeginEvent(this asd.Scene obj, Action action)
         {
-            obj.GetSceneComponent().OnTransitionBeginEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            obj.GetSceneComponent().OnTransitionBeginEvent += _ => action();
         }
 
         /// <summary>
         /// シーンへの画面遷移が完了したときに実行されるイベントを追加する。
         /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void AddOnTransitionFinishedEvent(this asd.Scene obj, Action action)
         {
-            obj.GetSceneComponent().OnTransitionFinishedEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            obj.GetSceneComponent().OnTransitionFinishedEvent += _ => action();
         }
 
         /// <summary>
         /// シーンが破棄されたときに実行されるイベントを追加する。
         /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void AddOnDisposedEvent(this asd.Scene obj, Action action)
         {
-            obj.GetSceneComponent().OnDisposedEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            obj.GetSceneComponent().OnDisposedEvent += _ => action();
         }
 
         /// <summary>
@@ -223,9 +241,11 @@ namespace wraikny.MilleFeuille
         /// <param name="coroutine"></param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void AddCoroutine(this asd.Scene obj, IEnumerator coroutine)
 
         {
+            if (coroutine == null) throw new ArgumentNullException("coroutine");
             obj.GetSceneComponent().Coroutine.AddCoroutine(coroutine);
         }
 
@@ -235,9 +255,11 @@ namespace wraikny.MilleFeuille
         /// <param name="coroutine"></param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void AddCoroutine(this asd.Scene obj, Func<IEnumerator> coroutine)
         {
-            obj.AddCoroutine(coroutine.Invoke());
+            if (coroutine == null) throw new ArgumentNullException("coroutine");
+            obj.AddCoroutine(coroutine());
         }
 
         /// <summary>
@@ -247,10 +269,11 @@ namespace wraikny.MilleFeuille
         /// <exception cref="InvalidOperationException.InvalidOperationException">
         /// Thrown when called outside of current coroutines updating.
         /// </exception>
+        /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
         /// <exception cref="ArgumentNullException"></exception>
-        /// /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
         public static void StackCoroutine(this asd.Scene obj, IEnumerator coroutine)
         {
+            if (coroutine == null) throw new ArgumentNullException("coroutine");
             obj.GetSceneComponent().Coroutine.StackCoroutine(coroutine);
         }
 
@@ -262,10 +285,12 @@ namespace wraikny.MilleFeuille
         /// Thrown when called outside of current coroutines updating.
         /// </exception>
         /// <exception cref="ArgumentNullException"></exception>
-        /// /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
+        /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void StackCoroutine(this asd.Scene obj, Func<IEnumerator> coroutine)
         {
-            obj.GetSceneComponent().Coroutine.StackCoroutine(coroutine.Invoke());
+            if (coroutine == null) throw new ArgumentNullException("coroutine");
+            obj.GetSceneComponent().Coroutine.StackCoroutine(coroutine());
         }
     }
 }

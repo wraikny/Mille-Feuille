@@ -99,33 +99,41 @@ namespace wraikny.MilleFeuille
         /// <summary>
         /// オブジェクトがレイヤーに登録されたときに実行されるイベントを追加する。
         /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void AddOnAddedEvent(this asd.Object2D obj, Action action)
         {
-            obj.GetObject2DComponent().OnAddedEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            obj.GetObject2DComponent().OnAddedEvent += _ => action();
         }
 
         /// <summary>
         /// オブジェクトからレイヤーに登録解除されたときに実行されるイベントを追加する。
         /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void AddOnRemovedEvent(this asd.Object2D obj, Action action)
         {
-            obj.GetObject2DComponent().OnRemovedEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            obj.GetObject2DComponent().OnRemovedEvent += _ => action();
         }
 
         /// <summary>
         /// オブジェクトが更新されるときに実行されるイベントを追加する。
         /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void AddOnUpdateEvent(this asd.Object2D obj, Action action)
         {
-            obj.GetObject2DComponent().OnUpdateEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            obj.GetObject2DComponent().OnUpdateEvent += _ => action();
         }
 
         /// <summary>
         /// オブジェクトが破棄されたときに実行されるイベントを追加する。
         /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void AddOnDisposedEvent(this asd.Object2D obj, Action action)
         {
-            obj.GetObject2DComponent().OnDisposedEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            obj.GetObject2DComponent().OnDisposedEvent += _ => action();
         }
 
         /// <summary>
@@ -134,9 +142,11 @@ namespace wraikny.MilleFeuille
         /// <param name="coroutine"></param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void AddCoroutine(this asd.Object2D obj, IEnumerator coroutine)
-            
+
         {
+            if (coroutine == null) throw new ArgumentNullException("coroutine");
             obj.GetObject2DComponent().Coroutine.AddCoroutine(coroutine);
         }
 
@@ -146,9 +156,11 @@ namespace wraikny.MilleFeuille
         /// <param name="coroutine"></param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void AddCoroutine(this asd.Object2D obj, Func<IEnumerator> coroutine)
         {
-            obj.AddCoroutine(coroutine.Invoke());
+            if (coroutine == null) throw new ArgumentNullException("coroutine");
+            obj.AddCoroutine(coroutine());
         }
 
         /// <summary>
@@ -159,9 +171,10 @@ namespace wraikny.MilleFeuille
         /// Thrown when called outside of current coroutines updating.
         /// </exception>
         /// <exception cref="ArgumentNullException"></exception>
-        /// /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
+        /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
         public static void StackCoroutine(this asd.Object2D obj, IEnumerator coroutine)
         {
+            if (coroutine == null) throw new ArgumentNullException("coroutine");
             obj.GetObject2DComponent().Coroutine.StackCoroutine(coroutine);
         }
 
@@ -173,10 +186,11 @@ namespace wraikny.MilleFeuille
         /// Thrown when called outside of current coroutines updating.
         /// </exception>
         /// <exception cref="ArgumentNullException"></exception>
-        /// /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
+        /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
         public static void StackCoroutine(this asd.Object2D obj, Func<IEnumerator> coroutine)
         {
-            obj.GetObject2DComponent().Coroutine.StackCoroutine(coroutine.Invoke());
+            if (coroutine == null) throw new ArgumentNullException("coroutine");
+            obj.GetObject2DComponent().Coroutine.StackCoroutine(coroutine());
         }
     }
 }
