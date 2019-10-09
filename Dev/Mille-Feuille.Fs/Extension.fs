@@ -43,13 +43,13 @@ type asd.RectI with
 
 
 type asd.Object2D with
-    member inline this.AddCoroutine(coroutine : seq<unit>) =
-        this.AddCoroutine(coroutine.GetEnumerator())
+    member inline this.AddCoroutineAsParallel(coroutine : seq<unit>) =
+        this.CoroutineManager().AddCoroutineAsParallel(coroutine.GetEnumerator())
 
 type asd.Layer2D with
-    member inline this.AddCoroutine(coroutine : seq<unit>) =
-        this.AddCoroutine(coroutine.GetEnumerator())
+    member inline this.AddCoroutineAsParallel(coroutine : seq<unit>) =
+        this.CoroutineManager().AddCoroutineAsParallel(coroutine.GetEnumerator())
 
 type asd.Scene with
-    member inline this.AddCoroutine(coroutine : seq<unit>) =
-        this.AddCoroutine(coroutine.GetEnumerator())
+    member inline this.AddCoroutineAsParallel(coroutine : seq<unit>) =
+        this.CoroutineManager().AddCoroutineAsParallel(coroutine.GetEnumerator())
