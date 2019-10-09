@@ -43,7 +43,7 @@ module Vector4 =
         asd.Color(v.x, v.y, v.z, v.w)
 
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-module Rect =
+module Rectangle =
     let inline toRectF (r : float32 Rectangle2) : asd.RectF =
         asd.RectF(
             r.position |> Vector2.toVector2DF
