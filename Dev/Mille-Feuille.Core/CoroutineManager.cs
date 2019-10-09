@@ -29,25 +29,28 @@ namespace wraikny.MilleFeuille
         /// </summary>
         public void Update()
         {
-            enableSubCoroutine = true;
-            foreach (var coroutineStack in coroutines.ToArray())
+            if(coroutines.Count > 0)
             {
-                if (coroutineStack.Count > 0 && !(coroutineStack.Peek()?.MoveNext() ?? false))
+                enableSubCoroutine = true;
+                foreach (var coroutineStack in coroutines.ToArray())
                 {
-                    registeredCoroutines.Remove(coroutineStack.Pop());
-                }
+                    if (coroutineStack.Count > 0 && !(coroutineStack.Peek()?.MoveNext() ?? false))
+                    {
+                        registeredCoroutines.Remove(coroutineStack.Pop());
+                    }
 
-                while(subcoroutines.Count > 0)
-                {
-                    coroutineStack.Push(subcoroutines.Dequeue());
-                }
+                    while(subcoroutines.Count > 0)
+                    {
+                        coroutineStack.Push(subcoroutines.Dequeue());
+                    }
 
-                if (coroutineStack.Count == 0)
-                {
-                    coroutines.Remove(coroutineStack);
+                    if (coroutineStack.Count == 0)
+                    {
+                        coroutines.Remove(coroutineStack);
+                    }
                 }
+                enableSubCoroutine = false;
             }
-            enableSubCoroutine = false;
         }
 
         /// <summary>
@@ -71,9 +74,6 @@ namespace wraikny.MilleFeuille
         /// サブコルーチンを現在のスタックに追加する。
         /// </summary>
         /// <param name="subcoroutine"></param>
-        /// <exception cref="InvalidOperationException.InvalidOperationException">
-        /// Thrown when called outside of current coroutines updating.
-        /// </exception>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
         public void StackCoroutine(IEnumerator subcoroutine)
