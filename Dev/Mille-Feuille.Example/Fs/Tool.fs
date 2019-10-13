@@ -1,17 +1,14 @@
 ﻿namespace wraikny.MilleFeuille.ExampleFs.Fs.Tool
 
-open wraikny.Tart.Core
 open wraikny.MilleFeuille
-
+open Elmish
 
 module Counter =
-    type ViewMsg =
-        | Print of string
-
     module Core =
-        open wraikny.Tart.Core.Libraries
         open wraikny.MilleFeuille.Tool
         open wraikny.MilleFeuille.Tool.Tree
+
+        let rand = System.Random()
 
         type Model =
             {
@@ -29,7 +26,7 @@ module Counter =
             | SetRange of int * int
 
 
-        let init : Model * Cmd<Msg, ViewMsg> =
+        let init() : Model * Cmd<Msg> =
             {
                 count = 0
                 tmp = 0
@@ -37,8 +34,7 @@ module Counter =
             }, Cmd.none
 
 
-        let update msg model : Model * Cmd<Msg, ViewMsg> =
-            let {count=count; tmp=tmp} = model
+        let update msg model : Model * Cmd<Msg> =
             msg |> function
             | SetValue(c, t) ->
                 { model with
@@ -46,10 +42,10 @@ module Counter =
                     tmp = t
                 }, Cmd.none
             | Clear ->
-                fst init, Cmd.ofPort(Print "Cleared!")
+                fst <| init(), Cmd.none
             | Random ->
                 let a, b = model.range
-                model, (SideEffect.performWith SetCount (Random.int a b))
+                { model with count = rand.Next(a,b) }, Cmd.none
             | SetCount i ->
                 { model with count = i }, Cmd.none
             | SetTmp i ->
@@ -90,46 +86,30 @@ module Counter =
                     ]
                 ]
             ]
+    open Core
 
-
-        let program =
-            {
-                init = init
-                update = update
-                view = view
-            }
+    let program = Program.mkProgram init update (fun m _ -> m)
 
 
     let main () =
         asd.Engine.Initialize("Counter", 800, 600, new asd.EngineOption())
         |> ignore
 
+        let sc = QueueSynchronizationContext()
+        let renderer = Tool.Renderer<_>()
 
-        let messenger =
-            let env = { seed = System.Random().Next() }
-
-            Messenger.Create(env, Core.program)
-
-        messenger.ViewModel
-            .Subscribe(fun x -> Tool.render x messenger.Enqueue) |> ignore
-
-        messenger.ViewMsg.Subscribe(fun x ->
-            x |> function
-            | Print s -> printfn "Executed in mainthread: %s" s
-        ) |> ignore
-
-
+        program
+        |> Program.withSetState(fun model dispatch ->
+            renderer.SetState(Core.view model, dispatch)
+        )
+        |> Program.run
         Tool.open' <| fun _ ->
-            messenger.StartAsync() |> ignore
-
-            asd.Engine.TargetFPS <- 20
-
+            asd.Engine.TargetFPS <- 30
 
             while asd.Engine.DoEvents() do
-                messenger.NotifyView()
+                renderer.Render()
+                sc.Execute()
                 asd.Engine.Update()
-            
-            messenger.Stop()
 
         asd.Engine.Terminate()
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Library</OutputType>
@@ -31,13 +31,14 @@
     <Compile Include="UI\MouseWindow\MouseButton.fs" />
     <Compile Include="UI\MouseWindow\MouseInputField.fs" />
     <Compile Include="UI\MouseWindow\MouseWindow.fs" />
+    <Compile Include="Objects\ObjectsPooling.fs" />
+    <Compile Include="Objects\ObjectsUpdater.fs" />
     <Compile Include="Objects\ActorsUpdater.fs" />
     <Compile Include="Objects\MaptipsUpdater.fs" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Affogato\src\Affogato\Affogato.fsproj" />
-    <ProjectReference Include="..\..\..\Tart\src\Tart.Helper\Tart.Helper.fsproj" />
     <ProjectReference Include="..\Mille-Feuille.Core\Mille-Feuille.csproj" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />

@@ -1,7 +1,6 @@
 ﻿namespace wraikny.MilleFeuille.Objects
 
 open System
-open wraikny.Tart.Helper
 
 type ActorsUpdaterArg<'ViewModel, 'Actor, 'ActorViewModel
     when 'Actor :> asd.Object2D
