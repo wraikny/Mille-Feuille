@@ -9,7 +9,7 @@ type ObjectsPool<'a> private (stack, create) =
 
     new(count: int, create) =
         let pool = Stack<_>()
-        for i = 1 to count do
+        for _i = 1 to count do
             pool.Push(create())
         new ObjectsPool<'a>(pool, create)
 
