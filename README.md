@@ -30,3 +30,6 @@ This software includes the work that is distributed in the [Apache License 2.0](
 ## Reference
 * [Altseed.Reactive](https://github.com/NumAniCloud/Altseed.Reactive)
 * [BaseComponent](https://github.com/gon6109/BaseComponent)
+
+## License
+* QueueSynchronizationContext: Copyright (c) 2016 Kouji Matsui, Apache License 2.0
