@@ -2,15 +2,6 @@
 
 open System
 
-type ActorsUpdaterArg<'ViewModel, 'Actor, 'ActorViewModel
-    when 'Actor :> asd.Object2D
-    > =
-    {
-        create : unit -> 'Actor
-        onError : exn -> unit
-        onCompleted : unit -> unit
-    }
-
 
 /// 追加削除の発生するasd.Object2Dの更新管理を行うクラス。
 [<Class; Sealed>]
@@ -18,10 +9,10 @@ type ActorsUpdater<'Key, 'Actor, 'ActorViewModel
     when 'Actor :> asd.Object2D
     and 'Actor :> IUpdatee<'ActorViewModel>
     and  'Key : equality
-    >(layer : asd.Layer2D, enebleObjectsRemoving, arg : ActorsUpdaterArg<_, _, _>) =
+    >(layer : asd.Layer2D, enebleObjectsRemoving, create : unit -> 'Actor) =
 
     let updater = new ObjectsUpdater<'Key, 'Actor, 'ActorViewModel>({
-        create = arg.create
+        create = create
         add =
             if enebleObjectsRemoving then
                 layer.AddObject
@@ -47,7 +38,7 @@ type ActorsUpdater<'Key, 'Actor, 'ActorViewModel
         dispose = fun actor -> actor.Dispose()
     })
 
-    new(layer, arg) = new ActorsUpdater<_, _, _>(layer, false, arg)
+    new(layer, create) = new ActorsUpdater<_, _, _>(layer, false, create)
 
     member __.UpdatingOption
         with get() = updater.UpdatingOption
@@ -60,6 +51,6 @@ type ActorsUpdater<'Key, 'Actor, 'ActorViewModel
             if layer.IsUpdated then
                 updater.Update(input)
 
-        member this.OnError(e) = arg.onError(e)
+        member this.OnError(e) = raise e
 
-        member this.OnCompleted() = arg.onCompleted()
+        member this.OnCompleted() = printfn "Completed"

@@ -3,27 +3,17 @@
 open System
 
 
-type MaptipsUpdaterArg<'ViewModel, 'Chip, 'ChipViewModel
-    when 'Chip :> asd.Chip2D
-    > =
-    {
-        create : unit -> 'Chip
-        onError : exn -> unit
-        onCompleted : unit -> unit
-    }
-
-
 /// 追加削除の発生するマップチップの更新管理を行うクラス。
 [<Class; Sealed>]
 type MaptipsUpdater<'Key, 'Chip, 'ChipViewModel
     when 'Chip :> asd.Chip2D
     and  'Chip :> IUpdatee<'ChipViewModel>
     and  'Key : equality
-    >(arg : MaptipsUpdaterArg<_, _, _>) as this =
+    >(create: unit -> 'Chip) as this =
     inherit asd.MapObject2D()
 
     let updater = new ObjectsUpdater<'Key, 'Chip, 'ChipViewModel>({
-        create = arg.create
+        create = create
         add = this.AddChip >> ignore
         remove =
             this.RemoveChip >> ignore
@@ -46,6 +36,6 @@ type MaptipsUpdater<'Key, 'Chip, 'ChipViewModel
             if this.IsUpdated then
                 updater.Update(input)
 
-        member __.OnError(e) = arg.onError(e)
+        member __.OnError(e) = raise e
 
-        member __.OnCompleted() = arg.onCompleted()
+        member __.OnCompleted() = printfn "Completed"
