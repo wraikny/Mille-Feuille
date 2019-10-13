@@ -32,10 +32,10 @@
     <Compile Include="UI\MouseWindow\MouseButton.fs" />
     <Compile Include="UI\MouseWindow\MouseInputField.fs" />
     <Compile Include="UI\MouseWindow\MouseWindow.fs" />
-    <Compile Include="Objects\ObjectsPooling.fs" />
-    <Compile Include="Objects\ObjectsUpdater.fs" />
-    <Compile Include="Objects\ActorsUpdater.fs" />
-    <Compile Include="Objects\MaptipsUpdater.fs" />
+    <Compile Include="Updater\ObjectsPooling.fs" />
+    <Compile Include="Updater\ObjectsUpdater.fs" />
+    <Compile Include="Updater\ActorsUpdater.fs" />
+    <Compile Include="Updater\MaptipsUpdater.fs" />
   </ItemGroup>
 
   <ItemGroup>

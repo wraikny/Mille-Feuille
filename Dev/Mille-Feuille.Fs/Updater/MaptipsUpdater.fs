@@ -1,4 +1,4 @@
-﻿namespace wraikny.MilleFeuille.Objects
+﻿namespace wraikny.MilleFeuille.Updater
 
 open System
 
