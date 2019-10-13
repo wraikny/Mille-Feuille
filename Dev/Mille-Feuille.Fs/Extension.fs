@@ -41,15 +41,23 @@ type asd.RectI with
     member inline r.ToRect2() =
         Rectangle.init (r.Position.ToVector2()) (r.Size.ToVector2())
 
-
 type asd.Object2D with
     member inline this.AddCoroutineAsParallel(coroutine : seq<unit>) =
         this.CoroutineManager().AddCoroutineAsParallel(coroutine.GetEnumerator())
+
+    member inline this.StackCoroutine(coroutine: seq<unit>) =
+        this.CoroutineManager().StackCoroutine(coroutine.GetEnumerator())
 
 type asd.Layer2D with
     member inline this.AddCoroutineAsParallel(coroutine : seq<unit>) =
         this.CoroutineManager().AddCoroutineAsParallel(coroutine.GetEnumerator())
 
+    member inline this.StackCoroutine(coroutine: seq<unit>) =
+        this.CoroutineManager().StackCoroutine(coroutine.GetEnumerator())
+
 type asd.Scene with
     member inline this.AddCoroutineAsParallel(coroutine : seq<unit>) =
         this.CoroutineManager().AddCoroutineAsParallel(coroutine.GetEnumerator())
+
+    member inline this.StackCoroutine(coroutine: seq<unit>) =
+        this.CoroutineManager().StackCoroutine(coroutine.GetEnumerator())
