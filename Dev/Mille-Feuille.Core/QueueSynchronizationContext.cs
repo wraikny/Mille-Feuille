@@ -91,23 +91,20 @@ namespace wraikny.MilleFeuille
         {
             // If current thread id is target thread id:
             var currentThreadId = Thread.CurrentThread.ManagedThreadId;
-            if (currentThreadId == targetThreadId)
+            if (currentThreadId == targetThreadId && recursiveCount < MaxRecursiveCount)
             {
                 // HACK: If current thread is already target thread, invoke continuation directly.
                 //   But if continuation has invokeing Post/Send recursive, cause stack overflow.
                 //   We can fix this problem by simple solution: Continuation invoke every post into queue,
                 //   but performance will be lost.
                 //   This counter uses post for scattering (each 50 times).
-                if (recursiveCount < MaxRecursiveCount)
-                {
-                    recursiveCount++;
+                recursiveCount++;
 
-                    // Invoke continuation on current thread is better performance.
-                    continuation(state);
+                // Invoke continuation on current thread is better performance.
+                continuation(state);
 
-                    recursiveCount--;
-                    return;
-                }
+                recursiveCount--;
+                return;
             }
 
             // Add continuation information into queue.
@@ -124,7 +121,7 @@ namespace wraikny.MilleFeuille
                 throw new InvalidOperationException();
             }
 
-            if (queue.TryTake(out var info))
+            while (queue.TryTake(out var info))
             {
                 // Invoke continuation.
                 info.Continuation(info.State);

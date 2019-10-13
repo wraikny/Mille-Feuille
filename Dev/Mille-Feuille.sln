@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28729.10
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Mille-Feuille.Fs", "Mille-Feuille.Fs\Mille-Feuille.Fs.fsproj", "{F0694096-423D-4328-AB20-CEF9052B2F31}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Mille-Feuille.Fs", "Mille-Feuille.Fs\Mille-Feuille.Fs.fsproj", "{F0694096-423D-4328-AB20-CEF9052B2F31}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mille-Feuille", "Mille-Feuille.Core\Mille-Feuille.csproj", "{73984409-A0FE-476E-99F2-61BE570A752F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mille-Feuille", "Mille-Feuille.Core\Mille-Feuille.csproj", "{73984409-A0FE-476E-99F2-61BE570A752F}"
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Mille-Feuille.Example", "Mille-Feuille.Example\Mille-Feuille.Example.fsproj", "{CBD7A32F-7435-400B-922E-A89684CBA30A}"
 EndProject
@@ -16,6 +16,11 @@ EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Tart.Helper", "..\..\Tart\src\Tart.Helper\Tart.Helper.fsproj", "{90FE8A1E-F512-4D6B-B203-3BE3C6034C62}"
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Tart.Core", "..\..\Tart\src\Tart.Core\Tart.Core.fsproj", "{B64C70AC-85D6-4FA3-B0B3-13E1109F2468}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6E16CDAD-1706-47A5-BD9B-B806566FA6C8}"
+	ProjectSection(SolutionItems) = preProject
+		..\README.md = ..\README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
