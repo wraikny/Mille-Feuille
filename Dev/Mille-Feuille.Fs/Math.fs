@@ -6,10 +6,10 @@ open Affogato
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Vector2 =
     let inline fromVector2DF (v : asd.Vector2DF) =
-        v.ToVector2()
+        v.ToVector2F()
 
     let inline fromVector2DI (v : asd.Vector2DI) =
-        v.ToVector2()
+        v.ToVector2I()
 
     let inline toVector2DF (v : float32 Vector2) =
         asd.Vector2DF(v.x, v.y)

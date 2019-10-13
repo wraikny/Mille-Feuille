@@ -2,6 +2,7 @@
 module wraikny.MilleFeuille.Extension
 
 open Affogato
+open Affogato.Helper
 open System.Collections
 
 type asd.Font with
@@ -13,12 +14,18 @@ type asd.Font with
 
 
 type asd.Vector2DF with
-    member inline v.ToVector2() =
+    member inline v.ToVector2F() =
         Vector2.init v.X v.Y
 
+    member inline v.ToVector2I() =
+      Vector2.init (int v.X) (int v.Y)
+
 type asd.Vector2DI with
-    member inline v.ToVector2() =
-        Vector2.init v.X v.Y
+    member inline v.ToVector2F() =
+        Vector2.init (float32 v.X) (float32 v.Y)
+
+    member inline v.ToVector2I() =
+      Vector2.init v.X v.Y
 
 type asd.Vector3DF with
     member inline v.ToVector3() =
@@ -35,11 +42,11 @@ type asd.Color with
 
 type asd.RectF with
     member inline r.ToRectangle2() =
-        Rectangle.init (r.Position.ToVector2()) (r.Size.ToVector2())
+        Rectangle.init (r.Position.ToVector2F()) (r.Size.ToVector2F())
 
 type asd.RectI with
     member inline r.ToRectangle2() =
-        Rectangle.init (r.Position.ToVector2()) (r.Size.ToVector2())
+        Rectangle.init (r.Position.ToVector2F()) (r.Size.ToVector2F())
 
 type asd.Object2D with
     member inline this.AddCoroutineAsParallel(coroutine : seq<unit>) =
