@@ -1,4 +1,5 @@
-﻿module wraikny.MilleFeuille.Sound
+﻿[<RequireQualifiedAccess>]
+module wraikny.MilleFeuille.Sound
 
 
 let inline createSoundSource path isDecompessed =

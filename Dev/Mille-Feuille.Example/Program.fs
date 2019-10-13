@@ -22,6 +22,6 @@ module Program =
 
     [<EntryPoint>]
     let main _ = 
-        // Fs.Tool.Counter.main()
-        startScene()
-        0
+        Fs.Tool.Counter.main()
+        //startScene()
+        //0

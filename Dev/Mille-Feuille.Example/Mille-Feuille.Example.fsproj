@@ -21,8 +21,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Affogato\src\Affogato\Affogato.fsproj" />
-    <ProjectReference Include="..\..\..\Tart\src\Tart.Core\Tart.Core.fsproj" />
-    <ProjectReference Include="..\..\..\Tart\src\Tart.Helper\Tart.Helper.fsproj" />
     <ProjectReference Include="..\Mille-Feuille.Core\Mille-Feuille.csproj" />
     <ProjectReference Include="..\Mille-Feuille.Fs\Mille-Feuille.Fs.fsproj" />
   </ItemGroup>

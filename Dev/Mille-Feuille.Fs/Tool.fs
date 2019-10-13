@@ -430,9 +430,9 @@ module private Render =
                 if x.menuBar.IsSome then
                     Helper.menuBar renderMenu
                 renderContent()
-    
 
-let render (x : ViewModel<'Msg>) (dispatch : 'Msg -> unit) =
+
+let private render (x : ViewModel<'Msg>) (dispatch : 'Msg -> unit) =
     x.mainWindow |> function
     | None -> ()
     | Some(mainWindow, offset) ->
@@ -440,3 +440,12 @@ let render (x : ViewModel<'Msg>) (dispatch : 'Msg -> unit) =
 
     for w in x.windows do
         Render.windowRender w Windowed dispatch
+
+type Renderer<'Msg>() =
+    let mutable cache: (ViewModel<'Msg> * ('Msg -> unit)) option = None
+
+    member __.SetState(viewModel, disptach) =
+        cache <- Some (viewModel, disptach)
+
+    member __.Render() =
+        cache |> iter (uncurry render)
