@@ -40,7 +40,7 @@ type ObjectsUpdater<'Key, 'Object, 'ObjectViewModel
 
     let parent : ObjectsParent<'Object, 'ObjectViewModel> = parent
 
-    let objectPooling = ObjectsPool<'Object>(parent.create)
+    let objectPooling = ObjectsPool<'Object>(fun() -> parent.create())
 
     let mutable updatingOption = UpdatingWithPooling
 
