@@ -34,11 +34,11 @@ type asd.Color with
 
 
 type asd.RectF with
-    member inline r.ToRect2() =
+    member inline r.ToRectangle2() =
         Rectangle.init (r.Position.ToVector2()) (r.Size.ToVector2())
 
 type asd.RectI with
-    member inline r.ToRect2() =
+    member inline r.ToRectangle2() =
         Rectangle.init (r.Position.ToVector2()) (r.Size.ToVector2())
 
 type asd.Object2D with
