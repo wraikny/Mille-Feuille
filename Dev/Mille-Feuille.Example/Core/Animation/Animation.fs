@@ -40,12 +40,11 @@ module TestAnims =
                 owner.Color <- new asd.Color(0uy, 0uy, 0uy)
                 yield ()
 
-                //yield! 
-                //yield! Coroutine.asParallel
-                //    [
-                //        owner |> rotation Easing.OutQuad 120 (0.0f, 180.0f)
-                //        owner |> color Easing.OutQuad 120 (0.0f, 255.0f)
-                //    ]
+
+                yield! Coroutine.toParallel [
+                    owner |> rotation Easing.OutQuad 120 (0.0f, 180.0f)
+                    owner |> color Easing.OutQuad 120 (0.0f, 255.0f)
+                ]
 
                 printfn "First Animation: End"
                 isFinishedFirst := true
@@ -73,7 +72,7 @@ module TestAnims =
                 let first = owner.Angle
 
                 yield! owner |> rotation Easing.InOutBack 180 (first, first + 180.0f)
-                for i in 1..60 -> ()
+                for _ in 1..60 -> ()
 
                 printfn "Rotate Animation: End"
                 yield ()
@@ -88,7 +87,7 @@ module TestAnims =
 
                 yield! owner |> color Easing.InOutCubic frame (255.0f, 0.0f)
                 yield! owner |> color Easing.InOutCubic frame (0.0f, 255.0f)
-                for i in 1..30 -> ()
+                for _ in 1..30 -> ()
                     
                 printfn "Color Animation: End"
                 yield()
