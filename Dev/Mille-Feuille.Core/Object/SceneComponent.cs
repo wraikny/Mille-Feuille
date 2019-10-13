@@ -10,9 +10,6 @@ namespace wraikny.MilleFeuille
     public class SceneComponent<T> : asd.SceneComponent
         where T : asd.Scene
     {
-        private readonly CoroutineManager coroutineManager = new CoroutineManager();
-        public ICoroutineManager Coroutine => coroutineManager;
-
         public string Name { get; }
 
         public SceneComponent(string name)
@@ -70,76 +67,64 @@ namespace wraikny.MilleFeuille
         /// </summary>
         public event Action<T> OnDisposedEvent = delegate { };
 
-        private void InvokeAction(Action<T> action)
-        {
-            if (Owner is T obj)
-            {
-                action.Invoke(obj);
-            }
-            else
-            {
-                throw new InvalidCastException();
-            }
-        }
-
         protected override void OnSceneRegistered()
         {
-            InvokeAction(OnRegisteredEvent);
+            OnRegisteredEvent(Owner as T);
         }
 
         protected override void OnSceneUnregistered()
         {
-            InvokeAction(OnUnRegisteredEvent);
+            OnUnRegisteredEvent(Owner as T);
         }
 
         protected override void OnStartSceneUpdating()
         {
-            InvokeAction(OnStartUpdatingEvent);
+            OnStartUpdatingEvent(Owner as T);
         }
 
         protected override void OnStopSceneUpdating()
         {
-            InvokeAction(OnStopUpdatingEvent);
+            OnStopUpdatingEvent(Owner as T);
         }
 
         protected override void OnUpdating()
         {
-            InvokeAction(OnUpdatingEvent);
+            OnUpdatingEvent(Owner as T);
         }
 
         protected override void OnUpdated()
         {
-            InvokeAction(OnUpdatedEvent);
-            coroutineManager.Update();
+            OnUpdatedEvent(Owner as T);
         }
 
         protected override void OnSceneTransitionBegin()
         {
-            InvokeAction(OnTransitionBeginEvent);
+            OnTransitionBeginEvent(Owner as T);
         }
 
         protected override void OnSceneTransitionFinished()
         {
-            InvokeAction(OnTransitionFinishedEvent);
+            OnTransitionFinishedEvent(Owner as T);
         }
 
         protected override void OnSceneDisposed()
         {
-            InvokeAction(OnDisposedEvent);
+            OnDisposedEvent(Owner as T);
         }
     }
 
     public static class SceneComponentExt
     {
-        private const string componentName = "__MilleFeuilleSceneComponentExt";
+        private const string ComponentName = "__MilleFeuilleSceneComponentExt";
+        private const string CoroutineComponentName = "__MilleFeuilleSceneComponentExt_Coroutine";
 
-        private static SceneComponent<asd.Scene> GetSceneComponent(this asd.Scene obj)
+        private static SceneComponent<asd.Scene> GetSceneComponent(this asd.Scene scene)
         {
-            var component = (SceneComponent<asd.Scene>)obj.GetComponent(componentName);
+            var component = (SceneComponent<asd.Scene>)scene.GetComponent(ComponentName);
             if (component == null)
             {
-                component = new SceneComponent<asd.Scene>(componentName);
-                component.Attach(obj);
+                component = new SceneComponent<asd.Scene>(ComponentName);
+                component.Attach(scene);
             }
 
             return component;
@@ -148,124 +133,117 @@ namespace wraikny.MilleFeuille
         /// <summary>
         /// シーンがエンジンに登録されたときに実行されるイベントを追加する。
         /// </summary>
-        public static void AddOnRegisteredEventEvent(this asd.Scene obj, Action action)
+        /// <exception cref="ArgumentNullException"></exception>
+        public static void AddOnRegisteredEventEvent(this asd.Scene scene, Action action)
         {
-            obj.GetSceneComponent().OnRegisteredEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            scene.GetSceneComponent().OnRegisteredEvent += _ => action();
         }
 
         /// <summary>
         /// シーンがエンジンから登録解除されたときに実行されるイベントを追加する。
         /// </summary>
-        public static void AddOnUnRegisteredEventEvent(this asd.Scene obj, Action action)
+        /// <exception cref="ArgumentNullException"></exception>
+        public static void AddOnUnRegisteredEventEvent(this asd.Scene scene, Action action)
         {
-            obj.GetSceneComponent().OnUnRegisteredEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            scene.GetSceneComponent().OnUnRegisteredEvent += _ => action();
         }
 
         /// <summary>
         /// シーンの更新が始まるときに実行されるイベントを追加する。
         /// </summary>
-        public static void AddOnStartUpdatingEvent(this asd.Scene obj, Action action)
+        /// <exception cref="ArgumentNullException"></exception>
+        public static void AddOnStartUpdatingEvent(this asd.Scene scene, Action action)
         {
-            obj.GetSceneComponent().OnStartUpdatingEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            scene.GetSceneComponent().OnStartUpdatingEvent += _ => action();
         }
 
         /// <summary>
         /// シーンの更新が止まるときに実行されるイベントを追加する。
         /// </summary>
-        public static void AddOnStopUpdatingEvent(this asd.Scene obj, Action action)
+        /// <exception cref="ArgumentNullException"></exception>
+        public static void AddOnStopUpdatingEvent(this asd.Scene scene, Action action)
         {
-            obj.GetSceneComponent().OnStopUpdatingEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            scene.GetSceneComponent().OnStopUpdatingEvent += _ => action();
         }
 
         /// <summary>
         /// シーンのUpdateが始まるときに実行されるイベントを追加する。
         /// </summary>
-        public static void AddOnUpdatingEvent(this asd.Scene obj, Action action)
+        /// <exception cref="ArgumentNullException"></exception>
+        public static void AddOnUpdatingEvent(this asd.Scene scene, Action action)
         {
-            obj.GetSceneComponent().OnUpdatingEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            scene.GetSceneComponent().OnUpdatingEvent += _ => action();
         }
 
         /// <summary>
         /// シーンのUpdateが終わるときに実行されるイベントを追加する。
         /// </summary>
-        public static void AddOnUpdateEvent(this asd.Scene obj, Action action)
+        /// <exception cref="ArgumentNullException"></exception>
+        public static void AddOnUpdateEvent(this asd.Scene scene, Action action)
         {
-            obj.GetSceneComponent().OnUpdatedEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            scene.GetSceneComponent().OnUpdatedEvent += _ => action();
         }
 
         /// <summary>
         /// シーンへの画面遷移が始まるときに実行されるイベントを追加する。
         /// </summary>
-        public static void AddOnTransitionBeginEvent(this asd.Scene obj, Action action)
+        /// <exception cref="ArgumentNullException"></exception>
+        public static void AddOnTransitionBeginEvent(this asd.Scene scene, Action action)
         {
-            obj.GetSceneComponent().OnTransitionBeginEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            scene.GetSceneComponent().OnTransitionBeginEvent += _ => action();
         }
 
         /// <summary>
         /// シーンへの画面遷移が完了したときに実行されるイベントを追加する。
         /// </summary>
-        public static void AddOnTransitionFinishedEvent(this asd.Scene obj, Action action)
+        /// <exception cref="ArgumentNullException"></exception>
+        public static void AddOnTransitionFinishedEvent(this asd.Scene scene, Action action)
         {
-            obj.GetSceneComponent().OnTransitionFinishedEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            scene.GetSceneComponent().OnTransitionFinishedEvent += _ => action();
         }
 
         /// <summary>
         /// シーンが破棄されたときに実行されるイベントを追加する。
         /// </summary>
-        public static void AddOnDisposedEvent(this asd.Scene obj, Action action)
+        /// <exception cref="ArgumentNullException"></exception>
+        public static void AddOnDisposedEvent(this asd.Scene scene, Action action)
         {
-            obj.GetSceneComponent().OnDisposedEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            scene.GetSceneComponent().OnDisposedEvent += _ => action();
+        }
+
+        sealed class CoroutineComponent : asd.SceneComponent
+        {
+            private readonly CoroutineUpdater coroutineManager = new CoroutineUpdater();
+            public CoroutineManager Coroutine => coroutineManager;
+
+            protected override void OnUpdated()
+            {
+                coroutineManager.Update();
+            }
         }
 
         /// <summary>
-        /// 新しいコルーチンを追加する。
+        /// コルーチンを管理するクラスを取得する。
         /// </summary>
-        /// <param name="coroutine"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
-        public static void AddCoroutine(this asd.Scene obj, IEnumerator coroutine)
-
+        public static CoroutineManager CoroutineManager(this asd.Scene scene)
         {
-            obj.GetSceneComponent().Coroutine.AddCoroutine(coroutine);
-        }
+            var component = (CoroutineComponent)scene.GetComponent(CoroutineComponentName);
+            if (component == null)
+            {
+                component = new CoroutineComponent();
+                scene.AddComponent(component, CoroutineComponentName);
+            }
 
-        /// <summary>
-        /// 新しいコルーチンを追加する。
-        /// </summary>
-        /// <param name="coroutine"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
-        public static void AddCoroutine(this asd.Scene obj, Func<IEnumerator> coroutine)
-        {
-            obj.AddCoroutine(coroutine.Invoke());
-        }
-
-        /// <summary>
-        /// サブコルーチンを現在のスタックに追加する。
-        /// </summary>
-        /// <param name="coroutine"></param>
-        /// <exception cref="InvalidOperationException.InvalidOperationException">
-        /// Thrown when called outside of current coroutines updating.
-        /// </exception>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
-        public static void StackCoroutine(this asd.Scene obj, IEnumerator coroutine)
-        {
-            obj.GetSceneComponent().Coroutine.StackCoroutine(coroutine);
-        }
-
-        /// <summary>
-        /// サブコルーチンを現在のスタックに追加する。
-        /// </summary>
-        /// <param name="coroutine"></param>
-        /// <exception cref="InvalidOperationException.InvalidOperationException">
-        /// Thrown when called outside of current coroutines updating.
-        /// </exception>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
-        public static void StackCoroutine(this asd.Scene obj, Func<IEnumerator> coroutine)
-        {
-            obj.GetSceneComponent().Coroutine.StackCoroutine(coroutine.Invoke());
+            return component.Coroutine;
         }
     }
 }

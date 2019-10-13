@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
     <OutputType>Library</OutputType>
-    <RootNamespace>MilleFeuille</RootNamespace>
+    <RootNamespace>wraikny.MilleFeuille</RootNamespace>
     <AssemblyName>MilleFeuille</AssemblyName>
     <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>

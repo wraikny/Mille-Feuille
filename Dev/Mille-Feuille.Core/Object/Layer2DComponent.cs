@@ -10,9 +10,6 @@ namespace wraikny.MilleFeuille
     public class Layer2DComponent<T> : asd.Layer2DComponent
         where T : asd.Layer2D
     {
-        private readonly CoroutineManager coroutineManager = new CoroutineManager();
-        public ICoroutineManager Coroutine => coroutineManager;
-
         public string Name { get; }
 
         public Layer2DComponent(string name)
@@ -45,49 +42,37 @@ namespace wraikny.MilleFeuille
         /// </summary>
         public event Action<T> OnUpdatedEvent = delegate { };
 
-        private void InvokeAction(Action<T> action)
-        {
-            if (Owner is T obj)
-            {
-                action.Invoke(obj);
-            }
-            else
-            {
-                throw new InvalidCastException();
-            }
-        }
-
         protected override void OnLayerAdded()
         {
-            InvokeAction(OnAddedEvent);
+            OnAddedEvent(Owner as T);
         }
         protected override void OnLayerRemoved()
         {
-            InvokeAction(OnRemovedEvent);
+            OnRemovedEvent(Owner as T);
         }
 
         protected override void OnUpdating()
         {
-            InvokeAction(OnUpdatingEvent);
+            OnUpdatingEvent(Owner as T);
         }
 
         protected override void OnLayerUpdated()
         {
-            InvokeAction(OnUpdatedEvent);
-            coroutineManager.Update();
+            OnUpdatedEvent(Owner as T);
         }
     }
 
     public static class Layer2DComponentExt
     {
-        private const string componentName = "__MilleFeuilleLayer2DComponentExt";
+        private const string ComponentName = "__MilleFeuilleLayer2DComponentExt";
+        private const string CoroutineComponentName = "__MilleFeuilleLayer2DComponentExt_Coroutine";
 
         private static Layer2DComponent<asd.Layer2D> GetLayer2DComponent(this asd.Layer2D obj)
         {
-            var component = (Layer2DComponent<asd.Layer2D>)obj.GetComponent(componentName);
+            var component = (Layer2DComponent<asd.Layer2D>)obj.GetComponent(ComponentName);
             if (component == null)
             {
-                component = new Layer2DComponent<asd.Layer2D>(componentName);
+                component = new Layer2DComponent<asd.Layer2D>(ComponentName);
                 component.Attach(obj);
             }
 
@@ -97,84 +82,67 @@ namespace wraikny.MilleFeuille
         /// <summary>
         /// レイヤーがシーンに登録されたときに実行されるイベントを追加する。
         /// </summary>
-        public static void AddOnAddedEvent(this asd.Layer2D obj, Action action)
+        /// <exception cref="ArgumentNullException"></exception>
+        public static void AddOnAddedEvent(this asd.Layer2D layer, Action action)
         {
-            obj.GetLayer2DComponent().OnAddedEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            layer.GetLayer2DComponent().OnAddedEvent += _ => action();
         }
 
         /// <summary>
         /// オブジェクトからレイヤーに登録解除されたときに実行されるイベントを追加する。
         /// </summary>
-        public static void AddOnRemovedEvent(this asd.Layer2D obj, Action action)
+        /// <exception cref="ArgumentNullException"></exception>
+        public static void AddOnRemovedEvent(this asd.Layer2D layer, Action action)
         {
-            obj.GetLayer2DComponent().OnRemovedEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            layer.GetLayer2DComponent().OnRemovedEvent += _ => action();
         }
 
         /// <summary>
         /// レイヤーが更新される直前に実行されるイベントを追加する。
         /// </summary>
-        public static void AddOnUpdatingEvent(this asd.Layer2D obj, Action action)
+        /// <exception cref="ArgumentNullException"></exception>
+        public static void AddOnUpdatingEvent(this asd.Layer2D layer, Action action)
         {
-            obj.GetLayer2DComponent().OnUpdatingEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            layer.GetLayer2DComponent().OnUpdatingEvent += _ => action();
         }
 
         /// <summary>
         /// レイヤーが更新される直後に実行されるイベントを追加する。
         /// </summary>
-        public static void AddOnUpdateEvent(this asd.Layer2D obj, Action action)
+        /// <exception cref="ArgumentNullException"></exception>
+        public static void AddOnUpdateEvent(this asd.Layer2D layer, Action action)
         {
-            obj.GetLayer2DComponent().OnUpdatedEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            layer.GetLayer2DComponent().OnUpdatedEvent += _ => action();
+        }
+
+        sealed class CoroutineComponent : asd.Layer2DComponent
+        {
+            private readonly CoroutineUpdater coroutineManager = new CoroutineUpdater();
+            public CoroutineManager Coroutine => coroutineManager;
+
+            protected override void OnUpdating()
+            {
+                coroutineManager.Update();
+            }
         }
 
         /// <summary>
-        /// 新しいコルーチンを追加する。
+        /// コルーチンを管理するクラスを取得する。
         /// </summary>
-        /// <param name="coroutine"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
-        public static void AddCoroutine(this asd.Layer2D obj, IEnumerator coroutine)
-
+        public static CoroutineManager CoroutineManager(this asd.Layer2D layer)
         {
-            obj.GetLayer2DComponent().Coroutine.AddCoroutine(coroutine);
-        }
+            var component = (CoroutineComponent)layer.GetComponent(CoroutineComponentName);
+            if (component == null)
+            {
+                component = new CoroutineComponent();
+                layer.AddComponent(component, CoroutineComponentName);
+            }
 
-        /// <summary>
-        /// 新しいコルーチンを追加する。
-        /// </summary>
-        /// <param name="coroutine"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
-        public static void AddCoroutine(this asd.Layer2D obj, Func<IEnumerator> coroutine)
-        {
-            obj.AddCoroutine(coroutine.Invoke());
-        }
-
-        /// <summary>
-        /// サブコルーチンを現在のスタックに追加する。
-        /// </summary>
-        /// <param name="coroutine"></param>
-        /// <exception cref="InvalidOperationException.InvalidOperationException">
-        /// Thrown when called outside of current coroutines updating.
-        /// </exception>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
-        public static void StackCoroutine(this asd.Layer2D obj, IEnumerator coroutine)
-        {
-            obj.GetLayer2DComponent().Coroutine.StackCoroutine(coroutine);
-        }
-
-        /// <summary>
-        /// サブコルーチンを現在のスタックに追加する。
-        /// </summary>
-        /// <param name="coroutine"></param>
-        /// <exception cref="InvalidOperationException.InvalidOperationException">
-        /// Thrown when called outside of current coroutines updating.
-        /// </exception>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
-        public static void StackCoroutine(this asd.Layer2D obj, Func<IEnumerator> coroutine)
-        {
-            obj.GetLayer2DComponent().Coroutine.StackCoroutine(coroutine.Invoke());
+            return component.Coroutine;
         }
     }
 }

@@ -10,9 +10,6 @@ namespace wraikny.MilleFeuille
     public class Object2DComponent<T> : asd.Object2DComponent
         where T : asd.Object2D
     {
-        private readonly CoroutineManager coroutineManager = new CoroutineManager();
-        public ICoroutineManager Coroutine => coroutineManager;
-
         public string Name { get; }
 
         public Object2DComponent(string name)
@@ -46,50 +43,38 @@ namespace wraikny.MilleFeuille
         /// </summary>
         public event Action<T> OnDisposedEvent = delegate { };
 
-        private void InvokeAction(Action<T> action)
-        {
-            if (Owner is T obj)
-            {
-                action.Invoke(obj);
-            }
-            else
-            {
-                throw new InvalidCastException();
-            }
-        }
-
         protected override void OnObjectAdded()
         {
-            InvokeAction(OnAddedEvent);
+            OnAddedEvent(Owner as T);
         }
 
         protected override void OnObjectRemoved()
         {
-            InvokeAction(OnRemovedEvent);
+            OnRemovedEvent(Owner as T);
         }
 
         protected override void OnUpdate()
         {
-            InvokeAction(OnUpdateEvent);
-            coroutineManager.Update();
+            OnUpdateEvent(Owner as T);
         }
 
         protected override void OnObjectDisposed()
         {
-            InvokeAction(OnDisposedEvent);
+            OnDisposedEvent(Owner as T);
         }
     }
 
     public static class Object2DComponentExt
     {
-        private const string componentName = "__MilleFeuilleObject2DComponentExt";
+        private const string ComponentName = "__MilleFeuilleObject2DComponentExt";
+        private const string CoroutineComponentName = "__MilleFeuilleObject2DComponentExt_Coroutine";
 
         private static Object2DComponent<asd.Object2D> GetObject2DComponent(this asd.Object2D obj)
         {
-            var component = (Object2DComponent<asd.Object2D>)obj.GetComponent(componentName);
+            var component = (Object2DComponent<asd.Object2D>)obj.GetComponent(ComponentName);
             if(component == null)
             {
-                component = new Object2DComponent<asd.Object2D>(componentName);
+                component = new Object2DComponent<asd.Object2D>(ComponentName);
                 component.Attach(obj);
             }
 
@@ -99,84 +84,67 @@ namespace wraikny.MilleFeuille
         /// <summary>
         /// オブジェクトがレイヤーに登録されたときに実行されるイベントを追加する。
         /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void AddOnAddedEvent(this asd.Object2D obj, Action action)
         {
-            obj.GetObject2DComponent().OnAddedEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            obj.GetObject2DComponent().OnAddedEvent += _ => action();
         }
 
         /// <summary>
         /// オブジェクトからレイヤーに登録解除されたときに実行されるイベントを追加する。
         /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void AddOnRemovedEvent(this asd.Object2D obj, Action action)
         {
-            obj.GetObject2DComponent().OnRemovedEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            obj.GetObject2DComponent().OnRemovedEvent += _ => action();
         }
 
         /// <summary>
         /// オブジェクトが更新されるときに実行されるイベントを追加する。
         /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void AddOnUpdateEvent(this asd.Object2D obj, Action action)
         {
-            obj.GetObject2DComponent().OnUpdateEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            obj.GetObject2DComponent().OnUpdateEvent += _ => action();
         }
 
         /// <summary>
         /// オブジェクトが破棄されたときに実行されるイベントを追加する。
         /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void AddOnDisposedEvent(this asd.Object2D obj, Action action)
         {
-            obj.GetObject2DComponent().OnDisposedEvent += _ => action.Invoke();
+            if (action == null) throw new ArgumentNullException("action");
+            obj.GetObject2DComponent().OnDisposedEvent += _ => action();
+        }
+
+        sealed class CoroutineComponent : asd.Object2DComponent
+        {
+            private readonly CoroutineUpdater coroutineManager = new CoroutineUpdater();
+            public CoroutineManager Coroutine => coroutineManager;
+
+            protected override void OnUpdate()
+            {
+                coroutineManager.Update();
+            }
         }
 
         /// <summary>
-        /// 新しいコルーチンを追加する。
+        /// コルーチンを管理するクラスを取得する。
         /// </summary>
-        /// <param name="coroutine"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
-        public static void AddCoroutine(this asd.Object2D obj, IEnumerator coroutine)
-            
+        public static CoroutineManager CoroutineManager(this asd.Object2D obj)
         {
-            obj.GetObject2DComponent().Coroutine.AddCoroutine(coroutine);
-        }
+            var component = (CoroutineComponent)obj.GetComponent(CoroutineComponentName);
+            if (component == null)
+            {
+                component = new CoroutineComponent();
+                obj.AddComponent(component, CoroutineComponentName);
+            }
 
-        /// <summary>
-        /// 新しいコルーチンを追加する。
-        /// </summary>
-        /// <param name="coroutine"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
-        public static void AddCoroutine(this asd.Object2D obj, Func<IEnumerator> coroutine)
-        {
-            obj.AddCoroutine(coroutine.Invoke());
-        }
-
-        /// <summary>
-        /// サブコルーチンを現在のスタックに追加する。
-        /// </summary>
-        /// <param name="coroutine"></param>
-        /// <exception cref="InvalidOperationException.InvalidOperationException">
-        /// Thrown when called outside of current coroutines updating.
-        /// </exception>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
-        public static void StackCoroutine(this asd.Object2D obj, IEnumerator coroutine)
-        {
-            obj.GetObject2DComponent().Coroutine.StackCoroutine(coroutine);
-        }
-
-        /// <summary>
-        /// サブコルーチンを現在のスタックに追加する。
-        /// </summary>
-        /// <param name="coroutine"></param>
-        /// <exception cref="InvalidOperationException.InvalidOperationException">
-        /// Thrown when called outside of current coroutines updating.
-        /// </exception>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// /// <exception cref="ArgumentException">Thrown when coroutine have been already added</exception>
-        public static void StackCoroutine(this asd.Object2D obj, Func<IEnumerator> coroutine)
-        {
-            obj.GetObject2DComponent().Coroutine.StackCoroutine(coroutine.Invoke());
+            return component.Coroutine;
         }
     }
 }
