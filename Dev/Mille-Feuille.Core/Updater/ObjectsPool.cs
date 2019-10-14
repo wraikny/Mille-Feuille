@@ -8,7 +8,7 @@ namespace wraikny.MilleFeuille.Updater
 {
     public class ObjectsPool<T>
     {
-        private readonly Stack<T> pool;
+        private readonly Stack<T> pool = new Stack<T>();
         private readonly Func<T> create;
 
         public ObjectsPool(Func<T> create, int count = 0)
@@ -19,7 +19,7 @@ namespace wraikny.MilleFeuille.Updater
             }
 
             this.create = create;
-            pool = new Stack<T>();
+            
             for(int i = 0; i < count; i++)
             {
                 pool.Push(create());
