@@ -5,21 +5,12 @@ Mille-Feuille is a Altseed Extension Library for F#
 .Net Framework 4.7.2
 
 ## Build
-1. Clone Tart and Affogato to same directory
+1. Clone Affogato to same directory
 2. Open Mille-Feuille.sln in Visual Studio 2019 and build.
   
 ## Dependencies
-### Common
-* Altseed 1.1.6 : MIT (c) Altseed 2013-2018
-  https://github.com/altseed/Altseed/blob/master/LICENSE
-### Fs
-* FSharp.Core 4.6.2 : MIT (c) Microsoft Corporation.
-  https://github.com/dotnet/fsharp/blob/master/License.txt
-
-* Tart latest : Apache License 2.0 (c) wraikny 2019
-  https://github.com/wraikny/Tart
-  (Only Tart.Helper)
-
+nuget libraries: [paket.dependencies]
+others:
 * Affogato latest : Apache License 2.0 (c) wraikny 2019
   https://github.com/wraikny/Affogato
   (Only Affogato)
