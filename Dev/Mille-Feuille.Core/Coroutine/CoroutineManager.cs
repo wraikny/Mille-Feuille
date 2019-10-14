@@ -14,6 +14,19 @@ namespace wraikny.MilleFeuille
         protected readonly Queue<IEnumerator> subcoroutines = new Queue<IEnumerator>();
         protected bool enableSubCoroutine = false;
 
+        public CoroutineManager()
+        {
+
+        }
+
+        public void Clear()
+        {
+            registeredCoroutines.Clear();
+            coroutines.Clear();
+            subcoroutines.Clear();
+            enableSubCoroutine = false;
+        }
+
         /// <summary>
         /// 新しいコルーチンを追加する。
         /// </summary>
